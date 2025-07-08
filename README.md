@@ -1,247 +1,242 @@
-# Fixelo - Service Marketplace Platform
+# 🏠 Fixelo - Modern Services Marketplace
 
-<div align="center">
-  <img src="https://via.placeholder.com/200x200?text=Fixelo" alt="Fixelo Logo" width="100" height="100">
-  
-  <p>
-    <strong>Modern Service Marketplace for Florida, USA</strong>
-  </p>
-  
-  <p>
-    <a href="README.pt.md">🇧🇷 Português</a> |
-    <a href="README.es.md">🇪🇸 Español</a> |
-    <a href="#english">🇺🇸 English</a>
-  </p>
+> **Professional services marketplace focused on Florida, USA. Connect with verified service providers for cleaning, repairs, beauty, and more.**
 
-  <p>
-    <img src="https://img.shields.io/badge/Next.js-14-black?style=flat&logo=next.js" alt="Next.js">
-    <img src="https://img.shields.io/badge/NestJS-9-red?style=flat&logo=nestjs" alt="NestJS">
-    <img src="https://img.shields.io/badge/React_Native-Expo-blue?style=flat&logo=expo" alt="React Native">
-    <img src="https://img.shields.io/badge/TypeScript-5-blue?style=flat&logo=typescript" alt="TypeScript">
-    <img src="https://img.shields.io/badge/PostgreSQL-15-blue?style=flat&logo=postgresql" alt="PostgreSQL">
-  </p>
-</div>
+![License](https://img.shields.io/badge/license-MIT-blue.svg)
+![Node](https://img.shields.io/badge/node-%3E%3D18.17.0-green.svg)
+![TypeScript](https://img.shields.io/badge/TypeScript-5.4.2-blue.svg)
+![NestJS](https://img.shields.io/badge/NestJS-10.3.3-red.svg)
+![Next.js](https://img.shields.io/badge/Next.js-14.2.30-black.svg)
 
----
+## 🌟 Features
 
-## 🎯 About Fixelo
-
-Fixelo is a modern, mobile-first service marketplace designed specifically for Florida, USA. It connects clients with verified professionals for services like cleaning, repairs, beauty treatments, and personal care.
-
-### ✨ Key Features
-
-- 🔍 **Smart Search**: Location-based service discovery
-- ✅ **Verified Professionals**: Background-checked service providers
-- 💬 **Real-time Chat**: Direct communication between clients and providers
-- 💳 **Secure Payments**: Integrated Stripe payment processing
-- ⭐ **Review System**: Transparent rating and review system
-- 📱 **Mobile Apps**: Native iOS and Android applications
-- 🌐 **Multilingual**: Support for English, Portuguese, and Spanish
-- 📊 **Analytics**: Comprehensive business insights
+- 🔐 **Complete Authentication System** - JWT + Refresh tokens with role-based access
+- 👥 **Multi-role Support** - Clients, Service Providers, and Admins
+- 🛍️ **Service Marketplace** - Browse, book, and pay for services
+- 💬 **Real-time Chat** - Direct communication between clients and providers
+- 💳 **Stripe Integration** - Secure payments and subscription management
+- ⭐ **Review System** - Rate and review service providers
+- 📱 **Mobile Apps** - React Native apps for clients and providers
+- 🌐 **Multi-language** - English, Portuguese, and Spanish support
+- 📍 **Location-based** - Find services in Florida cities
+- 📊 **Analytics Dashboard** - Performance metrics and insights
 
 ## 🏗️ Architecture
 
-This project uses a **monorepo structure** with TurboRepo for optimal development experience:
-
+### **Monorepo Structure**
 ```
 fixelo/
 ├── apps/
-│   ├── web/              # Next.js 14 web application
-│   ├── api/              # NestJS API backend
-│   ├── mobile-client/    # React Native client app
-│   └── mobile-provider/  # React Native provider app
+│   ├── api/           # NestJS API server
+│   ├── web/           # Next.js web application
+│   ├── mobile-client/ # React Native client app
+│   └── mobile-provider/ # React Native provider app
 ├── libs/
-│   ├── common/           # Shared types and constants
-│   ├── prisma/           # Database schema and utilities
-│   └── utils/            # Shared utility functions
-└── infra/                # Infrastructure and deployment
+│   ├── common/        # Shared types and utilities
+│   ├── prisma/        # Database schema and client
+│   └── utils/         # Utility functions
+└── infra/             # Infrastructure and deployment
 ```
 
-## 🚀 Tech Stack
+### **Tech Stack**
 
-### Backend
-- **Framework**: NestJS with TypeScript
-- **Database**: PostgreSQL with Prisma ORM
-- **Cache**: Redis
-- **Authentication**: JWT with refresh tokens
-- **Payments**: Stripe integration
-- **File Storage**: Supabase Storage
-- **Real-time**: Socket.IO
+#### **Backend**
+- **Framework:** NestJS with TypeScript
+- **Database:** PostgreSQL with Prisma ORM
+- **Authentication:** JWT + Refresh tokens
+- **Real-time:** Socket.IO
+- **Payments:** Stripe
+- **File Storage:** Supabase Storage
+- **Documentation:** Swagger/OpenAPI
 
-### Frontend
-- **Framework**: Next.js 14 with App Router
-- **Styling**: TailwindCSS + shadcn/ui
-- **State Management**: React Query
-- **Forms**: React Hook Form with Zod validation
+#### **Frontend**
+- **Web:** Next.js 14 with TailwindCSS
+- **Mobile:** React Native with Expo
+- **UI Components:** shadcn/ui
+- **State Management:** React Query + Zustand
 
-### Mobile
-- **Framework**: React Native with Expo
-- **Navigation**: React Navigation v6
-- **UI**: React Native Paper + NativeWind
-- **Maps**: React Native Maps
+#### **Infrastructure**
+- **Monorepo:** Turbo + npm workspaces
+- **Containerization:** Docker
+- **CI/CD:** GitHub Actions
+- **Hosting:** Railway/Fly.io
+- **Monitoring:** Sentry + PostHog
 
-### DevOps
-- **Containerization**: Docker & Docker Compose
-- **Monorepo**: TurboRepo
-- **CI/CD**: GitHub Actions
-- **Monitoring**: Sentry + Analytics
+## 🚀 Quick Start
 
-## 🛠️ Quick Start
+### **Prerequisites**
+- Node.js >= 18.17.0
+- npm >= 9.0.0
+- PostgreSQL database
+- Redis (optional, for caching)
 
-### Prerequisites
+### **Installation**
 
-- Node.js 18+
-- Docker & Docker Compose
-- Git
-
-### 1. Clone & Install
-
+1. **Clone the repository**
 ```bash
-git clone https://github.com/your-username/fixelo.git
+git clone https://github.com/viniciussvasques/fixelo.git
 cd fixelo
+```
+
+2. **Install dependencies**
+```bash
 npm install
 ```
 
-### 2. Environment Setup
-
+3. **Set up environment variables**
 ```bash
 cp .env.example .env
-# Edit .env with your configuration
+# Edit .env with your database and API keys
 ```
 
-### 3. Start Development Environment
-
+4. **Set up the database**
 ```bash
-# Start databases
-docker-compose up postgres redis -d
-
-# Run database migrations
-npm run db:migrate
-
-# Seed database (optional)
-npm run db:seed
-
-# Start all applications
-npm run dev
+npm run db:generate
+npm run db:push
 ```
 
-### 4. Access Applications
-
-- 🌐 **Web App**: http://localhost:3000
-- 🔧 **API**: http://localhost:3001
-- 📊 **API Docs**: http://localhost:3001/api/docs
-- 🗄️ **Database Admin**: http://localhost:5050
-
-## 📱 Mobile Development
-
-### Client App
-```bash
-cd apps/mobile-client
-npm run start
-```
-
-### Provider App
-```bash
-cd apps/mobile-provider
-npm run start
-```
-
-## 🗄️ Database
-
-### Migrations
-```bash
-npm run db:migrate      # Run migrations
-npm run db:reset        # Reset database
-npm run db:seed         # Seed with sample data
-```
-
-### Schema
-- **Users**: Clients and service providers
-- **Services**: Service categories and offerings
-- **Bookings**: Service reservations and scheduling
-- **Reviews**: Rating and feedback system
-- **Messages**: Real-time chat system
-- **Plans**: Subscription and pricing tiers
-
-## 🐳 Docker Commands
-
+5. **Start development servers**
 ```bash
 # Start all services
-docker-compose up
+npm run dev
 
-# Start only databases
-docker-compose up postgres redis -d
-
-# Start with admin tools
-docker-compose --profile tools up
-
-# Build and start
-docker-compose up --build
-
-# Stop all services
-docker-compose down
+# Or start individually
+npm run dev --workspace=@fixelo/api    # API server
+npm run dev --workspace=@fixelo/web    # Web app
 ```
 
-## 🧪 Testing
+### **API Endpoints**
+
+The API will be available at `http://localhost:3001/api/v1`
+
+#### **Authentication**
+- `POST /auth/register` - User registration
+- `POST /auth/login` - User login
+- `POST /auth/refresh` - Refresh access token
+- `POST /auth/logout` - User logout
+
+#### **Health Check**
+- `GET /health` - API health status
+
+📖 **Full API documentation:** http://localhost:3001/api/docs
+
+## 🌍 Target Market
+
+**Primary Location:** Florida, USA
+- Miami, Orlando, Tampa, Jacksonville
+- Fort Lauderdale, St. Petersburg, Tallahassee
+- And more Florida cities
+
+**Service Categories:**
+- 🧹 Cleaning Services
+- 🔧 Home Repairs
+- 💄 Beauty & Wellness
+- 🌱 Gardening & Landscaping
+- 🔌 Electrical Services
+- 🚰 Plumbing Services
+- 🎨 Painting Services
+- 📦 Moving & Storage
+- 📚 Tutoring & Education
+- 📸 Photography & Video
+- 🎉 Event Planning
+- 🐕 Pet Care
+
+## 💰 Business Model
+
+### **For Service Providers**
+
+#### **Free Plan**
+- Up to 10 leads/month
+- Basic profile
+- Customer reviews
+- Extra leads: $3 each
+
+#### **Pro Plan - $34.80/month**
+- Unlimited leads and messages
+- Verified badge
+- Top search visibility
+- Analytics dashboard
+- Boost/ads access
+- Priority support
+- 7-day free trial
+
+### **Revenue Streams**
+- Monthly subscriptions (Pro plan)
+- Lead purchases (Free plan users)
+- Service boost/ads
+- Transaction fees (5% platform fee)
+
+## 🛠️ Development
+
+### **Available Scripts**
 
 ```bash
-# Run all tests
-npm run test
+# Development
+npm run dev                 # Start all services
+npm run build              # Build all apps
+npm run test               # Run tests
+npm run lint               # Lint code
+npm run type-check         # Type checking
 
-# Run tests with coverage
-npm run test:cov
+# Database
+npm run db:generate        # Generate Prisma client
+npm run db:push           # Push schema to database
+npm run db:migrate        # Run migrations
+npm run db:studio         # Open Prisma Studio
 
-# Run e2e tests
-npm run test:e2e
+# Docker
+npm run docker:up         # Start services with Docker
+npm run docker:down       # Stop Docker services
 ```
 
-## 📖 Documentation
+### **Project Status**
 
-- [API Documentation](http://localhost:3001/api/docs)
-- [Architecture Guide](docs/architecture.md)
-- [Development Guide](docs/development.md)
-- [Deployment Guide](docs/deployment.md)
+#### ✅ **Completed**
+- [x] Monorepo setup with Turbo
+- [x] Authentication system (JWT + Refresh tokens)
+- [x] Database schema with Prisma
+- [x] API foundation with NestJS
+- [x] Health check endpoint
+- [x] Role-based access control
+- [x] Web app foundation with Next.js
 
-## 🚀 Deployment
+#### 🔄 **In Progress**
+- [ ] User management system
+- [ ] Service CRUD operations
+- [ ] Booking system
 
-### Production Build
-```bash
-npm run build
-npm run start:prod
-```
-
-### Docker Production
-```bash
-docker-compose -f docker-compose.prod.yml up
-```
-
-## 🌍 Internationalization
-
-Fixelo supports three languages:
-- 🇺🇸 **English** (Primary)
-- 🇧🇷 **Portuguese**
-- 🇪🇸 **Spanish**
+#### 📋 **Planned**
+- [ ] Stripe payment integration
+- [ ] Real-time chat system
+- [ ] Review and rating system
+- [ ] Mobile applications
+- [ ] Push notifications
+- [ ] Analytics dashboard
 
 ## 🤝 Contributing
 
-1. Fork the repository
-2. Create a feature branch: `git checkout -b feature/amazing-feature`
-3. Commit changes: `git commit -m 'Add amazing feature'`
-4. Push to branch: `git push origin feature/amazing-feature`
-5. Open a Pull Request
+We welcome contributions! Please see our [Contributing Guide](CONTRIBUTING.md) for details.
+
+### **Development Guidelines**
+1. Follow the existing code style
+2. Write tests for new features
+3. Update documentation
+4. Use conventional commit messages
 
 ## 📄 License
 
 This project is licensed under the MIT License - see the [LICENSE](LICENSE) file for details.
 
-## 🆘 Support
+## 🔗 Links
 
-- 📧 **Email**: support@fixelo.com
-- 📱 **Discord**: [Join our community](https://discord.gg/fixelo)
-- 📚 **Docs**: [Documentation site](https://docs.fixelo.com)
+- **Repository:** https://github.com/viniciussvasques/fixelo
+- **API Documentation:** http://localhost:3001/api/docs (when running locally)
+- **Issues:** https://github.com/viniciussvasques/fixelo/issues
+
+## 📞 Support
+
+For support, email support@fixelo.com or create an issue on GitHub.
 
 ---
 
-<div align="center">
-  <p>Made with ❤️ by the Fixelo Team</p>
-</div> 
+**Made with ❤️ for the Florida community** 
