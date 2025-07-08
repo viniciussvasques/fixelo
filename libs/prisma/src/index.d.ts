@@ -1,0 +1,16 @@
+import { PrismaClient } from '@prisma/client';
+export declare const prisma: any;
+export * from '@prisma/client';
+export { PrismaService } from './prisma.service';
+export declare const connectDatabase: () => Promise<void>;
+export declare const disconnectDatabase: () => Promise<void>;
+export declare const checkDatabaseHealth: () => Promise<boolean>;
+export declare const runInTransaction: <T>(fn: (prisma: PrismaClient) => Promise<T>) => Promise<T>;
+export declare const cleanupDatabase: () => Promise<void>;
+export declare const createDefaultPlans: () => Promise<void>;
+export declare const findUserByEmail: (email: string) => Promise<any>;
+export declare const findUserById: (id: string) => Promise<any>;
+export declare const updateUserRating: (providerId: string) => Promise<void>;
+export declare const findNearbyServices: (latitude: number, longitude: number, radiusMiles?: number, category?: string) => Promise<any>;
+export declare const findBookingWithDetails: (bookingId: string) => Promise<any>;
+export default prisma;

@@ -1,0 +1,411 @@
+// Prisma schema for Fixelo marketplace
+
+generator client {
+  provider = "prisma-client-js"
+  output   = "../../../node_modules/.prisma/client"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+// Enums
+enum UserRole {
+  CLIENT
+  PROVIDER
+  ADMIN
+}
+
+enum UserStatus {
+  ACTIVE
+  INACTIVE
+  SUSPENDED
+  PENDING_VERIFICATION
+}
+
+enum ServiceStatus {
+  ACTIVE
+  INACTIVE
+  DRAFT
+  SUSPENDED
+}
+
+enum ServiceCategory {
+  CLEANING
+  REPAIRS
+  BEAUTY
+  GARDENING
+  PLUMBING
+  ELECTRICAL
+  PAINTING
+  MOVING
+  TUTORING
+  PHOTOGRAPHY
+  EVENT_PLANNING
+  PET_CARE
+  OTHER
+}
+
+enum BookingStatus {
+  PENDING
+  CONFIRMED
+  IN_PROGRESS
+  COMPLETED
+  CANCELLED
+  DISPUTED
+}
+
+enum PaymentStatus {
+  PENDING
+  PROCESSING
+  COMPLETED
+  FAILED
+  REFUNDED
+  DISPUTED
+}
+
+enum PlanType {
+  FREE
+  PRO
+}
+
+enum SubscriptionStatus {
+  ACTIVE
+  CANCELLED
+  PAST_DUE
+  TRIALING
+}
+
+enum MessageType {
+  TEXT
+  IMAGE
+  FILE
+  SYSTEM
+}
+
+enum NotificationType {
+  BOOKING_REQUEST
+  BOOKING_CONFIRMED
+  BOOKING_CANCELLED
+  PAYMENT_RECEIVED
+  MESSAGE_RECEIVED
+  REVIEW_RECEIVED
+  PLAN_UPGRADED
+  VERIFICATION_APPROVED
+  VERIFICATION_REJECTED
+}
+
+enum Language {
+  en
+  pt
+  es
+}
+
+// User model (base for all user types)
+model User {
+  id        String     @id @default(cuid())
+  email     String     @unique
+  password  String // hashed
+  firstName String
+  lastName  String
+  phone     String?
+  avatar    String?
+  role      UserRole
+  status    UserStatus @default(ACTIVE)
+  language  Language   @default(en)
+
+  // Location information
+  address   String?
+  city      String?
+  state     String? // Always FL for Florida
+  zipCode   String?
+  latitude  Float?
+  longitude Float?
+  country   String? // Always USA
+
+  // Provider-specific fields (only for PROVIDER role)
+  businessName       String?
+  bio                String?
+  verified           Boolean  @default(false)
+  planType           PlanType @default(FREE)
+  planExpiresAt      DateTime?
+  leadsUsed          Int      @default(0)
+  leadsLimit         Int      @default(10)
+  rating             Float    @default(0)
+  reviewCount        Int      @default(0)
+  completedBookings  Int      @default(0)
+
+  // Relationships
+  providedServices   Service[]      @relation("ServiceProvider")
+  clientBookings     Booking[]      @relation("BookingClient")
+  providerBookings   Booking[]      @relation("BookingProvider")
+  sentMessages       Message[]      @relation("MessageSender")
+  receivedReviews    Review[]       @relation("ReviewProvider")
+  givenReviews       Review[]       @relation("ReviewClient")
+  subscriptions      Subscription[]
+  notifications      Notification[]
+  refreshTokens      RefreshToken[]
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  preferredLanguage String   @default("en")
+  isActive          Boolean  @default(true)
+  emailVerified     Boolean  @default(false)
+  lastLogin         DateTime?
+
+  @@map("users")
+}
+
+// Service model
+model Service {
+  id          String        @id @default(cuid())
+  title       String
+  description String
+  category    ServiceCategory
+  price       Float // in USD
+  currency    String        @default("USD")
+  duration    Int // in minutes
+  images      String[] // array of image URLs
+  status      ServiceStatus @default(ACTIVE)
+  isActive    Boolean       @default(true)
+  tags        String[]
+
+  // Location (can be different from provider location)
+  address   String?
+  city      String?
+  state     String?
+  zipCode   String?
+  latitude  Float?
+  longitude Float?
+
+  // Relationships
+  providerId String
+  provider   User      @relation("ServiceProvider", fields: [providerId], references: [id], onDelete: Cascade)
+  bookings   Booking[]
+  reviews    Review[]
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  @@map("services")
+}
+
+// Booking model
+model Booking {
+  id              String        @id @default(cuid())
+  status          BookingStatus @default(PENDING)
+  scheduledAt     DateTime
+  duration        Int // in minutes
+  totalAmount     Float
+  currency        String        @default("USD")
+  paymentStatus   PaymentStatus @default(PENDING)
+  paymentIntentId String? // Stripe payment intent ID
+  notes           String?
+
+  // Location (where service will be performed)
+  address   String?
+  city      String?
+  state     String?
+  zipCode   String?
+  latitude  Float?
+  longitude Float?
+
+  // Relationships
+  serviceId  String
+  service    Service   @relation(fields: [serviceId], references: [id], onDelete: Cascade)
+  clientId   String
+  client     User      @relation("BookingClient", fields: [clientId], references: [id], onDelete: Cascade)
+  providerId String
+  provider   User      @relation("BookingProvider", fields: [providerId], references: [id], onDelete: Cascade)
+  messages   Message[]
+  reviews    Review[]
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  @@map("bookings")
+}
+
+// Review model
+model Review {
+  id       String  @id @default(cuid())
+  rating   Int // 1-5
+  comment  String?
+  response String? // Provider response to review
+
+  // Relationships
+  bookingId  String
+  booking    Booking @relation(fields: [bookingId], references: [id], onDelete: Cascade)
+  clientId   String
+  client     User    @relation("ReviewClient", fields: [clientId], references: [id], onDelete: Cascade)
+  providerId String
+  provider   User    @relation("ReviewProvider", fields: [providerId], references: [id], onDelete: Cascade)
+  serviceId  String
+  service    Service @relation(fields: [serviceId], references: [id], onDelete: Cascade)
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  @@unique([bookingId, clientId])
+  @@map("reviews")
+}
+
+// Message model (for chat between client and provider)
+model Message {
+  id          String      @id @default(cuid())
+  content     String
+  messageType MessageType @default(TEXT)
+  readAt      DateTime?
+
+  // Relationships
+  bookingId String
+  booking   Booking @relation(fields: [bookingId], references: [id], onDelete: Cascade)
+  senderId  String
+  sender    User    @relation("MessageSender", fields: [senderId], references: [id], onDelete: Cascade)
+
+  createdAt DateTime @default(now())
+
+  @@map("messages")
+}
+
+// Plan model
+model Plan {
+  id            String    @id @default(cuid())
+  type          PlanType  @unique
+  name          String
+  price         Float
+  currency      String    @default("USD")
+  billingPeriod String    @default("monthly") // monthly, yearly
+  features      String[]
+  leadsLimit    Int?
+  trialDays     Int?
+  isActive      Boolean   @default(true)
+
+  // Relationships
+  subscriptions Subscription[]
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  @@map("plans")
+}
+
+// Subscription model
+model Subscription {
+  id                    String             @id @default(cuid())
+  stripeSubscriptionId  String             @unique
+  status                SubscriptionStatus
+  currentPeriodStart    DateTime
+  currentPeriodEnd      DateTime
+  cancelAtPeriodEnd     Boolean            @default(false)
+
+  // Relationships
+  userId String
+  user   User   @relation(fields: [userId], references: [id], onDelete: Cascade)
+  planId String
+  plan   Plan   @relation(fields: [planId], references: [id])
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  @@map("subscriptions")
+}
+
+// Notification model
+model Notification {
+  id      String           @id @default(cuid())
+  type    NotificationType
+  title   String
+  message String
+  data    Json? // Additional data in JSON format
+  readAt  DateTime?
+
+  // Relationships
+  userId String
+  user   User   @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  createdAt DateTime @default(now())
+
+  @@map("notifications")
+}
+
+// Lead purchase tracking (for free plan users)
+model LeadPurchase {
+  id       String @id @default(cuid())
+  amount   Float // Amount paid for lead
+  currency String @default("USD")
+
+  // Relationships
+  userId String
+  // Note: No foreign key constraint to avoid circular dependency issues
+
+  createdAt DateTime @default(now())
+
+  @@map("lead_purchases")
+}
+
+// Refresh token model (for JWT auth)
+model RefreshToken {
+  id        String   @id @default(cuid())
+  token     String   @unique
+  expiresAt DateTime
+
+  // Relationships
+  userId String
+  user   User   @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  createdAt DateTime @default(now())
+
+  @@map("refresh_tokens")
+}
+
+// Verification model (for phone/email verification)
+model Verification {
+  id        String   @id @default(cuid())
+  type      String // "email" or "phone"
+  value     String // email or phone number
+  code      String
+  verified  Boolean  @default(false)
+  expiresAt DateTime
+
+  createdAt DateTime @default(now())
+
+  @@unique([type, value])
+  @@map("verifications")
+}
+
+// Admin audit log
+model AuditLog {
+  id       String @id @default(cuid())
+  action   String
+  resource String
+  resourceId String?
+  details  Json?
+
+  // Admin who performed the action
+  adminId String?
+
+  createdAt DateTime @default(now())
+
+  @@map("audit_logs")
+}
+
+// Service boost/ads tracking
+model ServiceBoost {
+  id        String   @id @default(cuid())
+  amount    Float // Amount paid for boost
+  currency  String   @default("USD")
+  startsAt  DateTime
+  endsAt    DateTime
+  isActive  Boolean  @default(true)
+
+  // Relationships
+  serviceId String
+  // Note: No foreign key to avoid complications
+
+  createdAt DateTime @default(now())
+
+  @@map("service_boosts")
+} 

@@ -1,0 +1,33 @@
+{
+  "name": "@fixelo/utils",
+  "version": "1.0.0",
+  "description": "Utility functions and helpers for Fixelo marketplace",
+  "main": "dist/index.js",
+  "types": "dist/index.d.ts",
+  "exports": {
+    ".": {
+      "types": "./dist/index.d.ts",
+      "import": "./dist/index.js",
+      "require": "./dist/index.js"
+    }
+  },
+  "scripts": {
+    "build": "tsc",
+    "dev": "tsc --watch",
+    "clean": "if exist dist rmdir /s /q dist",
+    "type-check": "tsc --noEmit",
+    "lint": "eslint src --ext .ts",
+    "lint:fix": "eslint src --ext .ts --fix"
+  },
+  "devDependencies": {
+    "typescript": "^5.4.2"
+  },
+  "dependencies": {},
+  "peerDependencies": {},
+  "files": [
+    "dist",
+    "src",
+    "package.json",
+    "README.md"
+  ]
+} 

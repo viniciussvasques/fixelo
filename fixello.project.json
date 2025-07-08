@@ -1,0 +1,123 @@
+{
+  "projectName": "Fixelo",
+  "primaryLanguage": "en",
+  "supportedLanguages": ["en", "pt", "es"],
+  "languageSwitcher": true,
+  "description": {
+    "en": "Fixelo is a modern, mobile-first services marketplace focused on the state of Florida, USA. Clients can find, book, and pay verified professionals (PRO) for services like cleaning, repairs, beauty, and more. Includes real-time chat, Stripe payments, reviews, scheduling, premium subscriptions, ads (boosts), and location-based search.",
+    "pt": "Fixelo é um marketplace moderno de serviços com foco na Flórida, EUA. Clientes podem encontrar, agendar e pagar profissionais verificados (PRO) para serviços como limpeza, reparos, beleza e mais. Inclui chat em tempo real, pagamentos via Stripe, avaliações, agendamentos, assinatura premium, anúncios (impulsionamento) e busca por localização.",
+    "es": "Fixelo es un mercado moderno de servicios centrado en Florida, EE. UU. Los clientes pueden encontrar, agendar y pagar a profesionales verificados (PRO) para servicios como limpieza, reparaciones, belleza y más. Incluye chat en tiempo real, pagos con Stripe, reseñas, reservas, suscripción premium, anuncios (impulsos) y búsqueda por ubicación."
+  },
+  "targetLocation": {
+    "country": "USA",
+    "state": "Florida",
+    "mainCities": ["Miami", "Orlando", "Tampa", "Jacksonville", "Fort Lauderdale", "St. Petersburg", "Tallahassee", "Sarasota", "Cape Coral", "West Palm Beach"]
+  },
+  "stack": {
+    "backend": {
+      "framework": "NestJS",
+      "language": "TypeScript",
+      "database": "PostgreSQL",
+      "orm": "Prisma",
+      "realtime": "Socket.IO",
+      "cache": "Redis",
+      "auth": "JWT + Refresh Token",
+      "payments": "Stripe",
+      "uploads": "Supabase Storage",
+      "notifications": "Firebase Cloud Messaging"
+    },
+    "frontendWeb": {
+      "framework": "Next.js 14",
+      "style": "TailwindCSS",
+      "uiKit": "shadcn/ui",
+      "language": "TypeScript"
+    },
+    "mobile": {
+      "framework": "React Native (Expo)",
+      "apps": ["fixello-app (client)", "fixello-pro (provider)"]
+    },
+    "admin": {
+      "panel": "AdminJS",
+      "access": "Moderators only"
+    },
+    "infra": {
+      "monorepo": true,
+      "orchestration": "Docker Compose",
+      "ci": "GitHub Actions",
+      "hosting": "Railway or Fly.io",
+      "analytics": "PostHog",
+      "monitoring": "Sentry"
+    }
+  },
+  "modules": ["auth", "users", "services", "bookings", "chat", "payments", "reviews", "ads", "plans", "admin"],
+  "plans": {
+    "free": {
+      "price": 0,
+      "leadLimit": 10,
+      "extraLeadPrice": 3.0,
+      "features": {
+        "en": ["Up to 10 leads/month", "Basic profile", "Can receive reviews", "Can purchase extra leads ($3 each)"],
+        "pt": ["Até 10 leads/mês", "Perfil básico", "Pode receber avaliações", "Pode comprar leads extras (R$3 cada)"],
+        "es": ["Hasta 10 contactos al mes", "Perfil básico", "Puede recibir reseñas", "Puede comprar leads extra ($3 cada uno)"]
+      }
+    },
+    "pro": {
+      "priceUSD": 34.80,
+      "billing": "monthly",
+      "trialDays": 7,
+      "features": {
+        "en": ["Unlimited leads and messages", "Verified badge", "Top search visibility", "Analytics", "Boost access (ADS)", "Priority support"],
+        "pt": ["Leads ilimitados", "Selo verificado", "Maior visibilidade nas buscas", "Analytics", "Impulsionamento (ADS)", "Suporte prioritário"],
+        "es": ["Contactos ilimitados", "Insignia verificada", "Máxima visibilidad", "Analytics", "Impulsos (ADS)", "Soporte prioritario"]
+      }
+    }
+  },
+  "features": {
+    "auth": true,
+    "multiLanguage": true,
+    "responsiveUI": true,
+    "darkMode": true,
+    "chat": true,
+    "payments": true,
+    "analytics": true,
+    "ads": true,
+    "plans": true,
+    "calendarBooking": true,
+    "geoSearch": true,
+    "pushNotifications": true,
+    "adminModeration": true,
+    "modernDesign": true,
+    "automatedTests": true
+  },
+  "folderStructure": {
+    "apps": ["fixello-web", "fixello-app", "fixello-pro", "admin"],
+    "services": ["auth", "users", "services", "bookings", "chat", "payments", "reviews", "ads", "plans"],
+    "libs": ["common", "prisma", "utils"],
+    "infra": ["docker", "nginx", "envs"]
+  },
+  "commandsForAI": [
+    "Crie monorepo com estrutura TurboRepo ou Nx",
+    "Use Prisma e gere schema inicial com usuário, serviço, booking, plano e mensagem",
+    "Configure JWT e refresh token com roles separadas: CLIENT, PROVIDER, ADMIN",
+    "Implemente Stripe para pagamento por booking, assinatura PRO, e compra de leads",
+    "Use Socket.IO para chat entre cliente e prestador por ID de booking",
+    "Monte páginas responsivas com Tailwind e shadcn/ui, com troca de idioma",
+    "Todas as buscas devem ter filtro por cidade, categoria e geolocalização",
+    "Crie testes automatizados com Vitest ou Jest para todos os módulos",
+    "Configure CI com GitHub Actions para testes, lint e deploy",
+    "Adicione README em três idiomas para documentar instalação, uso e arquitetura"
+  ],
+  "deliverySchedule": {
+    "week1": ["Infraestrutura, auth, perfis, estrutura dos apps e web"],
+    "week2": ["Serviços, bookings, reviews, Stripe checkout"],
+    "week3": ["Chat, notificacões, plano PRO, compra de leads, ads"],
+    "week4": ["Admin panel, testes, deploy, README, ajustes finais"]
+  },
+  "goals": [
+    "Sistema completo em 3 idiomas (EN/PT/ES)",
+    "Apps prontos para publicar na App Store e Google Play",
+    "Sistema com visual moderno, responsivo e pronto para portfolio",
+    "Suporte total a planos, pagamentos e monetização",
+    "Comportamento inteligente e regras de negócio bem implementadas"
+  ]
+}

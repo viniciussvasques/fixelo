@@ -1,0 +1,131 @@
+version: '3.8'
+
+services:
+  # Database
+  postgres:
+    image: postgres:15
+    container_name: fixelo-postgres
+    environment:
+      POSTGRES_DB: fixelo
+      POSTGRES_USER: fixelo
+      POSTGRES_PASSWORD: fixelo123
+    ports:
+      - "5432:5432"
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+    networks:
+      - fixelo-network
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U fixelo"]
+      interval: 30s
+      timeout: 10s
+      retries: 5
+
+  # Cache
+  redis:
+    image: redis:7-alpine
+    container_name: fixelo-redis
+    ports:
+      - "6379:6379"
+    command: redis-server --appendonly yes --requirepass redis123
+    volumes:
+      - redis_data:/data
+    networks:
+      - fixelo-network
+    healthcheck:
+      test: ["CMD", "redis-cli", "--raw", "incr", "ping"]
+      interval: 30s
+      timeout: 10s
+      retries: 5
+
+  # API Backend
+  api:
+    build:
+      context: .
+      dockerfile: apps/api/Dockerfile
+    container_name: fixelo-api
+    environment:
+      NODE_ENV: development
+      DATABASE_URL: postgresql://fixelo:fixelo123@postgres:5432/fixelo
+      REDIS_URL: redis://:redis123@redis:6379
+      JWT_SECRET: your-jwt-secret-key
+      JWT_REFRESH_SECRET: your-jwt-refresh-secret-key
+      PORT: 3001
+    ports:
+      - "3001:3001"
+    depends_on:
+      postgres:
+        condition: service_healthy
+      redis:
+        condition: service_healthy
+    volumes:
+      - ./apps/api:/app
+      - /app/node_modules
+    networks:
+      - fixelo-network
+    restart: unless-stopped
+
+  # Web Frontend
+  web:
+    build:
+      context: .
+      dockerfile: apps/web/Dockerfile
+    container_name: fixelo-web
+    environment:
+      NODE_ENV: development
+      NEXT_PUBLIC_API_URL: http://localhost:3001/api/v1
+      NEXT_PUBLIC_APP_URL: http://localhost:3000
+    ports:
+      - "3000:3000"
+    depends_on:
+      - api
+    volumes:
+      - ./apps/web:/app
+      - /app/node_modules
+      - /app/.next
+    networks:
+      - fixelo-network
+    restart: unless-stopped
+
+  # Database Admin (optional)
+  pgadmin:
+    image: dpage/pgadmin4:latest
+    container_name: fixelo-pgadmin
+    environment:
+      PGADMIN_DEFAULT_EMAIL: admin@fixelo.com
+      PGADMIN_DEFAULT_PASSWORD: admin123
+      PGADMIN_CONFIG_SERVER_MODE: 'False'
+    ports:
+      - "5050:80"
+    depends_on:
+      - postgres
+    volumes:
+      - pgadmin_data:/var/lib/pgadmin
+    networks:
+      - fixelo-network
+    profiles:
+      - tools
+
+  # Redis Admin (optional)
+  redis-commander:
+    image: rediscommander/redis-commander:latest
+    container_name: fixelo-redis-commander
+    environment:
+      REDIS_HOSTS: local:redis:6379:0:redis123
+    ports:
+      - "8081:8081"
+    depends_on:
+      - redis
+    networks:
+      - fixelo-network
+    profiles:
+      - tools
+
+volumes:
+  postgres_data:
+  redis_data:
+  pgadmin_data:
+
+networks:
+  fixelo-network:
+    driver: bridge 
