@@ -40,4 +40,5 @@ export {
   ServiceCategory,
   Language,
   NotificationType,
+  MessageType,
 } from './types'; 

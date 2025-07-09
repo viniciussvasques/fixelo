@@ -186,6 +186,53 @@ export const getBoundingBox = (
   };
 };
 
+// Phone utilities
+export const normalizePhone = (phone: string): string => {
+  // Remove all non-digit characters
+  const digits = phone.replace(/\D/g, '');
+  
+  // Handle US phone numbers
+  if (digits.length === 10) {
+    // Add US country code
+    return `+1${digits}`;
+  } else if (digits.length === 11 && digits.startsWith('1')) {
+    // Already has US country code
+    return `+${digits}`;
+  } else if (digits.length === 11 && !digits.startsWith('1')) {
+    // Assume it's a US number without country code
+    return `+1${digits}`;
+  }
+  
+  // Return as is if it doesn't match US format
+  return phone.startsWith('+') ? phone : `+${digits}`;
+};
+
+export const formatPhoneDisplay = (phone: string): string => {
+  const normalized = normalizePhone(phone);
+  
+  // Format US numbers as (XXX) XXX-XXXX
+  if (normalized.startsWith('+1') && normalized.length === 12) {
+    const digits = normalized.slice(2);
+    return `(${digits.slice(0, 3)}) ${digits.slice(3, 6)}-${digits.slice(6)}`;
+  }
+  
+  return normalized;
+};
+
+export const isValidPhone = (phone: string): boolean => {
+  const normalized = normalizePhone(phone);
+  
+  // Check if it's a valid US phone number
+  if (normalized.startsWith('+1') && normalized.length === 12) {
+    const digits = normalized.slice(2);
+    // Basic validation: first digit can't be 0 or 1
+    return digits[0] >= '2' && digits[0] <= '9' && digits[3] >= '2' && digits[3] <= '9';
+  }
+  
+  // For international numbers, just check if it has country code and reasonable length
+  return normalized.startsWith('+') && normalized.length >= 10 && normalized.length <= 15;
+};
+
 // ID generation
 export const generateId = (): string => {
   return Date.now().toString(36) + Math.random().toString(36).substr(2);
@@ -236,11 +283,11 @@ export const parseQueryString = (queryString: string): Record<string, string | s
   return result;
 };
 
-// Local storage utilities
+// Local storage utilities (browser only)
 export const setLocalStorage = (key: string, value: any): void => {
-  if (typeof window !== 'undefined') {
+  if (typeof globalThis !== 'undefined' && 'localStorage' in globalThis) {
     try {
-      localStorage.setItem(key, JSON.stringify(value));
+      (globalThis as any).localStorage.setItem(key, JSON.stringify(value));
     } catch (error) {
       console.warn('Failed to save to localStorage:', error);
     }
@@ -248,9 +295,9 @@ export const setLocalStorage = (key: string, value: any): void => {
 };
 
 export const getLocalStorage = <T>(key: string, defaultValue?: T): T | null => {
-  if (typeof window !== 'undefined') {
+  if (typeof globalThis !== 'undefined' && 'localStorage' in globalThis) {
     try {
-      const item = localStorage.getItem(key);
+      const item = (globalThis as any).localStorage.getItem(key);
       return item ? JSON.parse(item) : (defaultValue ?? null);
     } catch (error) {
       console.warn('Failed to read from localStorage:', error);
@@ -261,9 +308,9 @@ export const getLocalStorage = <T>(key: string, defaultValue?: T): T | null => {
 };
 
 export const removeLocalStorage = (key: string): void => {
-  if (typeof window !== 'undefined') {
+  if (typeof globalThis !== 'undefined' && 'localStorage' in globalThis) {
     try {
-      localStorage.removeItem(key);
+      (globalThis as any).localStorage.removeItem(key);
     } catch (error) {
       console.warn('Failed to remove from localStorage:', error);
     }
@@ -373,21 +420,21 @@ export const isEmpty = (value: unknown): boolean => {
 
 // Browser utilities
 export const isBrowser = (): boolean => {
-  return typeof window !== 'undefined';
+  return typeof globalThis !== 'undefined' && 'window' in globalThis;
 };
 
 export const isMobile = (): boolean => {
-  if (!isBrowser()) return false;
+  if (!isBrowser() || !('navigator' in globalThis)) return false;
   return /Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(
-    navigator.userAgent
+    (globalThis as any).navigator.userAgent
   );
 };
 
 export const copyToClipboard = async (text: string): Promise<boolean> => {
-  if (!isBrowser()) return false;
+  if (!isBrowser() || !('navigator' in globalThis) || !(globalThis as any).navigator.clipboard) return false;
   
   try {
-    await navigator.clipboard.writeText(text);
+    await (globalThis as any).navigator.clipboard.writeText(text);
     return true;
   } catch (error) {
     console.warn('Failed to copy to clipboard:', error);

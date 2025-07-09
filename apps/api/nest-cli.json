@@ -8,7 +8,7 @@
     "deleteOutDir": true,
     "watchAssets": true,
     "assets": ["**/*.json", "**/*.hbs", "**/*.html"],
-    "plugins": ["@nestjs/swagger"],
+    "plugins": [],
     "tsConfigPath": "tsconfig.build.json"
   }
 } 

@@ -17,7 +17,6 @@
     "declaration": true,
     "sourceMap": true,
     "paths": {
-      "@fixelo/common": ["../../libs/common/src"],
       "@fixelo/prisma": ["../../libs/prisma/src"],
       "@fixelo/utils": ["../../libs/utils/src"]
     },

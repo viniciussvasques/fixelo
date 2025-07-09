@@ -2,6 +2,7 @@ import { Injectable, UnauthorizedException, ConflictException, BadRequestExcepti
 import { JwtService } from '@nestjs/jwt';
 import { ConfigService } from '@nestjs/config';
 import { PrismaService } from '@fixelo/prisma';
+import { normalizePhone, isValidPhone } from '@fixelo/utils';
 import * as bcrypt from 'bcrypt';
 import { RegisterDto, LoginDto, AuthResponseDto } from './dto/auth.dto';
 
@@ -44,6 +45,24 @@ export class AuthService {
       throw new ConflictException('User with this email already exists');
     }
 
+    // Normalizar e validar telefone se fornecido
+    let normalizedPhone: string | undefined;
+    if (phone) {
+      if (!isValidPhone(phone)) {
+        throw new BadRequestException('Invalid phone number format');
+      }
+      normalizedPhone = normalizePhone(phone);
+      
+      // Verificar se o telefone já existe
+      const existingPhoneUser = await this.prisma.user.findUnique({
+        where: { phone: normalizedPhone },
+      });
+      
+      if (existingPhoneUser) {
+        throw new ConflictException('User with this phone number already exists');
+      }
+    }
+
     // Hash da senha
     const saltRounds = 12;
     const hashedPassword = await bcrypt.hash(password, saltRounds);
@@ -55,7 +74,7 @@ export class AuthService {
         password: hashedPassword,
         firstName,
         lastName,
-        phone,
+        phone: normalizedPhone,
         role,
         city,
         state,

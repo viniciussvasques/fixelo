@@ -22,8 +22,9 @@ export class RegisterDto {
 
   @ApiProperty({ example: '+14079538380', required: false })
   @IsOptional()
-  @Matches(/^(\+1|1)?[2-9]\d{2}[2-9]\d{2}\d{4}$/, {
-    message: 'Phone number must be a valid US phone number (e.g., +14079538380, 14079538380, or 4079538380)'
+  @IsString()
+  @Matches(/^(\+?1?[-.\s]?)?\(?[2-9]\d{2}\)?[-.\s]?[2-9]\d{2}[-.\s]?\d{4}$/, {
+    message: 'Phone number must be a valid US phone number (various formats accepted)'
   })
   phone?: string;
 

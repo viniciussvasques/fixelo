@@ -2,7 +2,6 @@
 
 generator client {
   provider = "prisma-client-js"
-  output   = "../../../node_modules/.prisma/client"
 }
 
 datasource db {
@@ -21,29 +20,169 @@ enum UserStatus {
   ACTIVE
   INACTIVE
   SUSPENDED
-  PENDING_VERIFICATION
+  DELETED
 }
 
 enum ServiceStatus {
   ACTIVE
   INACTIVE
-  DRAFT
+  PENDING
   SUSPENDED
 }
 
 enum ServiceCategory {
-  CLEANING
-  REPAIRS
-  BEAUTY
-  GARDENING
+  // 🏠 HOME & MAINTENANCE
+  HOUSE_CLEANING
+  DEEP_CLEANING
+  MOVE_IN_OUT_CLEANING
+  OFFICE_CLEANING
+  WINDOW_CLEANING
+  PRESSURE_WASHING
+  GUTTER_CLEANING
+  ROOF_CLEANING
+  POOL_CLEANING
+  LAWN_MOWING
+  LANDSCAPING
+  TREE_TRIMMING
+  SPRINKLER_REPAIR
+  PEST_CONTROL
+  HANDYMAN
+  ELECTRICAL_WORK
   PLUMBING
-  ELECTRICAL
+  HVAC_REPAIR
+  APPLIANCE_REPAIR
   PAINTING
-  MOVING
-  TUTORING
+  FLOORING
+  ROOFING
+  KITCHEN_REMODELING
+  BATHROOM_REMODELING
+  CARPENTRY
+  DRYWALL_REPAIR
+  TILE_INSTALLATION
+  CABINET_INSTALLATION
+  COUNTERTOP_INSTALLATION
+  
+  // 🚚 MOVING & DELIVERY
+  MOVING_SERVICES
+  PACKING_SERVICES
+  FURNITURE_ASSEMBLY
+  JUNK_REMOVAL
+  STORAGE_SERVICES
+  DELIVERY_SERVICES
+  COURIER_SERVICES
+  
+  // 🔧 AUTOMOTIVE
+  AUTO_REPAIR
+  OIL_CHANGE
+  CAR_WASH
+  DETAILING
+  TIRE_SERVICES
+  BRAKE_REPAIR
+  ENGINE_REPAIR
+  TRANSMISSION_REPAIR
+  AUTO_GLASS_REPAIR
+  MOBILE_MECHANIC
+  
+  // 💄 BEAUTY & WELLNESS
+  HAIR_STYLING
+  HAIR_COLORING
+  HAIR_EXTENSIONS
+  BARBERING
+  NAIL_SERVICES
+  MANICURE_PEDICURE
+  MASSAGE_THERAPY
+  FACIAL_TREATMENTS
+  EYEBROW_THREADING
+  EYELASH_EXTENSIONS
+  MAKEUP_SERVICES
+  PERSONAL_TRAINING
+  YOGA_INSTRUCTION
+  NUTRITION_COACHING
+  
+  // 🎉 EVENTS & ENTERTAINMENT
+  WEDDING_PLANNING
+  PARTY_PLANNING
+  CATERING
   PHOTOGRAPHY
-  EVENT_PLANNING
-  PET_CARE
+  VIDEOGRAPHY
+  DJ_SERVICES
+  LIVE_MUSIC
+  EVENT_DECORATION
+  BARTENDING
+  SECURITY_SERVICES
+  
+  // 👨‍🏫 PERSONAL SERVICES
+  TUTORING
+  MUSIC_LESSONS
+  LANGUAGE_LESSONS
+  COMPUTER_REPAIR
+  PHONE_REPAIR
+  IT_SUPPORT
+  WEB_DESIGN
+  GRAPHIC_DESIGN
+  ACCOUNTING
+  TAX_PREPARATION
+  LEGAL_SERVICES
+  NOTARY_SERVICES
+  TRANSLATION_SERVICES
+  
+  // 🐕 PET SERVICES
+  PET_GROOMING
+  DOG_WALKING
+  PET_SITTING
+  PET_BOARDING
+  VETERINARY_SERVICES
+  PET_TRAINING
+  PET_TRANSPORTATION
+  
+  // 👶 CHILDCARE & SENIOR CARE
+  BABYSITTING
+  NANNY_SERVICES
+  ELDER_CARE
+  COMPANION_CARE
+  RESPITE_CARE
+  
+  // 🏥 HEALTH & MEDICAL
+  PHYSICAL_THERAPY
+  OCCUPATIONAL_THERAPY
+  SPEECH_THERAPY
+  MENTAL_HEALTH_COUNSELING
+  MEDICAL_TRANSPORT
+  PHARMACY_DELIVERY
+  MEDICAL_EQUIPMENT
+  
+  // 🎓 EDUCATION & TRAINING
+  DRIVING_LESSONS
+  SPORTS_COACHING
+  LIFE_COACHING
+  CAREER_COACHING
+  SKILL_TRAINING
+  
+  // 🧹 SPECIALIZED CLEANING
+  CARPET_STEAM_CLEANING
+  UPHOLSTERY_CLEANING
+  TILE_GROUT_CLEANING
+  MATTRESS_CLEANING
+  VENT_CLEANING
+  CHIMNEY_CLEANING_SERVICE
+  BIOHAZARD_CLEANING
+  
+  // 🏠 REAL ESTATE SERVICES
+  HOME_STAGING
+  PROPERTY_MANAGEMENT
+  REAL_ESTATE_PHOTOGRAPHY
+  HOME_INSPECTION
+  APPRAISAL
+  
+  // 🎪 UNIQUE & SPECIALTY
+  MAGIC_SHOWS
+  CLOWNS
+  FACE_PAINTING
+  BALLOON_ARTIST
+  COSTUME_RENTAL
+  EQUIPMENT_RENTAL
+  TOOL_RENTAL
+  
   OTHER
 }
 
@@ -102,6 +241,51 @@ enum Language {
   es
 }
 
+// ADS System Enums
+enum AdType {
+  BOOST
+  BANNER
+  FEATURED
+  SPONSORED
+  PREMIUM_BADGE
+  TOP_SEARCH
+}
+
+enum AdStatus {
+  DRAFT
+  ACTIVE
+  PAUSED
+  COMPLETED
+  CANCELLED
+}
+
+enum BudgetType {
+  DAILY
+  TOTAL
+  PER_CLICK
+  PER_LEAD
+}
+
+enum BidStatus {
+  ACTIVE
+  PAUSED
+  EXPIRED
+}
+
+enum TransactionType {
+  SUBSCRIPTION
+  LEAD_PURCHASE
+  AD_CAMPAIGN
+  BOOST
+  REFUND
+}
+
+enum PaymentMethodType {
+  CARD
+  BANK_ACCOUNT
+  DIGITAL_WALLET
+}
+
 // User model (base for all user types)
 model User {
   id        String     @id @default(cuid())
@@ -109,7 +293,7 @@ model User {
   password  String // hashed
   firstName String
   lastName  String
-  phone     String?
+  phone     String? @unique
   avatar    String?
   role      UserRole
   status    UserStatus @default(ACTIVE)
@@ -132,9 +316,15 @@ model User {
   planExpiresAt      DateTime?
   leadsUsed          Int      @default(0)
   leadsLimit         Int      @default(10)
+  leadCount          Int      @default(0)
   rating             Float    @default(0)
   reviewCount        Int      @default(0)
   completedBookings  Int      @default(0)
+  
+  // Payment fields
+  stripeCustomerId   String?
+  subscriptionId     String?
+  subscriptionStatus String?
 
   // Relationships
   providedServices   Service[]      @relation("ServiceProvider")
@@ -146,6 +336,9 @@ model User {
   subscriptions      Subscription[]
   notifications      Notification[]
   refreshTokens      RefreshToken[]
+  adCampaigns        AdCampaign[]   @relation("AdCampaignProvider")
+  transactions       Transaction[]  @relation("UserTransaction")
+  paymentMethods     PaymentMethod[] @relation("UserPaymentMethods")
 
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
@@ -182,9 +375,10 @@ model Service {
 
   // Relationships
   providerId String
-  provider   User      @relation("ServiceProvider", fields: [providerId], references: [id], onDelete: Cascade)
+  provider   User         @relation("ServiceProvider", fields: [providerId], references: [id], onDelete: Cascade)
   bookings   Booking[]
   reviews    Review[]
+  adCampaigns AdCampaign[] @relation("AdCampaignService")
 
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
@@ -408,4 +602,170 @@ model ServiceBoost {
   createdAt DateTime @default(now())
 
   @@map("service_boosts")
+}
+
+// ================== ADS SYSTEM TABLES ==================
+
+// Ad Campaign model
+model AdCampaign {
+  id          String     @id @default(cuid())
+  name        String
+  description String?
+  adType      AdType
+  status      AdStatus   @default(DRAFT)
+  budget      Float
+  budgetType  BudgetType
+  spent       Float      @default(0)
+  
+  // Payment method for this campaign
+  paymentMethodId String?
+  
+  // Metrics
+  impressions  Int @default(0)
+  clicks       Int @default(0)
+  leads        Int @default(0)
+  conversions  Int @default(0)
+  
+  // Auction data
+  currentPosition Int?
+  actualCpc       Float?
+  
+  // Schedule
+  startDate   DateTime
+  endDate     DateTime
+  activatedAt DateTime?
+  
+  // Targeting (stored as JSON)
+  targeting String? // JSON string
+  creative  String? // JSON string
+  
+  // Relationships
+  serviceId  String
+  service    Service @relation("AdCampaignService", fields: [serviceId], references: [id], onDelete: Cascade)
+  providerId String
+  provider   User    @relation("AdCampaignProvider", fields: [providerId], references: [id], onDelete: Cascade)
+  paymentMethod PaymentMethod? @relation("CampaignPaymentMethod", fields: [paymentMethodId], references: [id])
+  bids       AdBid[]
+  
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+  
+  @@map("ad_campaigns")
+}
+
+// Ad Bid model (for auction system)
+model AdBid {
+  id             String    @id @default(cuid())
+  bidAmount      Float
+  targetPosition Int
+  autoBid        Boolean   @default(false)
+  maxBid         Float?
+  status         BidStatus @default(ACTIVE)
+  
+  // Relationships
+  campaignId String
+  campaign   AdCampaign @relation(fields: [campaignId], references: [id], onDelete: Cascade)
+  
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+  
+  @@map("ad_bids")
+}
+
+// Transaction model (for all payments)
+model Transaction {
+  id          String          @id @default(cuid())
+  type        TransactionType
+  amount      Float
+  currency    String          @default("USD")
+  status      String          @default("PENDING") // PENDING, COMPLETED, FAILED, REFUNDED
+  description String?
+  metadata    String? // JSON string for additional data
+  
+  // Stripe data
+  stripePaymentIntentId String?
+  stripeChargeId        String?
+  
+  // Relationships
+  userId String
+  user   User   @relation("UserTransaction", fields: [userId], references: [id], onDelete: Cascade)
+  
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+  
+  @@map("transactions")
+}
+
+// Payment Method model (for storing user payment methods)
+model PaymentMethod {
+  id           String            @id @default(cuid())
+  userId       String
+  stripeId     String            @unique // pm_xxxxx from Stripe
+  type         PaymentMethodType
+  last4        String
+  brand        String            // visa, mastercard, amex, etc.
+  expiryMonth  Int
+  expiryYear   Int
+  isDefault    Boolean           @default(false)
+  isActive     Boolean           @default(true)
+  
+  // Billing details
+  billingName    String?
+  billingEmail   String?
+  billingAddress String?
+  billingCity    String?
+  billingState   String?
+  billingZip     String?
+  billingCountry String?
+  
+  // Relationships
+  user      User        @relation("UserPaymentMethods", fields: [userId], references: [id], onDelete: Cascade)
+  campaigns AdCampaign[] @relation("CampaignPaymentMethod")
+  
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+  
+  @@map("payment_methods")
+}
+
+// Ad Metrics model (for detailed analytics)
+model AdMetric {
+  id          String   @id @default(cuid())
+  date        DateTime
+  impressions Int      @default(0)
+  clicks      Int      @default(0)
+  leads       Int      @default(0)
+  conversions Int      @default(0)
+  spent       Float    @default(0)
+  
+  // Audience data (stored as JSON)
+  audienceData String? // JSON string
+  
+  // Relationships
+  campaignId String
+  // Note: No foreign key to avoid complications with campaign deletion
+  
+  createdAt DateTime @default(now())
+  
+  @@unique([campaignId, date])
+  @@map("ad_metrics")
+}
+
+// Lead model (for tracking leads from ads)
+model Lead {
+  id          String   @id @default(cuid())
+  source      String   // "ad_campaign", "organic", "referral"
+  sourceId    String?  // Campaign ID if from ads
+  clientPhone String?
+  clientEmail String?
+  message     String?
+  converted   Boolean  @default(false)
+  
+  // Relationships
+  serviceId  String
+  providerId String
+  
+  createdAt DateTime @default(now())
+  
+  @@map("leads")
 } 
