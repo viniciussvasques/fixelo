@@ -2,8 +2,8 @@
   "compilerOptions": {
     "target": "ES2022",
     "lib": ["ES2022"],
-    "module": "commonjs",
-    "moduleResolution": "node",
+    "module": "NodeNext",
+    "moduleResolution": "nodenext",
     "outDir": "./dist",
     "baseUrl": "./",
     "incremental": true,
@@ -17,10 +17,12 @@
     "declaration": true,
     "sourceMap": true,
     "paths": {
+      "@fixelo/common": ["../../libs/common/src"],
       "@fixelo/prisma": ["../../libs/prisma/src"],
       "@fixelo/utils": ["../../libs/utils/src"]
     },
-    "types": ["node"]
+    "types": ["node"],
+    "resolvePackageJsonExports": true
   },
   "include": ["src/**/*"],
   "exclude": ["dist", "node_modules", "**/*.spec.ts", "**/*.test.ts"]

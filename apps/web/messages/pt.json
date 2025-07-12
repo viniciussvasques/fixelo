@@ -1,0 +1,795 @@
+{
+  "common": {
+    "or": "ou",
+    "loading": "Carregando...",
+    "error": "Erro",
+    "success": "Sucesso",
+    "save": "Salvar",
+    "cancel": "Cancelar",
+    "delete": "Excluir",
+    "edit": "Editar",
+    "view": "Visualizar",
+    "back": "Voltar",
+    "next": "Próximo",
+    "previous": "Anterior",
+    "search": {
+      "placeholder": "Buscar serviços..."
+    },
+    "filter": "Filtrar",
+    "sort": "Ordenar",
+    "clear": "Limpar",
+    "all": "Todos",
+    "none": "Nenhum",
+    "yes": "Sim",
+    "no": "Não",
+    "confirm": "Confirmar",
+    "close": "Fechar",
+    "tryAgain": "Tentar Novamente",
+    "refresh": "Atualizar",
+    "retry": "Repetir",
+    "update": "Atualizar",
+    "upload": "Enviar",
+    "remove": "Remover",
+    "add": "Adicionar",
+    "create": "Criar",
+    "manage": "Gerenciar",
+    "settings": "Configurações"
+  },
+  "navigation": {
+    "home": "Início",
+    "services": "Serviços",
+    "howItWorks": "Como Funciona",
+    "about": "Sobre",
+    "contact": "Contato",
+    "dashboard": "Painel",
+    "profile": "Perfil",
+    "settings": "Configurações",
+    "logout": "Sair",
+    "login": "Entrar",
+    "register": "Cadastrar"
+  },
+  "auth": {
+    "loginSuccess": "Login realizado com sucesso!",
+    "registerSuccess": "Conta criada com sucesso!",
+    "registerError": "Erro ao criar conta",
+    "invalidCredentials": "Credenciais inválidas",
+    "emailRequired": "Email é obrigatório",
+    "invalidEmail": "Formato de email inválido",
+    "passwordRequired": "Senha é obrigatória",
+    "passwordMinLength": "A senha deve ter pelo menos 6 caracteres",
+    "nameRequired": "Nome é obrigatório",
+    "phoneRequired": "Número de telefone é obrigatório",
+    "userTypeRequired": "Por favor selecione um tipo de usuário",
+    "cityRequired": "Cidade é obrigatória",
+    "termsRequired": "Você deve aceitar os termos e condições",
+    "passwordMismatch": "As senhas não coincidem",
+    "welcomeBack": "Bem-vindo de volta!",
+    "joinFixelo": "Junte-se ao Fixelo",
+    "signInToAccount": "Entre na sua conta",
+    "createAccount": "Crie sua conta",
+    "resetPassword": "Redefinir senha",
+    "enterEmailToReset": "Digite seu email para receber um link de redefinição",
+    "name": "Nome",
+    "email": "Email",
+    "password": "Senha",
+    "confirmPassword": "Confirmar Senha",
+    "phone": "Telefone",
+    "city": "Cidade",
+    "userType": "Tipo de Usuário",
+    "client": "Cliente",
+    "provider": "Prestador",
+    "clientDescription": "Encontrar serviços",
+    "providerDescription": "Oferecer serviços",
+    "login": "Entrar",
+    "register": "Cadastrar",
+    "rememberMe": "Lembrar-me",
+    "forgotPassword": "Esqueceu a senha?",
+    "hasAccount": "Já tem uma conta?",
+    "signInNow": "Entre agora",
+    "noAccount": "Não tem uma conta?",
+    "signUpNow": "Cadastre-se agora",
+    "termsAgreement": "Eu concordo com os termos e condições"
+  },
+  "dashboard": {
+    "title": "Painel",
+    "subtitle": "Gerencie sua conta e serviços",
+    "welcome": "Bem-vindo, {name}!",
+    "overview": "Aqui está uma visão geral das suas atividades no Fixelo",
+    "navigation": {
+      "dashboard": "Painel",
+      "bookings": "Agendamentos",
+      "messages": "Mensagens",
+      "favorites": "Favoritos",
+      "reviews": "Avaliações",
+      "services": "Serviços",
+      "profile": "Perfil",
+      "payments": "Pagamentos",
+      "settings": "Configurações",
+      "earnings": "Ganhos",
+      "analytics": "Analytics",
+      "ads": "Anúncios",
+      "campaigns": "Campanhas",
+      "boost": "Impulsionar",
+      "performance": "Performance",
+      "subscription": "Assinatura"
+    },
+    "stats": {
+      "servicesBooked": "Serviços Agendados",
+      "reviewsGiven": "Avaliações Feitas",
+      "messages": "Mensagens",
+      "totalSpent": "Total Gasto",
+      "thisMonth": "Este mês",
+      "total": "Total",
+      "unread": "Não lidas",
+      "thisYear": "Este ano",
+      "trend": {
+        "servicesBooked": "+{count}% vs semana passada",
+        "reviewsGiven": "+{count}% vs semana passada",
+        "messages": "+{count}% vs semana passada",
+        "totalSpent": "+{count}% vs semana passada"
+      },
+      "averageRating": "Média de {rating} estrelas",
+      "newToday": "{count} novos hoje",
+      "vsLastYear": "+{percent}% vs ano passado"
+    },
+    "upcomingBookings": "Próximos Agendamentos",
+    "upcomingBookingsDescription": "Seus próximos serviços agendados",
+    "recentBookings": "Seus agendamentos mais recentes",
+    "viewAll": "Ver Todos",
+    "quickActions": {
+      "title": "Ações Rápidas",
+      "description": "Acesso rápido às funcionalidades",
+      "searchServices": "Buscar Serviços",
+      "searchServicesDescription": "Descubra novos prestadores",
+      "myBookings": "Meus Agendamentos",
+      "myBookingsDescription": "Gerencie seus compromissos",
+      "messages": "Mensagens",
+      "messagesDescription": "Converse com prestadores",
+      "settings": "Configurações",
+      "settingsDescription": "Ajuste suas preferências"
+    },
+    "bookingConfirmed": "Agendamento confirmado",
+    "reviewSent": "Avaliação enviada",
+    "newMessage": "Nova mensagem",
+    "hours": "há {count}h",
+    "days": "há {count}d",
+    "at": "às",
+    "bookings": {
+      "houseCleaning": "Limpeza Residencial",
+      "electricalRepair": "Reparo Elétrico",
+      "gardening": "Jardinagem",
+      "status": {
+        "confirmed": "Confirmado",
+        "inProgress": "Em Andamento",
+        "scheduled": "Agendado"
+      }
+    },
+    "activity": {
+      "bookingConfirmed": "Agendamento confirmado",
+      "bookingConfirmedDetail": "Seu agendamento foi confirmado",
+      "reviewSent": "Avaliação enviada",
+      "reviewSentDetail": "Você deixou uma nova avaliação",
+      "newMessage": "Nova mensagem",
+      "newMessageDetail": "Você recebeu uma nova mensagem"
+    },
+    "ads": {
+      "title": "Anúncios",
+      "subtitle": "Gerencie suas campanhas de marketing e impulsione seus serviços",
+      "manageCampaigns": "Gerenciar Campanhas",
+      "createCampaign": "Criar Campanha",
+      "stats": {
+        "totalSpent": "Total Gasto",
+        "impressions": "Impressões",
+        "clicks": "Cliques",
+        "leads": "Leads",
+        "conversionRate": "Taxa de Conversão",
+        "ctr": "Taxa de Cliques (CTR)",
+        "cpc": "Custo por Clique (CPC)",
+        "roas": "Retorno sobre Investimento"
+      },
+      "activeCampaigns": "Campanhas Ativas",
+      "activeCampaignsDescription": "Suas campanhas de anúncios em andamento",
+      "quickActions": {
+        "title": "Ações Rápidas",
+        "description": "Acelere seu marketing",
+        "createCampaign": "Criar Campanha",
+        "createCampaignDescription": "Lance uma nova campanha",
+        "boostService": "Impulsionar Serviço",
+        "boostServiceDescription": "Destaque instantâneo",
+        "viewAnalytics": "Ver Analytics",
+        "viewAnalyticsDescription": "Analise performance",
+        "manageBudget": "Gerenciar Orçamento",
+        "manageBudgetDescription": "Controle seus gastos"
+      },
+      "performanceSummary": "Resumo de Performance",
+      "performanceSummaryDescription": "Principais métricas das suas campanhas",
+      "budgetAlert": {
+        "title": "Alerta de Orçamento",
+        "description": "Você já utilizou {percentage}% do seu orçamento mensal"
+      },
+      "campaigns": {
+        "title": "Campanhas",
+        "subtitle": "Gerencie todas as suas campanhas de anúncios",
+        "campaignsList": "Lista de Campanhas",
+        "campaignsListDescription": "Todas as suas campanhas em um só lugar",
+        "stats": {
+          "totalCampaigns": "Total de Campanhas",
+          "totalBudget": "Orçamento Total",
+          "totalImpressions": "Total de Impressões",
+          "totalLeads": "Total de Leads",
+          "active": "ativas",
+          "spent": "gasto",
+          "clicks": "cliques",
+          "conversionRate": "taxa de conversão"
+        },
+        "filters": {
+          "title": "Filtros",
+          "searchPlaceholder": "Buscar campanhas...",
+          "all": "Todas",
+          "active": "Ativas",
+          "paused": "Pausadas",
+          "ended": "Finalizadas"
+        },
+        "actions": {
+          "edit": "Editar",
+          "duplicate": "Duplicar",
+          "delete": "Excluir"
+        },
+        "create": {
+          "title": "Criar Nova Campanha",
+          "subtitle": "Configure sua campanha de anúncios para destacar seus serviços",
+          "basicInfo": "Informações Básicas",
+          "basicInfoDescription": "Defina o nome e descrição da sua campanha",
+          "campaignName": "Nome da Campanha",
+          "campaignNamePlaceholder": "Ex: Limpeza Residencial - Janeiro 2024",
+          "description": "Descrição",
+          "descriptionPlaceholder": "Descreva o objetivo da sua campanha...",
+          "service": "Serviço",
+          "selectService": "Selecione o serviço",
+          "adType": "Tipo de Anúncio",
+          "selectAdType": "Selecione o tipo",
+          "budgetAndPeriod": "Orçamento e Período",
+          "budgetAndPeriodDescription": "Configure o orçamento e duração da campanha",
+          "budget": "Orçamento",
+          "budgetType": "Tipo de Orçamento",
+          "daily": "Diário",
+          "total": "Total",
+          "startDate": "Data de Início",
+          "endDate": "Data de Fim",
+          "autoRenew": "Renovação automática",
+          "targeting": "Segmentação",
+          "targetingDescription": "Escolha onde seus anúncios serão exibidos",
+          "targetCities": "Cidades Alvo",
+          "biddingStrategy": "Estratégia de Lances",
+          "biddingStrategyDescription": "Configure seus lances para competir por posições",
+          "initialBid": "Lance Inicial",
+          "maxBid": "Lance Máximo",
+          "campaignSummary": "Resumo da Campanha",
+          "estimatedTotalCost": "Custo Estimado Total",
+          "selectedCities": "Cidades Selecionadas",
+          "citiesCount": "cidade(s)",
+          "saveDraft": "Salvar Rascunho",
+          "cancel": "Cancelar",
+          "createCampaign": "Criar Campanha",
+          "creating": "Criando...",
+          "campaignCreated": "Campanha Criada!",
+          "campaignCreatedDescription": "Sua campanha foi criada com sucesso e está sendo revisada.",
+          "draftSaved": "Rascunho Salvo",
+          "draftSavedDescription": "Sua campanha foi salva como rascunho.",
+          "validationError": "Erro de Validação",
+          "fillRequiredFields": "Por favor, preencha todos os campos obrigatórios.",
+          "selectCities": "Selecione pelo menos uma cidade alvo.",
+          "error": "Erro",
+          "errorCreatingCampaign": "Erro ao criar campanha. Tente novamente.",
+          "adTypes": {
+            "featured": "Destaque",
+            "featuredDescription": "Aparece no topo dos resultados",
+            "boost": "Boost",
+            "boostDescription": "Aumenta visibilidade rapidamente",
+            "topList": "Top da Lista",
+            "topListDescription": "Sempre no topo da categoria"
+          }
+        }
+      },
+      "boost": {
+        "title": "Impulsionar Serviço",
+        "subtitle": "Destaque seus serviços instantaneamente com boost rápido",
+        "selectService": "Selecionar Serviço",
+        "selectServiceDescription": "Escolha qual serviço você deseja impulsionar",
+        "boostConfiguration": "Configuração do Boost",
+        "boostConfigurationDescription": "Defina duração e orçamento",
+        "duration": "Duração",
+        "dailyBudget": "Orçamento Diário",
+        "targetCities": "Cidades Alvo",
+        "selectCities": "Selecionar cidades",
+        "autoRenew": "Renovação Automática",
+        "autoRenewDescription": "Renovar automaticamente quando expirar",
+        "costSummary": "Resumo de Custos",
+        "totalCost": "Custo Total",
+        "estimatedResults": "Resultados Estimados",
+        "estimatedResultsDescription": "Baseado em campanhas similares",
+        "startBoost": "Iniciar Boost",
+        "startBoostDescription": "Seu serviço será destacado imediatamente",
+        "quickPackages": "Pacotes Rápidos",
+        "quickPackagesDescription": "Configurações pré-definidas"
+      },
+      "performance": {
+        "title": "Performance",
+        "subtitle": "Analise o desempenho das suas campanhas de anúncios",
+        "exportReport": "Exportar Relatório",
+        "refresh": "Atualizar",
+        "stats": {
+          "totalSpent": "Total Gasto",
+          "impressions": "Impressões",
+          "clicks": "Cliques",
+          "leads": "Leads",
+          "ctr": "CTR",
+          "cpc": "CPC",
+          "conversionRate": "Taxa de Conversão",
+          "roas": "ROAS"
+        },
+        "tabs": {
+          "campaigns": "Campanhas",
+          "services": "Serviços",
+          "trends": "Tendências"
+        },
+        "campaignPerformance": "Performance das Campanhas",
+        "campaignPerformanceDescription": "Desempenho detalhado de cada campanha",
+        "topPerformingServices": "Serviços com Melhor Performance",
+        "topPerformingServicesDescription": "Seus serviços que geram mais retorno",
+        "performanceTrends": "Tendências de Performance",
+        "performanceTrendsDescription": "Evolução das métricas ao longo do tempo",
+        "insights": "Insights",
+        "insightsDescription": "Recomendações baseadas em dados",
+        "insights": {
+          "goodPerformance": "Boa Performance",
+          "optimization": "Oportunidade de Otimização",
+          "opportunity": "Nova Oportunidade"
+        }
+      }
+    },
+    "recentActivity": "Atividade Recente",
+    "recentActivityDescription": "Suas ações mais recentes na plataforma"
+  },
+  "services": {
+    "title": "Serviços",
+    "subtitle": "Gerencie suas ofertas de serviços",
+    "searchPlaceholder": "Buscar serviços...",
+    "searchButton": "Buscar",
+    "filters": "Filtros",
+    "clearFilters": "Limpar",
+    "category": "Categoria",
+    "allCategories": "Todas as categorias",
+    "city": "Cidade",
+    "allCities": "Todas as cidades",
+    "priceRange": "Faixa de preço",
+    "popularCategories": "Categorias populares",
+    "servicesFound": "{count} serviços encontrados",
+    "sortByLabel": "Ordenar por:",
+    "sortBy": {
+      "rating": "Avaliação",
+      "price": "Preço",
+      "distance": "Distância",
+      "newest": "Mais recentes",
+      "priceLow": "Preço: Menor para Maior",
+      "priceHigh": "Preço: Maior para Menor"
+    },
+    "resultsCount": "{count} serviços encontrados",
+    "noResults": "Nenhum serviço encontrado",
+    "noResultsDescription": "Tente ajustar seus filtros ou termo de busca.",
+    "bestRating": "Melhor avaliação",
+    "lowestPrice": "Menor preço",
+    "highestPrice": "Maior preço",
+    "newest": "Mais recentes",
+    "mostPopular": "Mais populares",
+    "gridView": "Visualização em grade",
+    "listView": "Visualização em lista",
+    "viewDetails": "Ver Detalhes",
+    "bookNow": "Agendar Agora",
+    "contactProvider": "Contatar Prestador",
+    "addToFavorites": "Adicionar aos Favoritos",
+    "removeFromFavorites": "Remover dos Favoritos",
+    "shareService": "Compartilhar",
+    "reportService": "Denunciar",
+    "from": "A partir de",
+    "per": "por",
+    "hour": "hora",
+    "service": "serviço",
+    "project": "projeto",
+    "rating": "Avaliação",
+    "reviews": "avaliações",
+    "review": "avaliação",
+    "noReviews": "Sem avaliações",
+    "verified": "Verificado",
+    "professional": "Profissional",
+    "responseTime": "Tempo de resposta",
+    "completedJobs": "Trabalhos concluídos",
+    "yearsExperience": "anos de experiência",
+    "languages": "Idiomas",
+    "about": "Sobre",
+    "portfolio": "Portfólio",
+    "pricing": "Preços",
+    "availability": "Disponibilidade",
+    "location": "Localização",
+    "serviceArea": "Área de atendimento",
+    "categories": {
+      "houseCleaning": "Limpeza Residencial",
+      "plumbing": "Encanamento",
+      "electrical": "Elétrica",
+      "gardening": "Jardinagem",
+      "painting": "Pintura",
+      "carpentry": "Carpintaria",
+      "appliances": "Eletrodomésticos",
+      "airConditioning": "Ar Condicionado",
+      "moving": "Mudanças",
+      "petCare": "Cuidado de Animais",
+      "tutoring": "Aulas Particulares",
+      "beauty": "Beleza",
+      "photography": "Fotografia",
+      "catering": "Catering",
+      "eventPlanning": "Organização de Eventos",
+      "fitness": "Fitness",
+      "massage": "Massagem",
+      "automotive": "Automotivo",
+      "technology": "Tecnologia",
+      "legal": "Jurídico",
+      "consulting": "Consultoria",
+      "translation": "Tradução",
+      "music": "Música",
+      "design": "Design",
+      "writing": "Redação"
+    },
+    "sponsored": {
+      "featured": "Destaque",
+      "boosted": "Impulsionado",
+      "topList": "Top da Lista"
+    }
+  },
+  "favorites": {
+    "title": "Seus Favoritos",
+    "subtitle": "Serviços que você salvou para mais tarde",
+    "empty": {
+      "title": "Ainda não tem favoritos",
+      "description": "Navegue por serviços e salve seus favoritos aqui",
+      "action": "Navegar Serviços"
+    },
+    "actions": {
+      "book": "Agendar Agora",
+      "remove": "Remover dos favoritos"
+    }
+  },
+  "bookings": {
+    "title": "Meus Agendamentos",
+    "subtitle": "Gerencie seus agendamentos de serviço",
+    "newBooking": "Novo Agendamento",
+    "searchPlaceholder": "Buscar por serviço ou prestador...",
+    "filterByStatus": "Filtrar por status",
+    "allStatuses": "Todos os status",
+    "confirmed": "Confirmado",
+    "inProgress": "Em Andamento",
+    "scheduled": "Agendado",
+    "completed": "Concluído",
+    "cancelled": "Cancelado",
+    "sortByDate": "Data",
+    "sortByPrice": "Preço",
+    "sortByStatus": "Status",
+    "upcoming": "Próximos ({count})",
+    "current": "Em Andamento ({count})",
+    "past": "Concluídos ({count})",
+    "noUpcomingBookings": "Nenhum agendamento próximo",
+    "noUpcomingDescription": "Você não tem nenhum agendamento confirmado ou pendente.",
+    "findServices": "Encontrar Serviços",
+    "noCurrentBookings": "Nenhum serviço em andamento",
+    "noCurrentDescription": "Você não tem nenhum serviço sendo executado no momento.",
+    "noCompletedBookings": "Nenhum agendamento concluído",
+    "noCompletedDescription": "Você ainda não concluiu nenhum serviço.",
+    "viewDetails": "Ver Detalhes",
+    "message": "Mensagem",
+    "reschedule": "Reagendar",
+    "cancel": "Cancelar",
+    "duration": "Duração",
+    "location": "Local",
+    "price": "Preço",
+    "provider": "Prestador",
+    "service": "Serviço",
+    "date": "Data",
+    "time": "Hora",
+    "status": "Status"
+  },
+  "serviceDetails": {
+    "backButton": "Voltar",
+    "shareButton": "Compartilhar",
+    "favoriteButton": "Favorito",
+    "bookService": "Agendar Serviço",
+    "bookNow": "Agendar Agora",
+    "sendMessage": "Enviar Mensagem",
+    "contactProvider": "Contatar Prestador",
+    "perService": "por serviço",
+    "duration": "Duração: {duration}",
+    "responseTime": "Resposta em {time}",
+    "included": "Incluído",
+    "notIncluded": "Não incluído",
+    "availability": "Disponibilidade",
+    "reviews": "Avaliações",
+    "reviewsDescription": "O que os clientes estão dizendo sobre este serviço",
+    "provider": "Prestador",
+    "memberSince": "Membro desde",
+    "servicesCompleted": "Serviços Concluídos",
+    "viewFullProfile": "Ver Perfil Completo",
+    "verified": "Verificado",
+    "rating": "Avaliação"
+  },
+  "hero": {
+    "title": "Encontre os Melhores Prestadores de Serviços",
+    "subtitle": "Conecte-se com profissionais qualificados na sua região",
+    "searchPlaceholder": "Que tipo de serviço você precisa?",
+    "searchButton": "Buscar",
+    "locationPlaceholder": "Sua localização",
+    "popularServices": "Serviços Populares",
+    "trustBadge": "Mais de 10.000 prestadores verificados",
+    "guaranteeBadge": "Garantia de satisfação",
+    "supportBadge": "Suporte 24/7"
+  },
+  "features": {
+    "title": "Por que escolher o Fixelo?",
+    "subtitle": "Oferecemos a melhor experiência para conectar você aos melhores profissionais",
+    "feature1": {
+      "title": "Prestadores Verificados",
+      "description": "Todos os nossos profissionais passam por verificação rigorosa"
+    },
+    "feature2": {
+      "title": "Pagamento Seguro",
+      "description": "Transações protegidas com garantia de reembolso"
+    },
+    "feature3": {
+      "title": "Suporte 24/7",
+      "description": "Estamos aqui para ajudar a qualquer hora do dia"
+    },
+    "feature4": {
+      "title": "Avaliações Reais",
+      "description": "Feedback genuíno de clientes reais"
+    },
+    "feature5": {
+      "title": "Agendamento Fácil",
+      "description": "Agende serviços em poucos cliques"
+    },
+    "feature6": {
+      "title": "Preços Transparentes",
+      "description": "Sem taxas ocultas, você sabe exatamente o que vai pagar"
+    }
+  },
+  "howItWorks": {
+    "title": "Como Funciona",
+    "subtitle": "Três passos simples para encontrar o serviço perfeito",
+    "step1": {
+      "title": "Busque",
+      "description": "Encontre o serviço que você precisa"
+    },
+    "step2": {
+      "title": "Compare",
+      "description": "Veja perfis, avaliações e preços"
+    },
+    "step3": {
+      "title": "Contrate",
+      "description": "Escolha o melhor e agende"
+    }
+  },
+  "categories": {
+    "title": "Categorias Populares",
+    "subtitle": "Encontre profissionais em diversas áreas",
+    "viewAll": "Ver Todas",
+    "servicesAvailable": "{count} serviços disponíveis"
+  },
+  "testimonials": {
+    "title": "O que nossos clientes dizem",
+    "subtitle": "Histórias reais de pessoas que encontraram ótimos profissionais",
+    "testimonial1": {
+      "text": "Encontrei um eletricista excelente através do Fixelo. Serviço rápido e preço justo!",
+      "author": "Maria Silva",
+      "role": "Cliente"
+    },
+    "testimonial2": {
+      "text": "Como prestador, o Fixelo me ajudou a expandir meus negócios significativamente.",
+      "author": "João Santos",
+      "role": "Prestador"
+    },
+    "testimonial3": {
+      "text": "Plataforma confiável e fácil de usar. Recomendo!",
+      "author": "Ana Costa",
+      "role": "Cliente"
+    }
+  },
+  "cta": {
+    "title": "Pronto para começar?",
+    "subtitle": "Junte-se a milhares de pessoas que já encontraram o serviço perfeito",
+    "clientButton": "Encontrar Serviços",
+    "providerButton": "Oferecer Serviços"
+  },
+  "footer": {
+    "company": "Empresa",
+    "about": "Sobre",
+    "careers": "Carreiras",
+    "press": "Imprensa",
+    "blog": "Blog",
+    "support": "Suporte",
+    "help": "Ajuda",
+    "contact": "Contato",
+    "safety": "Segurança",
+    "terms": "Termos",
+    "legal": "Legal",
+    "privacy": "Privacidade",
+    "cookies": "Cookies",
+    "accessibility": "Acessibilidade",
+    "community": "Comunidade",
+    "social": "Redes Sociais",
+    "facebook": "Facebook",
+    "twitter": "Twitter",
+    "instagram": "Instagram",
+    "linkedin": "LinkedIn",
+    "allRightsReserved": "Todos os direitos reservados",
+    "madeWith": "Feito com",
+    "love": "amor",
+    "in": "em",
+    "location": "Brasil"
+  },
+  "plans": {
+    "title": "Escolha seu plano",
+    "subtitle": "Encontre o plano perfeito para suas necessidades",
+    "monthly": "Mensal",
+    "yearly": "Anual",
+    "free": {
+      "name": "Gratuito",
+      "price": "0",
+      "description": "Ideal para começar",
+      "features": [
+        "Até 3 serviços listados",
+        "Perfil básico",
+        "Suporte por email",
+        "Estatísticas básicas"
+      ],
+      "includes": "Inclui:"
+    },
+    "premium": {
+      "name": "Premium",
+      "price": "29",
+      "description": "Para profissionais sérios",
+      "features": [
+        "Serviços ilimitados",
+        "Perfil destacado",
+        "Suporte prioritário",
+        "Analytics avançado",
+        "Boost de visibilidade",
+        "Sem taxas de transação"
+      ],
+      "mostPopular": "MAIS POPULAR",
+      "everythingInFree": "Tudo do plano Gratuito, mais:",
+      "additionalFeatures": [
+        "Suporte prioritário 24/7",
+        "Analytics detalhado",
+        "Campanhas de marketing",
+        "Badge de verificação",
+        "Leads qualificados"
+      ]
+    },
+    "upgrade": {
+      "title": "Upgrade para Premium",
+      "description": "Desbloqueie todo o potencial da plataforma",
+      "button": "Fazer Upgrade",
+      "savePerYear": "Economize {amount} por ano"
+    },
+    "features": {
+      "listings": "Listagens de serviços",
+      "profile": "Perfil profissional",
+      "support": "Suporte ao cliente",
+      "analytics": "Relatórios e analytics",
+      "boost": "Boost de visibilidade",
+      "fees": "Taxas de transação",
+      "badge": "Badge de verificação",
+      "leads": "Leads qualificados",
+      "marketing": "Ferramentas de marketing",
+      "priority": "Suporte prioritário"
+    },
+    "subscription": {
+      "title": "Assinatura",
+      "currentPlan": "Plano Atual: {plan}",
+      "plans": {
+        "free": {
+          "name": "Grátis",
+          "price": "R$ 0",
+          "features": {
+            "basicListing": "Listagem básica de serviços",
+            "limitedLeads": "Até 5 leads por mês",
+            "basicSupport": "Suporte básico",
+            "basicAnalytics": "Análises básicas"
+          }
+        },
+        "pro": {
+          "name": "Pro",
+          "price": "R$ 149",
+          "features": {
+            "priorityListing": "Listagem prioritária",
+            "unlimitedLeads": "Leads ilimitados",
+            "advancedAnalytics": "Análises avançadas",
+            "prioritySupport": "Suporte prioritário",
+            "customBranding": "Marca personalizada"
+          }
+        },
+        "premium": {
+          "name": "Premium",
+          "price": "R$ 499",
+          "features": {
+            "topListing": "Posição no topo da lista",
+            "unlimitedEverything": "Tudo ilimitado",
+            "dedicatedManager": "Gerente de conta dedicado",
+            "customIntegrations": "Integrações personalizadas",
+            "whiteLabel": "Solução marca branca"
+          }
+        },
+        "popular": "Mais Popular",
+        "current": "Plano Atual",
+        "upgrade": "Fazer Upgrade",
+        "downgrade": "Fazer Downgrade",
+        "month": "mês"
+      },
+      "usage": {
+        "title": "Estatísticas de Uso",
+        "leadsUsed": "Leads Utilizados",
+        "activeServices": "Serviços Ativos",
+        "bookingsThisMonth": "Agendamentos Este Mês",
+        "averageRating": "Avaliação Média"
+      }
+    },
+    "analytics": {
+      "title": "Análises",
+      "timeRange": {
+        "7d": "7 dias",
+        "30d": "30 dias",
+        "90d": "90 dias",
+        "1y": "1 ano"
+      },
+      "metrics": {
+        "totalViews": "Total de Visualizações",
+        "totalLeads": "Total de Leads",
+        "totalBookings": "Total de Agendamentos",
+        "totalRevenue": "Receita Total",
+        "averageRating": "Avaliação Média",
+        "responseTime": "Tempo de Resposta",
+        "conversionRate": "Taxa de Conversão",
+        "repeatCustomers": "Clientes Recorrentes",
+        "fromLastMonth": "do mês passado",
+        "outOf5": "de 5",
+        "averageResponse": "resposta média",
+        "leadsToBookings": "leads para agendamentos",
+        "thisMonth": "este mês"
+      },
+      "tabs": {
+        "overview": "Visão Geral",
+        "services": "Serviços",
+        "customers": "Clientes",
+        "revenue": "Receita"
+      },
+      "charts": {
+        "performanceOverview": "Visão Geral de Performance",
+        "chartPlaceholder": "Gráfico será exibido aqui"
+      },
+      "tables": {
+        "topServices": "Serviços com Melhor Performance",
+        "customerInsights": "Insights de Clientes",
+        "revenueAnalysis": "Análise de Receita",
+        "views": "visualizações",
+        "leads": "leads",
+        "bookings": "agendamentos",
+        "conversion": "conversão",
+        "comingSoon": "Em breve"
+      }
+    }
+  },
+  "errors": {
+    "general": "Algo deu errado. Tente novamente.",
+    "network": "Erro de conexão. Verifique sua internet.",
+    "notFound": "Página não encontrada",
+    "unauthorized": "Acesso não autorizado",
+    "forbidden": "Acesso negado",
+    "serverError": "Erro do servidor. Tente novamente mais tarde."
+  }
+} 

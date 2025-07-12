@@ -242,7 +242,14 @@ export class AuthService {
       expiresIn: accessTokenExpiry,
     });
 
-    const refreshToken = this.jwtService.sign(payload, {
+    // Adicionar timestamp único para evitar refresh tokens duplicados
+    const refreshPayload = {
+      ...payload,
+      iat: Math.floor(Date.now() / 1000), // timestamp atual
+      jti: `${user.id}-${Date.now()}`, // identificador único
+    };
+
+    const refreshToken = this.jwtService.sign(refreshPayload, {
       secret: this.configService.get('JWT_REFRESH_SECRET'),
       expiresIn: refreshTokenExpiry,
     });
@@ -250,6 +257,14 @@ export class AuthService {
     // Calcular tempo de expiração do refresh token
     const refreshExpiresAt = new Date();
     refreshExpiresAt.setDate(refreshExpiresAt.getDate() + 7); // 7 dias
+
+    // Limpar refresh tokens antigos do usuário antes de criar um novo
+    await this.prisma.refreshToken.deleteMany({
+      where: {
+        userId: user.id,
+        expiresAt: { lt: new Date() }, // remover apenas os expirados
+      },
+    });
 
     // Salvar refresh token no banco
     await this.prisma.refreshToken.create({

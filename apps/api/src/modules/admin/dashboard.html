@@ -1,0 +1,526 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Fixelo Admin Dashboard</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
+    <style>
+        .gradient-bg {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+        }
+        .card-hover:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 10px 25px rgba(0,0,0,0.1);
+        }
+        .stat-card {
+            background: white;
+            border-radius: 12px;
+            padding: 24px;
+            box-shadow: 0 4px 6px rgba(0,0,0,0.05);
+            transition: all 0.3s ease;
+        }
+        .sidebar {
+            background: linear-gradient(180deg, #1e293b 0%, #334155 100%);
+        }
+        .nav-item:hover {
+            background: rgba(255,255,255,0.1);
+        }
+        .metric-positive {
+            color: #10b981;
+        }
+        .metric-negative {
+            color: #ef4444;
+        }
+        .loading {
+            display: inline-block;
+            width: 20px;
+            height: 20px;
+            border: 3px solid #f3f3f3;
+            border-top: 3px solid #3498db;
+            border-radius: 50%;
+            animation: spin 1s linear infinite;
+        }
+        @keyframes spin {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
+        }
+        .admin-link {
+            background: linear-gradient(135deg, #2563eb 0%, #1d4ed8 100%);
+            color: white;
+            padding: 12px 24px;
+            border-radius: 8px;
+            text-decoration: none;
+            font-weight: 600;
+            transition: all 0.3s ease;
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+        }
+        .admin-link:hover {
+            background: linear-gradient(135deg, #1d4ed8 0%, #1e40af 100%);
+            transform: translateY(-2px);
+            box-shadow: 0 8px 20px rgba(37, 99, 235, 0.3);
+        }
+    </style>
+</head>
+<body class="bg-gray-50">
+    <div class="flex h-screen">
+        <!-- Sidebar -->
+        <div class="sidebar w-64 text-white">
+            <div class="p-6 border-b border-gray-600">
+                <h1 class="text-xl font-bold">Fixelo Admin</h1>
+                <p class="text-gray-300 text-sm">Management Panel</p>
+            </div>
+            <nav class="p-4">
+                <a href="#" class="nav-item flex items-center p-3 rounded-lg mb-2 text-gray-200 hover:text-white">
+                    <i class="fas fa-chart-line mr-3"></i>
+                    Dashboard
+                </a>
+                <a href="http://localhost:3002/admin" target="_blank" class="nav-item flex items-center p-3 rounded-lg mb-2 text-gray-200 hover:text-white">
+                    <i class="fas fa-database mr-3"></i>
+                    AdminJS Panel
+                    <i class="fas fa-external-link-alt ml-auto text-xs"></i>
+                </a>
+                <a href="#" onclick="navigateToUsers()" class="nav-item flex items-center p-3 rounded-lg mb-2 text-gray-200 hover:text-white">
+                    <i class="fas fa-users mr-3"></i>
+                    Users
+                </a>
+                <a href="#" onclick="navigateToServices()" class="nav-item flex items-center p-3 rounded-lg mb-2 text-gray-200 hover:text-white">
+                    <i class="fas fa-cog mr-3"></i>
+                    Services
+                </a>
+                <a href="#" onclick="navigateToBookings()" class="nav-item flex items-center p-3 rounded-lg mb-2 text-gray-200 hover:text-white">
+                    <i class="fas fa-calendar mr-3"></i>
+                    Bookings
+                </a>
+                <a href="#" onclick="navigateToReviews()" class="nav-item flex items-center p-3 rounded-lg mb-2 text-gray-200 hover:text-white">
+                    <i class="fas fa-star mr-3"></i>
+                    Reviews
+                </a>
+                <a href="#" onclick="navigateToPayments()" class="nav-item flex items-center p-3 rounded-lg mb-2 text-gray-200 hover:text-white">
+                    <i class="fas fa-credit-card mr-3"></i>
+                    Payments
+                </a>
+                <a href="#" onclick="navigateToAds()" class="nav-item flex items-center p-3 rounded-lg mb-2 text-gray-200 hover:text-white">
+                    <i class="fas fa-bullhorn mr-3"></i>
+                    Ads
+                </a>
+                <a href="#" onclick="navigateToNotifications()" class="nav-item flex items-center p-3 rounded-lg mb-2 text-gray-200 hover:text-white">
+                    <i class="fas fa-bell mr-3"></i>
+                    Notifications
+                </a>
+                <a href="#" onclick="navigateToReports()" class="nav-item flex items-center p-3 rounded-lg mb-2 text-gray-200 hover:text-white">
+                    <i class="fas fa-file-alt mr-3"></i>
+                    Reports
+                </a>
+            </nav>
+        </div>
+
+        <!-- Main Content -->
+        <div class="flex-1 overflow-auto">
+            <!-- Header -->
+            <div class="gradient-bg text-white p-6 shadow-lg">
+                <div class="flex justify-between items-center">
+                    <div>
+                        <h2 class="text-2xl font-bold">Dashboard Overview</h2>
+                        <p class="text-blue-100">Welcome back, Admin</p>
+                    </div>
+                    <div class="flex items-center space-x-4">
+                        <a href="http://localhost:3002/admin" target="_blank" class="admin-link">
+                            <i class="fas fa-external-link-alt"></i>
+                            Open AdminJS
+                        </a>
+                        <div class="text-right">
+                            <div class="text-sm text-blue-100">Last updated</div>
+                            <div id="lastUpdated" class="text-sm">Loading...</div>
+                        </div>
+                        <button onclick="refreshData()" class="bg-white bg-opacity-20 hover:bg-opacity-30 px-4 py-2 rounded-lg transition-all">
+                            <i class="fas fa-sync-alt mr-2"></i>
+                            Refresh
+                        </button>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Quick Access Panel -->
+            <div class="p-6 bg-white border-b">
+                <h3 class="text-lg font-semibold mb-4">Quick Access</h3>
+                <div class="grid grid-cols-2 md:grid-cols-4 lg:grid-cols-6 gap-4">
+                    <a href="http://localhost:3002/admin/resources/users" target="_blank" class="flex flex-col items-center p-4 bg-blue-50 rounded-lg hover:bg-blue-100 transition-colors">
+                        <i class="fas fa-users text-blue-600 text-2xl mb-2"></i>
+                        <span class="text-sm font-medium">Manage Users</span>
+                    </a>
+                    <a href="http://localhost:3002/admin/resources/services" target="_blank" class="flex flex-col items-center p-4 bg-green-50 rounded-lg hover:bg-green-100 transition-colors">
+                        <i class="fas fa-cog text-green-600 text-2xl mb-2"></i>
+                        <span class="text-sm font-medium">Manage Services</span>
+                    </a>
+                    <a href="http://localhost:3002/admin/resources/bookings" target="_blank" class="flex flex-col items-center p-4 bg-purple-50 rounded-lg hover:bg-purple-100 transition-colors">
+                        <i class="fas fa-calendar text-purple-600 text-2xl mb-2"></i>
+                        <span class="text-sm font-medium">Manage Bookings</span>
+                    </a>
+                    <a href="http://localhost:3002/admin/resources/reviews" target="_blank" class="flex flex-col items-center p-4 bg-yellow-50 rounded-lg hover:bg-yellow-100 transition-colors">
+                        <i class="fas fa-star text-yellow-600 text-2xl mb-2"></i>
+                        <span class="text-sm font-medium">Manage Reviews</span>
+                    </a>
+                    <a href="http://localhost:3002/admin/resources/transactions" target="_blank" class="flex flex-col items-center p-4 bg-red-50 rounded-lg hover:bg-red-100 transition-colors">
+                        <i class="fas fa-dollar-sign text-red-600 text-2xl mb-2"></i>
+                        <span class="text-sm font-medium">Transactions</span>
+                    </a>
+                    <a href="http://localhost:3002/admin/resources/adCampaigns" target="_blank" class="flex flex-col items-center p-4 bg-indigo-50 rounded-lg hover:bg-indigo-100 transition-colors">
+                        <i class="fas fa-bullhorn text-indigo-600 text-2xl mb-2"></i>
+                        <span class="text-sm font-medium">Ad Campaigns</span>
+                    </a>
+                </div>
+            </div>
+
+            <!-- Stats Cards -->
+            <div class="p-6">
+                <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 mb-8">
+                    <!-- Total Users -->
+                    <div class="stat-card card-hover">
+                        <div class="flex items-center justify-between">
+                            <div>
+                                <p class="text-gray-600 text-sm">Total Users</p>
+                                <p id="totalUsers" class="text-2xl font-bold text-gray-800">
+                                    <span class="loading"></span>
+                                </p>
+                                <p class="text-sm text-gray-500 mt-1">
+                                    <span id="usersGrowth" class="metric-positive">+12% this month</span>
+                                </p>
+                            </div>
+                            <div class="bg-blue-100 p-3 rounded-full">
+                                <i class="fas fa-users text-blue-600 text-xl"></i>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Active Services -->
+                    <div class="stat-card card-hover">
+                        <div class="flex items-center justify-between">
+                            <div>
+                                <p class="text-gray-600 text-sm">Active Services</p>
+                                <p id="totalServices" class="text-2xl font-bold text-gray-800">
+                                    <span class="loading"></span>
+                                </p>
+                                <p class="text-sm text-gray-500 mt-1">
+                                    <span id="servicesGrowth" class="metric-positive">+8% this month</span>
+                                </p>
+                            </div>
+                            <div class="bg-green-100 p-3 rounded-full">
+                                <i class="fas fa-cog text-green-600 text-xl"></i>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Total Bookings -->
+                    <div class="stat-card card-hover">
+                        <div class="flex items-center justify-between">
+                            <div>
+                                <p class="text-gray-600 text-sm">Total Bookings</p>
+                                <p id="totalBookings" class="text-2xl font-bold text-gray-800">
+                                    <span class="loading"></span>
+                                </p>
+                                <p class="text-sm text-gray-500 mt-1">
+                                    <span id="bookingsGrowth" class="metric-positive">+15% this month</span>
+                                </p>
+                            </div>
+                            <div class="bg-purple-100 p-3 rounded-full">
+                                <i class="fas fa-calendar text-purple-600 text-xl"></i>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Revenue -->
+                    <div class="stat-card card-hover">
+                        <div class="flex items-center justify-between">
+                            <div>
+                                <p class="text-gray-600 text-sm">Revenue</p>
+                                <p id="totalRevenue" class="text-2xl font-bold text-gray-800">
+                                    <span class="loading"></span>
+                                </p>
+                                <p class="text-sm text-gray-500 mt-1">
+                                    <span id="revenueGrowth" class="metric-positive">+23% this month</span>
+                                </p>
+                            </div>
+                            <div class="bg-yellow-100 p-3 rounded-full">
+                                <i class="fas fa-dollar-sign text-yellow-600 text-xl"></i>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- AdminJS Integration Panel -->
+                <div class="stat-card mb-8">
+                    <div class="flex items-center justify-between mb-4">
+                        <h3 class="text-lg font-semibold">AdminJS Management Panel</h3>
+                        <a href="http://localhost:3002/admin" target="_blank" class="admin-link">
+                            <i class="fas fa-external-link-alt"></i>
+                            Open Full Panel
+                        </a>
+                    </div>
+                    <div class="bg-gray-50 p-4 rounded-lg">
+                        <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
+                            <div class="bg-white p-4 rounded-lg">
+                                <h4 class="font-semibold text-gray-800 mb-2">User Management</h4>
+                                <p class="text-sm text-gray-600 mb-3">Manage users, roles, and permissions</p>
+                                <a href="http://localhost:3002/admin/resources/users" target="_blank" class="text-blue-600 hover:text-blue-800 text-sm font-medium">
+                                    View Users →
+                                </a>
+                            </div>
+                            <div class="bg-white p-4 rounded-lg">
+                                <h4 class="font-semibold text-gray-800 mb-2">Service Management</h4>
+                                <p class="text-sm text-gray-600 mb-3">Approve, edit, and monitor services</p>
+                                <a href="http://localhost:3002/admin/resources/services" target="_blank" class="text-green-600 hover:text-green-800 text-sm font-medium">
+                                    View Services →
+                                </a>
+                            </div>
+                            <div class="bg-white p-4 rounded-lg">
+                                <h4 class="font-semibold text-gray-800 mb-2">Financial Management</h4>
+                                <p class="text-sm text-gray-600 mb-3">Monitor transactions and payments</p>
+                                <a href="http://localhost:3002/admin/resources/transactions" target="_blank" class="text-purple-600 hover:text-purple-800 text-sm font-medium">
+                                    View Transactions →
+                                </a>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Charts Row -->
+                <div class="grid grid-cols-1 lg:grid-cols-2 gap-6 mb-8">
+                    <!-- Revenue Chart -->
+                    <div class="stat-card">
+                        <h3 class="text-lg font-semibold mb-4">Revenue Overview</h3>
+                        <canvas id="revenueChart" width="400" height="200"></canvas>
+                    </div>
+
+                    <!-- User Growth Chart -->
+                    <div class="stat-card">
+                        <h3 class="text-lg font-semibold mb-4">User Growth</h3>
+                        <canvas id="userChart" width="400" height="200"></canvas>
+                    </div>
+                </div>
+
+                <!-- Recent Activity -->
+                <div class="grid grid-cols-1 lg:grid-cols-2 gap-6">
+                    <!-- Recent Users -->
+                    <div class="stat-card">
+                        <h3 class="text-lg font-semibold mb-4">Recent Users</h3>
+                        <div id="recentUsers" class="space-y-3">
+                            <div class="flex items-center justify-center py-8">
+                                <div class="loading"></div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Recent Bookings -->
+                    <div class="stat-card">
+                        <h3 class="text-lg font-semibold mb-4">Recent Bookings</h3>
+                        <div id="recentBookings" class="space-y-3">
+                            <div class="flex items-center justify-center py-8">
+                                <div class="loading"></div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- System Health -->
+                <div class="mt-8">
+                    <div class="stat-card">
+                        <div class="flex items-center justify-between mb-4">
+                            <h3 class="text-lg font-semibold">System Health</h3>
+                            <div class="flex items-center space-x-2">
+                                <div class="w-3 h-3 bg-green-500 rounded-full"></div>
+                                <span class="text-sm text-gray-600">All systems operational</span>
+                            </div>
+                        </div>
+                        <div class="grid grid-cols-1 md:grid-cols-4 gap-4">
+                            <div class="text-center">
+                                <div class="text-2xl font-bold text-green-600">99.9%</div>
+                                <div class="text-sm text-gray-600">API Uptime</div>
+                            </div>
+                            <div class="text-center">
+                                <div class="text-2xl font-bold text-blue-600">45ms</div>
+                                <div class="text-sm text-gray-600">Response Time</div>
+                            </div>
+                            <div class="text-center">
+                                <div class="text-2xl font-bold text-purple-600">2.1GB</div>
+                                <div class="text-sm text-gray-600">Memory Usage</div>
+                            </div>
+                            <div class="text-center">
+                                <div class="text-2xl font-bold text-green-600">Online</div>
+                                <div class="text-sm text-gray-600">AdminJS Status</div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // Initialize charts
+        let revenueChart, userChart;
+
+        // Navigation functions
+        function navigateToUsers() {
+            window.open('http://localhost:3002/admin/resources/users', '_blank');
+        }
+
+        function navigateToServices() {
+            window.open('http://localhost:3002/admin/resources/services', '_blank');
+        }
+
+        function navigateToBookings() {
+            window.open('http://localhost:3002/admin/resources/bookings', '_blank');
+        }
+
+        function navigateToReviews() {
+            window.open('http://localhost:3002/admin/resources/reviews', '_blank');
+        }
+
+        function navigateToPayments() {
+            window.open('http://localhost:3002/admin/resources/transactions', '_blank');
+        }
+
+        function navigateToAds() {
+            window.open('http://localhost:3002/admin/resources/adCampaigns', '_blank');
+        }
+
+        function navigateToNotifications() {
+            window.open('http://localhost:3002/admin/resources/notifications', '_blank');
+        }
+
+        function navigateToReports() {
+            window.open('http://localhost:3002/admin/resources/auditLogs', '_blank');
+        }
+
+        // Load dashboard data
+        async function loadDashboardData() {
+            try {
+                const response = await fetch('/admin/dashboard/stats');
+                const data = await response.json();
+                
+                // Update stats
+                document.getElementById('totalUsers').textContent = data.totalUsers || '0';
+                document.getElementById('totalServices').textContent = data.totalServices || '0';
+                document.getElementById('totalBookings').textContent = data.totalBookings || '0';
+                document.getElementById('totalRevenue').textContent = '$' + (data.totalRevenue || '0');
+                
+                // Update last updated time
+                document.getElementById('lastUpdated').textContent = new Date().toLocaleTimeString();
+                
+                // Load recent users
+                if (data.recentUsers) {
+                    const recentUsersHtml = data.recentUsers.map(user => `
+                        <div class="flex items-center space-x-3 p-3 bg-gray-50 rounded-lg">
+                            <div class="w-8 h-8 bg-blue-500 rounded-full flex items-center justify-center text-white text-sm">
+                                ${user.firstName ? user.firstName.charAt(0) : 'U'}
+                            </div>
+                            <div class="flex-1">
+                                <div class="font-medium">${user.firstName || 'Unknown'} ${user.lastName || 'User'}</div>
+                                <div class="text-sm text-gray-600">${user.email}</div>
+                            </div>
+                            <div class="text-xs text-gray-500">
+                                ${new Date(user.createdAt).toLocaleDateString()}
+                            </div>
+                        </div>
+                    `).join('');
+                    document.getElementById('recentUsers').innerHTML = recentUsersHtml;
+                }
+                
+                // Load recent bookings
+                if (data.recentBookings) {
+                    const recentBookingsHtml = data.recentBookings.map(booking => `
+                        <div class="flex items-center space-x-3 p-3 bg-gray-50 rounded-lg">
+                            <div class="w-8 h-8 bg-green-500 rounded-full flex items-center justify-center text-white text-sm">
+                                <i class="fas fa-calendar"></i>
+                            </div>
+                            <div class="flex-1">
+                                <div class="font-medium">Booking #${booking.id.slice(-6)}</div>
+                                <div class="text-sm text-gray-600">Status: ${booking.status}</div>
+                            </div>
+                            <div class="text-xs text-gray-500">
+                                $${booking.totalAmount}
+                            </div>
+                        </div>
+                    `).join('');
+                    document.getElementById('recentBookings').innerHTML = recentBookingsHtml;
+                }
+                
+            } catch (error) {
+                console.error('Error loading dashboard data:', error);
+            }
+        }
+
+        // Initialize revenue chart
+        function initRevenueChart() {
+            const ctx = document.getElementById('revenueChart').getContext('2d');
+            revenueChart = new Chart(ctx, {
+                type: 'line',
+                data: {
+                    labels: ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun'],
+                    datasets: [{
+                        label: 'Revenue',
+                        data: [1200, 1900, 3000, 5000, 2000, 3000],
+                        borderColor: '#3b82f6',
+                        backgroundColor: 'rgba(59, 130, 246, 0.1)',
+                        tension: 0.4
+                    }]
+                },
+                options: {
+                    responsive: true,
+                    maintainAspectRatio: false,
+                    scales: {
+                        y: {
+                            beginAtZero: true
+                        }
+                    }
+                }
+            });
+        }
+
+        // Initialize user chart
+        function initUserChart() {
+            const ctx = document.getElementById('userChart').getContext('2d');
+            userChart = new Chart(ctx, {
+                type: 'bar',
+                data: {
+                    labels: ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun'],
+                    datasets: [{
+                        label: 'New Users',
+                        data: [12, 19, 30, 50, 20, 30],
+                        backgroundColor: '#10b981'
+                    }]
+                },
+                options: {
+                    responsive: true,
+                    maintainAspectRatio: false,
+                    scales: {
+                        y: {
+                            beginAtZero: true
+                        }
+                    }
+                }
+            });
+        }
+
+        // Refresh data
+        function refreshData() {
+            loadDashboardData();
+        }
+
+        // Initialize dashboard
+        document.addEventListener('DOMContentLoaded', function() {
+            loadDashboardData();
+            initRevenueChart();
+            initUserChart();
+            
+            // Auto-refresh every 30 seconds
+            setInterval(loadDashboardData, 30000);
+        });
+    </script>
+</body>
+</html> 

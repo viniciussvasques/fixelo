@@ -13,6 +13,8 @@ import { PlansModule } from './modules/plans/plans.module';
 import { HealthModule } from './modules/health/health.module';
 import { ServicesModule } from './services/services.module';
 import { PrismaModule } from './modules/prisma/prisma.module';
+import { AdminModule } from './modules/admin/admin.module';
+import { LocationsModule } from './modules/locations/locations.module';
 
 @Module({
   imports: [
@@ -30,6 +32,8 @@ import { PrismaModule } from './modules/prisma/prisma.module';
     PlansModule,
     ChatModule,
     HealthModule,
+    AdminModule,
+    LocationsModule,
   ],
 })
 export class AppModule {} 

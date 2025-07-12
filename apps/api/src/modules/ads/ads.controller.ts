@@ -222,8 +222,7 @@ export class AdsController {
   @ApiOperation({ summary: 'Estatísticas gerais da plataforma (Admin)' })
   @ApiResponse({ status: 200, description: 'Estatísticas da plataforma' })
   async getPlatformStats() {
-    // TODO: Implementar estatísticas da plataforma
-    return { message: 'Platform stats - to be implemented' };
+    return this.adsService.getPlatformStats();
   }
 
   // ================== ENDPOINTS PÚBLICOS (para busca) ==================
