@@ -2,7 +2,7 @@ import { Injectable, NotFoundException, ForbiddenException, BadRequestException 
 import { PrismaService } from '@fixelo/prisma';
 import { CreateServiceDto, UpdateServiceDto, ServiceSearchDto, ServiceResponseDto, ServiceListResponseDto, ServiceCategoriesResponseDto } from './dto/service.dto';
 import { UserRole } from '@fixelo/common';
-import { ServiceCategory, ServiceStatus } from '@prisma/client';
+import { ServiceCategory, ServiceStatus, PaymentStatus, BookingStatus } from '@prisma/client';
 
 @Injectable()
 export class ServicesService {
@@ -358,6 +358,47 @@ export class ServicesService {
     });
 
     return services.map(service => this.formatServiceResponse(service));
+  }
+
+  async getProviderStats(providerId: string): Promise<any> {
+    const [servicesCount, bookingsCount, reviewsCount, totalEarnings] = await Promise.all([
+      // Count active services
+      this.prisma.service.count({
+        where: { providerId, isActive: true }
+      }),
+      // Count bookings
+      this.prisma.booking.count({
+        where: { providerId }
+      }),
+      // Count reviews
+      this.prisma.review.count({
+        where: { providerId }
+      }),
+      // Calculate total earnings from completed bookings
+      this.prisma.booking.aggregate({
+        where: { 
+          providerId,
+          status: BookingStatus.COMPLETED,
+          paymentStatus: PaymentStatus.COMPLETED
+        },
+        _sum: { totalAmount: true }
+      })
+    ]);
+
+    // Get provider rating
+    const provider = await this.prisma.user.findUnique({
+      where: { id: providerId },
+      select: { rating: true, reviewCount: true }
+    });
+
+    return {
+      servicesCount,
+      bookingsCount: bookingsCount,
+      reviewsCount,
+      totalEarnings: totalEarnings._sum.totalAmount || 0,
+      averageRating: provider?.rating || 0,
+      totalReviews: provider?.reviewCount || 0
+    };
   }
 
   private formatServiceResponse(service: any): ServiceResponseDto {

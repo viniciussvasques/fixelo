@@ -3,7 +3,18 @@ import { AppModule } from './app.module';
 import { ValidationPipe } from '@nestjs/common';
 import { GlobalExceptionFilter } from './common/filters/global-exception.filter';
 
+console.log('✅ STRIPE_SECRET_KEY definida diretamente:', process.env.STRIPE_SECRET_KEY?.substring(0, 20) + '...');
+console.log('✅ Comprimento da chave:', process.env.STRIPE_SECRET_KEY?.length);
+
+// NÃO CARREGAR dotenv - pode sobrescrever as variáveis
+// require('dotenv').config({ path: '../../.env' });
+// require('dotenv').config({ path: '.env' });
+
 async function bootstrap() {
+  // Verificação final das variáveis
+  console.log('🔍 VERIFICAÇÃO FINAL - STRIPE_SECRET_KEY:', process.env.STRIPE_SECRET_KEY?.substring(0, 20) + '...');
+  console.log('🔍 VERIFICAÇÃO FINAL - Comprimento:', process.env.STRIPE_SECRET_KEY?.length);
+  
   const app = await NestFactory.create(AppModule);
   
   // Global validation pipe
@@ -391,4 +402,4 @@ async function bootstrap() {
   console.log('🚀 API is running on: http://localhost:3001');
   console.log('📚 API Documentation: http://localhost:3001/api/docs');
 }
-bootstrap(); 
+bootstrap();

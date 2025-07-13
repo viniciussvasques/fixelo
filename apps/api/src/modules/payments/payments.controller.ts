@@ -8,7 +8,9 @@ import {
   UseGuards, 
   Request,
   HttpStatus,
-  HttpCode
+  HttpCode,
+  Req,
+  Res
 } from '@nestjs/common';
 import { ApiTags, ApiOperation, ApiResponse, ApiBearerAuth } from '@nestjs/swagger';
 import { JwtAuthGuard } from '../auth/guards/jwt-auth.guard';
@@ -21,6 +23,8 @@ import {
   LeadPurchaseDto, 
   BoostCampaignDto 
 } from './dto/payment.dto';
+import Stripe from 'stripe';
+import { PlanType } from '@prisma/client';
 
 @ApiTags('Payments')
 @Controller('payments')
@@ -192,10 +196,25 @@ export class PaymentsController {
     description: 'Handle Stripe webhook events'
   })
   @ApiResponse({ status: 200, description: 'Webhook processed successfully' })
-  async handleStripeWebhook(@Body() webhookData: any) {
-    // Handle Stripe webhook events
-    // This would typically verify the webhook signature and process events
-    return { received: true };
+  async handleStripeWebhook(@Req() req, @Res() res) {
+    const stripe = new Stripe(process.env.STRIPE_SECRET_KEY!, { apiVersion: '2023-10-16' });
+    const sig = req.headers['stripe-signature'];
+    let event;
+    try {
+      event = stripe.webhooks.constructEvent(req.rawBody, sig, process.env.STRIPE_WEBHOOK_SECRET!);
+    } catch (err) {
+      return res.status(400).send(`Webhook Error: ${err.message}`);
+    }
+    // Processar evento de subscription ativada
+    if (event.type === 'checkout.session.completed') {
+      const session = event.data.object;
+      const userId = session.metadata?.userId;
+      // Atualizar plano do usuário para PRO
+      if (userId) {
+        await this.paymentsService.updateUserPlan(userId, PlanType.PRO);
+      }
+    }
+    res.status(200).json({ received: true });
   }
 
   @Post('webhook/apple')

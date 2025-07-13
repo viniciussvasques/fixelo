@@ -305,18 +305,85 @@ export class PlansService {
   }> {
     const user = await this.prisma.user.findUnique({
       where: { id: userId },
-      select: { planType: true, leadsUsed: true, leadsLimit: true },
+      select: {
+        planType: true,
+        leadsUsed: true,
+        leadsLimit: true,
+      },
     });
 
-    const plan = this.plans[user?.planType || 'FREE'];
-    const currentLeads = user?.leadsUsed || 0;
-    const limit = user?.leadsLimit || plan.leadLimit;
-    
+    if (!user) {
+      throw new Error('User not found');
+    }
+
+    const plan = this.plans[user.planType || 'FREE'];
+    const currentLeads = user.leadsUsed || 0;
+    const limit = user.leadsLimit || plan.leadLimit;
+
     return {
       currentLeads,
       limit,
       canReceiveMore: currentLeads < limit,
-      plan: user?.planType || 'FREE',
+      plan: user.planType || 'FREE',
+    };
+  }
+
+  async getUserUsage(userId: string): Promise<{
+    planType: string;
+    leadsUsed: number;
+    leadsLimit: number;
+    leadsRemaining: number;
+    usagePercentage: number;
+    planDetails: PlanDetails;
+    monthlyStats: {
+      totalLeads: number;
+      conversions: number;
+      conversionRate: number;
+      revenue: number;
+    };
+  }> {
+    const user = await this.prisma.user.findUnique({
+      where: { id: userId },
+      select: {
+        planType: true,
+        leadsUsed: true,
+        leadsLimit: true,
+        leadCount: true,
+        completedBookings: true,
+        rating: true,
+      },
+    });
+
+    if (!user) {
+      throw new Error('User not found');
+    }
+
+    const planType = user.planType || 'FREE';
+    const planDetails = this.plans[planType];
+    const leadsUsed = user.leadsUsed || 0;
+    const leadsLimit = user.leadsLimit || planDetails.leadLimit;
+    const leadsRemaining = Math.max(0, leadsLimit - leadsUsed);
+    const usagePercentage = Math.round((leadsUsed / leadsLimit) * 100);
+
+    // Calcular estatísticas mensais (simulado)
+    const totalLeads = user.leadCount || 0;
+    const conversions = user.completedBookings || 0;
+    const conversionRate = totalLeads > 0 ? Math.round((conversions / totalLeads) * 100) : 0;
+    const revenue = conversions * 50; // Valor médio por conversão
+
+    return {
+      planType,
+      leadsUsed,
+      leadsLimit,
+      leadsRemaining,
+      usagePercentage,
+      planDetails,
+      monthlyStats: {
+        totalLeads,
+        conversions,
+        conversionRate,
+        revenue,
+      },
     };
   }
 

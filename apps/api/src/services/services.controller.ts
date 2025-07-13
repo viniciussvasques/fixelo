@@ -143,6 +143,51 @@ export class ServicesController {
     return this.servicesService.getFeaturedServices(limit);
   }
 
+  // 📊 GET PROVIDER STATS (must be before /provider endpoint)
+  @Get('provider/stats')
+  @UseGuards(JwtAuthGuard, RolesGuard)
+  @Roles(UserRole.PROVIDER)
+  @ApiBearerAuth()
+  @ApiOperation({ 
+    summary: 'Get current provider statistics',
+    description: 'Get statistics for the currently logged in provider'
+  })
+  @ApiResponse({ 
+    status: 200, 
+    description: 'Provider statistics retrieved successfully'
+  })
+  @ApiResponse({ status: 401, description: 'Unauthorized' })
+  @ApiResponse({ status: 403, description: 'Only providers can access this endpoint' })
+  async getProviderStats(@Request() req: any): Promise<any> {
+    return this.servicesService.getProviderStats(req.user.id);
+  }
+
+  // 👤 GET SERVICES BY CURRENT PROVIDER (logged in)
+  @Get('provider')
+  @UseGuards(JwtAuthGuard, RolesGuard)
+  @Roles(UserRole.PROVIDER)
+  @ApiBearerAuth()
+  @ApiOperation({ 
+    summary: 'Get services by current logged in provider',
+    description: 'Get all services from the currently logged in provider'
+  })
+  @ApiQuery({ name: 'page', required: false, description: 'Page number' })
+  @ApiQuery({ name: 'limit', required: false, description: 'Items per page' })
+  @ApiResponse({ 
+    status: 200, 
+    description: 'Current provider services retrieved successfully',
+    type: ServiceListResponseDto
+  })
+  @ApiResponse({ status: 401, description: 'Unauthorized' })
+  @ApiResponse({ status: 403, description: 'Only providers can access this endpoint' })
+  async findByCurrentProvider(
+    @Request() req: any,
+    @Query('page', new DefaultValuePipe(1), ParseIntPipe) page: number,
+    @Query('limit', new DefaultValuePipe(10), ParseIntPipe) limit: number
+  ): Promise<ServiceListResponseDto> {
+    return this.servicesService.findByProvider(req.user.id, page, limit);
+  }
+
   // 👤 GET SERVICES BY PROVIDER
   @Get('provider/:providerId')
   @ApiOperation({ 

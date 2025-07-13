@@ -113,7 +113,11 @@
       "boost": "Impulsar",
       "performance": "Rendimiento",
       "subscription": "Suscripción",
-      "backToSite": "Volver al Sitio"
+      "backToSite": "Volver al Sitio",
+      "upgradeBanner": "¡Desbloquea funciones avanzadas con Pro!",
+      "pro": {
+        "cta": "Actualizar a Pro"
+      }
     },
     "stats": {
       "servicesBooked": "Servicios Reservados",
@@ -281,7 +285,6 @@
           "validationError": "Error de Validación",
           "fillRequiredFields": "Por favor, completa todos los campos requeridos.",
           "selectCities": "Selecciona al menos una ciudad objetivo.",
-          "error": "Error",
           "errorCreatingCampaign": "Error al crear campaña. Inténtalo de nuevo.",
           "adTypes": {
             "featured": "Destacado",
@@ -355,12 +358,15 @@
   },
   "services": {
     "title": "Servicios",
+    "subtitle": "Gestiona tus servicios y rastrea el rendimiento",
     "myServices": "Mis Servicios",
     "allServices": "Todos los Servicios",
     "activeServices": "Servicios Activos",
     "inactiveServices": "Servicios Inactivos",
     "active": "Activo",
     "inactive": "Inactivo",
+    "activeOnly": "Solo Activos",
+    "inactiveOnly": "Solo Inactivos",
     "activate": "Activar",
     "deactivate": "Desactivar",
     "views": "Visualizaciones",
@@ -377,10 +383,10 @@
     "updating": "Actualizando...",
     "notFound": "Servicio no encontrado",
     "tagsHelp": "Separa las etiquetas con comas",
-    "error": "Error",
     "serviceDeleted": "Servicio eliminado exitosamente",
     "serviceUpdated": "Servicio actualizado exitosamente",
     "serviceCreated": "¡Servicio Creado!",
+    "created": "Creado",
     "serviceCreatedSuccess": "Su servicio ha sido creado exitosamente.",
     "noServices": "No se encontraron servicios",
     "noServicesDescription": "Aún no has creado ningún servicio. Comienza creando tu primer servicio.",
@@ -420,6 +426,7 @@
     "providerInfo": "Información del Proveedor",
     "serviceLocation": "Ubicación del Servicio",
     "serviceLocationDescription": "¿Dónde proporciona este servicio?",
+    "available": "Disponible",
     "availableIn": "Disponible en",
     "serviceArea": "Área de Servicio",
     "duration": "Duración",
@@ -427,7 +434,7 @@
     "category": "Categoría",
     "tags": "Etiquetas",
     "serviceTags": "Etiquetas del Servicio",
-    "serviceTagsDescription": "Agregue etiquetas para ayudar a los clientes a encontrar su servicio",
+    "serviceTagsDescription": "Agregue etiquetas para ayudar a los clientes a encontrar tu servicio",
     "addTag": "Agregar Etiqueta",
     "addTagPlaceholder": "Agregar una etiqueta...",
     "images": "Imágenes",
@@ -668,7 +675,8 @@
     "personalCare": {
       "title": "Cuidado Personal",
       "description": "Entrenamiento personal y bienestar"
-    }
+    },
+    "serviceLabel": "servicios"
   },
   "testimonials": {
     "title": "Lo que dicen nuestros usuarios",
@@ -751,6 +759,28 @@
     "timeline": {
       "title": "Nuestro Viaje",
       "subtitle": "Hitos importantes en la historia de Fixelo",
+      "2020": {
+        "title": "Fundación",
+        "description": "Nacimiento de la idea y desarrollo del concepto inicial"
+      },
+      "2021": {
+        "title": "MVP Lanzado",
+        "description": "Primera versión de la plataforma en Miami"
+      },
+      "2022": {
+        "title": "Expansión Regional",
+        "description": "Cobertura en toda Florida"
+      },
+      "2023": {
+        "title": "Serie A",
+        "description": "Inversión de $5M para expansión"
+      },
+      "2024": {
+        "title": "Plataforma Nacional",
+        "description": "Preparación para expansión nacional"
+      }
+    },
+    "milestones": {
       "2020": {
         "title": "Fundación",
         "description": "Nacimiento de la idea y desarrollo del concepto inicial"
@@ -865,7 +895,7 @@
     "password": "Contraseña",
     "passwordDescription": "Cambia tu contraseña",
     "changePassword": "Cambiar Contraseña",
-    "twoFactor": "Autenticación de Dos Factores",
+    "twoFactor": "Autenticación de dos factores",
     "twoFactorDescription": "Añade una capa extra de seguridad",
     "enable": "Habilitar",
     "sessions": "Sesiones Activas",
@@ -1095,16 +1125,19 @@
         "validationError": "Error de Validación",
         "fillRequiredFields": "Por favor, llena todos los campos requeridos.",
         "selectCities": "Selecciona al menos una ciudad objetivo.",
-        "error": "Error",
         "errorCreatingCampaign": "Error al crear la campaña. Por favor, intenta de nuevo.",
-        "adTypes": {
+                  "adTypes": {
+            "featured": "Destacado",
+            "featuredDescription": "Aparece en la parte superior de los resultados",
+            "boost": "Impulso",
+            "boostDescription": "Aumenta la visibilidad rápidamente",
+            "topList": "Top de la Lista",
+            "topListDescription": "Siempre en la parte superior de la categoría"
+          },
+          "boosted": "Impulsado",
           "featured": "Destacado",
-          "featuredDescription": "Aparece en la parte superior de los resultados",
-          "boost": "Impulso",
-          "boostDescription": "Aumenta la visibilidad rápidamente",
           "topList": "Top de la Lista",
-          "topListDescription": "Siempre en la parte superior de la categoría"
-        }
+          "sponsored": "Patrocinado"
       }
     },
     "boost": {
@@ -1278,24 +1311,362 @@
     },
     "copyright": "© {year} Fixelo. Todos los derechos reservados."
   },
-  "servicesPage": {
-    "title": "Buscar Servicios",
-    "subtitle": "Encuentra y agenda los mejores profesionales en tu ciudad.",
-    "searchPlaceholder": "Buscar servicios...",
-    "allCategories": "Todas las Categorías",
-    "allCities": "Todas las Ciudades",
-    "sortBy": {
-      "label": "Ordenar por",
-      "rating": "Calificación",
-      "priceLow": "Menor Precio",
-      "priceHigh": "Mayor Precio",
-      "newest": "Más Recientes"
+  "services": {
+    "services": "Servicios",
+    "servicesPage": {
+      "title": "Buscar Servicios",
+      "subtitle": "Encuentra y agenda los mejores profesionales en tu ciudad.",
+      "searchPlaceholder": "Buscar servicios...",
+      "allCategories": "Todas las Categorías",
+      "allCities": "Todas las Ciudades",
+      "sortBy": {
+        "label": "Ordenar por",
+        "rating": "Calificación",
+        "priceLow": "Menor Precio",
+        "priceHigh": "Mayor Precio",
+        "newest": "Más Recientes"
+      },
+      "resultsCount": "{count} resultados",
+      "sponsored": "Patrocinado",
+      "filters": "Filtros",
+      "noResults": "No se encontraron servicios",
+      "noResultsDescription": "Intenta ajustar tu búsqueda o filtros.",
+      "popularCategories": "Categorías Populares"
+    }
+  },
+  "howItWorks": {
+    "badge": "Cómo Funciona",
+    "title": {
+      "line1": "Tres pasos simples para encontrar",
+      "highlight": "el servicio perfecto",
+      "line2": "para ti"
     },
-    "resultsCount": "{count} resultados",
-    "sponsored": "Patrocinado",
-    "filters": "Filtros",
-    "noResults": "No se encontraron servicios",
-    "noResultsDescription": "Intenta ajustar tu búsqueda o filtros.",
-    "popularCategories": "Categorías Populares"
+    "subtitle": "Conéctate con profesionales de confianza en minutos",
+    "steps": {
+      "search": {
+        "title": "Buscar y Comparar",
+        "description": "Explora cientos de profesionales verificados en tu área",
+        "features": {
+          "browse": "Busca por categoría de servicio",
+          "filter": "Filtra por ubicación y precio",
+          "compare": "Lee reseñas y calificaciones"
+        },
+        "details": [
+          "Busca por categoría de servicio",
+          "Filtra por ubicación y precio",
+          "Lee reseñas y calificaciones",
+          "Compara perfiles y portafolios"
+        ]
+      },
+      "book": {
+        "title": "Reservar y Agendar",
+        "description": "Elige tu profesional preferido y agenda el servicio",
+        "features": {
+          "schedule": "Selecciona fecha y hora",
+          "payment": "Opciones de pago seguro",
+          "confirmation": "Confirmación instantánea"
+        },
+        "details": [
+          "Selecciona fecha y hora",
+          "Agrega detalles del servicio",
+          "Chatea con el profesional",
+          "Confirma la reserva al instante"
+        ]
+      },
+      "choose": {
+        "title": "Elegir & Revisar",
+        "description": "Selecciona al mejor profesional para tus necesidades",
+        "features": {
+          "profile": "Ver perfiles de profesionales",
+          "reviews": "Revisar calificaciones y opiniones",
+          "verification": "Profesionales verificados"
+        }
+      },
+      "enjoy": {
+        "title": "Disfrutar & Calificar",
+        "description": "Disfruta del servicio y deja tu opinión",
+        "features": {
+          "service": "Recibe un servicio de calidad",
+          "support": "Soporte 24/7",
+          "review": "Deja una reseña"
+        }
+      },
+      "pay": {
+        "title": "Pagar y Opinar",
+        "description": "Pago seguro tras la realización del servicio y deja tu opinión",
+        "details": [
+          "Paga solo después de completar",
+          "Múltiples métodos de pago",
+          "Califica y opina sobre el servicio",
+          "Construye confianza en la comunidad"
+        ]
+      },
+      "title": "Nuestro Proceso",
+      "subtitle": "Cómo funciona en pasos simples"
+    },
+    "benefits": {
+      "title": "¿Por qué elegir nuestra plataforma?",
+      "subtitle": "Experimenta la diferencia con nuestra plataforma integral de servicios",
+      "noHiddenFees": {
+        "title": "Sin cargos ocultos",
+        "description": "Precios transparentes sin sorpresas"
+      },
+      "support247": {
+        "title": "Soporte 24/7",
+        "description": "Obtén ayuda cuando la necesites"
+      },
+      "moneyBack": {
+        "title": "Garantía de devolución",
+        "description": "Satisfacción 100% garantizada"
+      },
+      "instantBooking": {
+        "title": "Reserva instantánea",
+        "description": "Reserva servicios en solo unos clics"
+      },
+      "findServices": "Buscar Servicios",
+      "becomeProfessional": "Hazte Profesional",
+      "security": {
+        "title": "Seguridad",
+        "description": "Tus datos y pagos están protegidos"
+      },
+      "speed": {
+        "title": "Velocidad",
+        "description": "Reserva servicios rápida y fácilmente"
+      },
+      "payment": {
+        "title": "Pago",
+        "description": "Múltiples opciones de pago seguro"
+      },
+      "communication": {
+        "title": "Comunicación",
+        "description": "Chat directo con profesionales"
+      },
+      "community": {
+        "title": "Comunidad",
+        "description": "Únete a una red confiable de usuarios"
+      },
+      "quality": {
+        "title": "Calidad",
+        "description": "Profesionales con las mejores valoraciones"
+      }
+    },
+    "cta": {
+      "findServicesButton": "Buscar Servicios",
+      "becomeProfessionalButton": "Hazte Profesional",
+      "title": "¿Listo para comenzar?",
+      "subtitle": "Únete a miles de clientes y profesionales satisfechos hoy mismo"
+    },
+    "faq": {
+      "title": "Preguntas Frecuentes",
+      "subtitle": "Respuestas rápidas a las preguntas más comunes",
+      "q1": { "question": "¿Cómo reservo un servicio?", "answer": "Simplemente busca, elige un profesional y reserva en línea." },
+      "q2": { "question": "¿El pago es seguro?", "answer": "Sí, todos los pagos se procesan de forma segura." },
+      "q3": { "question": "¿Puedo contactar al profesional antes de reservar?", "answer": "Sí, puedes chatear directamente antes de confirmar." },
+      "q4": { "question": "¿Qué pasa si no estoy satisfecho?", "answer": "Ofrecemos garantía de devolución y soporte 24/7." }
+    },
+    "comparison": {
+      "title": "Clientes vs Profesionales",
+      "subtitle": "Beneficios clave para cada lado",
+      "clients": {
+        "tab": "Clientes",
+        "features": {
+          "search": { "title": "Búsqueda Inteligente", "description": "Encuentra servicios fácilmente" },
+          "security": { "title": "Seguridad", "description": "Protección total de datos y pagos" },
+          "payment": { "title": "Pago Seguro", "description": "Métodos de pago confiables" },
+          "communication": { "title": "Comunicación Directa", "description": "Chatea con profesionales" },
+          "reviews": { "title": "Reseñas Reales", "description": "Lee reseñas verificadas" },
+          "speed": { "title": "Velocidad", "description": "Contrata en minutos" }
+        }
+      },
+      "professionals": {
+        "tab": "Profesionales",
+        "features": {
+          "clients": { "title": "Más Clientes", "description": "Conéctate con clientes calificados" },
+          "verification": { "title": "Verificación", "description": "Gana confianza con insignia verificada" },
+          "payment": { "title": "Pagos Rápidos", "description": "Recibe pagos de forma ágil y segura" },
+          "communication": { "title": "Chat con Clientes", "description": "Contacto directo y sencillo" },
+          "reviews": { "title": "Reputación", "description": "Construye reseñas positivas" },
+          "tools": { "title": "Herramientas", "description": "Accede a herramientas de gestión y análisis" }
+        }
+      }
+    }
+  },
+  "plans": {
+    "title": "Elige tu Plan",
+    "subtitle": "Desbloquea el potencial de tu negocio con nuestras funciones premium",
+    "free": {
+      "name": "GRATIS",
+      "price": "$0",
+      "period": "para siempre",
+      "description": "Perfecto para comenzar",
+      "includes": "Incluye",
+      "features": {
+        "leadsPerWeek": "10 leads por mes",
+        "basicProfile": "Perfil básico",
+        "images": "3 imágenes de servicio",
+        "standardSupport": "Soporte estándar",
+        "basicAnalytics": "Analíticas básicas"
+      },
+      "limitations": {
+        "title": "Limitaciones",
+        "noTopPriority": "Sin prioridad en la lista superior",
+        "noAds": "Sin campañas ADS",
+        "limitedVisibility": "Visibilidad limitada",
+        "slowVerification": "Verificación de 7-14 días"
+      },
+      "button": "Plan Actual",
+      "downgrade": "Cambiar a Gratis",
+      "popular": false
+    },
+    "premium": {
+      "name": "PREMIUM",
+      "price": "$34.80",
+      "period": "por mes",
+      "description": "Maximiza el crecimiento de tu negocio",
+      "mostPopular": "MÁS POPULAR",
+      "everythingInFree": "Todo en Gratis, además",
+      "features": {
+        "moreLeads": "40 leads por mes (vs 10/mes)",
+        "topList": "Lista superior 4x por semana",
+        "fullAds": "Acceso completo ADS",
+        "moreImages": "10 imágenes de servicio",
+        "premiumBadge": "Insignia premium",
+        "prioritySupport": "Soporte prioritario",
+        "advancedAnalytics": "Analíticas avanzadas",
+        "autoTemplates": "Plantillas de respuesta automática",
+        "fastVerification": "Verificación en 24-48h",
+        "competitorInsights": "Información de competidores"
+      },
+      "button": "Mejorar Ahora",
+      "currentPlan": "Plan Actual",
+      "popular": true,
+      "savings": "Ahorra $180/año"
+    },
+    "comparison": {
+      "title": "Comparación de Características",
+      "leads": "Leads Mensuales",
+      "topList": "Prioridad en Lista Superior",
+      "ads": "Campañas ADS",
+      "images": "Imágenes de Servicio",
+      "support": "Nivel de Soporte",
+      "analytics": "Analíticas",
+      "verification": "Tiempo de Verificación",
+      "badge": "Insignia Premium"
+    },
+    "benefits": {
+      "title": "¿Por qué ser Premium?",
+      "subtitle": "Únete a miles de profesionales exitosos",
+      "moreLeads": {
+        "title": "4x Más Leads",
+        "description": "Obtén hasta 40 leads calificados por mes vs 10/mes en el plan gratis"
+      },
+      "topVisibility": {
+        "title": "Mayor Visibilidad",
+        "description": "Aparece en la parte superior de resultados 4 veces por semana"
+      },
+      "adsControl": {
+        "title": "Control de ADS",
+        "description": "Crea campañas segmentadas para llegar a tus clientes ideales"
+      },
+      "fastGrowth": {
+        "title": "Crecimiento Acelerado",
+        "description": "Los usuarios Premium ven un crecimiento 300% más rápido en promedio"
+      }
+    },
+    "upgrade": {
+      "title": "Mejorar a Premium",
+      "subtitle": "Comienza a hacer crecer tu negocio hoy",
+      "monthlyBilling": "Facturación Mensual",
+      "annualBilling": "Facturación Anual",
+      "save20": "Ahorra 20%",
+      "savePerYear": "Ahorra {amount}/año",
+      "startTrial": "Iniciar Prueba Gratis",
+      "upgradeNow": "Mejorar Ahora",
+      "moneyBack": "Garantía de devolución de 30 días"
+    }
+  },
+  "subscription": {
+    "title": "Suscripción",
+    "currentPlan": "Plan Actual: {plan}",
+    "plans": {
+      "free": {
+        "name": "Gratis",
+        "price": "$0",
+        "features": {
+          "basicListing": "Listado básico de servicio",
+          "limitedLeads": "Hasta 5 leads por mes",
+          "basicSupport": "Soporte básico",
+          "basicAnalytics": "Analíticas básicas"
+        }
+      },
+      "pro": {
+        "name": "Pro",
+        "price": "$29",
+        "features": {
+          "priorityListing": "Listado prioritario",
+          "unlimitedLeads": "Leads ilimitados",
+          "advancedAnalytics": "Analíticas avanzadas",
+          "prioritySupport": "Soporte prioritario",
+          "customBranding": "Personalización de marca"
+        }
+      },
+      "popular": "Más Popular",
+      "current": "Plan Actual",
+      "upgrade": "Mejorar",
+      "downgrade": "Cambiar a Gratis",
+      "month": "mes"
+    },
+    "usage": {
+      "title": "Estadísticas de Uso",
+      "leadsUsed": "Leads Utilizados",
+      "activeServices": "Servicios Activos",
+      "bookingsThisMonth": "Reservas Este Mes",
+      "averageRating": "Calificación Promedio"
+    }
+  },
+  "subscriptionPage": {
+    "title": "Suscripción y Beneficios",
+    "currentPlan": "Tu plan actual",
+    "month": "mes",
+    "free": {
+      "name": "Gratis",
+      "price": "$0",
+      "cta": "Quedarse en Gratis",
+      "features": [
+        "Listado básico de servicio",
+        "Hasta 5 leads por mes",
+        "Soporte básico",
+        "Analíticas básicas"
+      ],
+      "limitations": [
+        "Sin prioridad en la lista superior",
+        "Sin campañas ADS",
+        "Visibilidad limitada",
+        "Verificación de 7-14 días"
+      ]
+    },
+    "pro": {
+      "name": "Pro",
+      "price": "$29",
+      "cta": "Mejorar a Pro",
+      "features": [
+        "Listado prioritario",
+        "Leads ilimitados",
+        "Analíticas avanzadas",
+        "Soporte prioritario",
+        "Personalización de marca"
+      ],
+      "limitations": []
+    },
+    "benefitsTitle": "Beneficios de tu plan",
+    "changePlan": "Cambiar Plan",
+    "usage": {
+      "title": "Estadísticas de Uso",
+      "leadsUsed": "Leads Utilizados",
+      "activeServices": "Servicios Activos",
+      "bookingsThisMonth": "Reservas Este Mes",
+      "averageRating": "Calificación Promedio"
+    },
+    "upgradeBanner": "¡Desbloquea funciones avanzadas con Pro y haz crecer tu negocio!"
   }
-} 
+}

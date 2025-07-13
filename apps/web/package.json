@@ -55,6 +55,7 @@
     "react-map-gl": "^7.1.7",
     "react-use": "^17.5.0",
     "sonner": "^1.4.41",
+    "stripe": "^18.3.0",
     "tailwind-merge": "^2.3.0",
     "tailwindcss-animate": "^1.0.7",
     "zod": "^3.23.6",

@@ -5,7 +5,8 @@ import { motion } from 'framer-motion'
 import { useForm } from 'react-hook-form'
 import { zodResolver } from '@hookform/resolvers/zod'
 import { z } from 'zod'
-import { useTranslations } from 'next-intl'
+import { useTranslations, useLocale } from 'next-intl'
+import { useRouter } from 'next/navigation'
 import { Eye, EyeOff, Loader2, Mail, Lock, User, Phone } from 'lucide-react'
 import { Button } from '@/components/ui/button'
 import { Input } from '@/components/ui/input'
@@ -29,6 +30,8 @@ const floridaCities = [
 export function RegisterForm({ onToggleMode }: RegisterFormProps) {
   const t = useTranslations('auth')
   const tCommon = useTranslations('common')
+  const router = useRouter()
+  const locale = useLocale()
   const [showPassword, setShowPassword] = useState(false)
   const [showConfirmPassword, setShowConfirmPassword] = useState(false)
   const { register: registerUser, isLoading, error } = useAuthStore()
@@ -82,7 +85,12 @@ export function RegisterForm({ onToggleMode }: RegisterFormProps) {
       
       console.log('✅ Usuário registrado com sucesso!')
       toast.success(t('registerSuccess') || 'Conta criada com sucesso!')
-      // Redirect será feito pelo middleware ou pela aplicação
+      
+      // Redirecionar para o dashboard após registro bem-sucedido
+      setTimeout(() => {
+        router.push(`/${locale}/dashboard`)
+      }, 500) // Pequeno delay para mostrar o toast
+      
     } catch (error: any) {
       console.error('❌ Erro ao registrar usuário:', error)
       console.error('❌ Detalhes do erro:', error.response?.data || error.message)
@@ -292,7 +300,9 @@ export function RegisterForm({ onToggleMode }: RegisterFormProps) {
             {/* Error message */}
             {error && (
               <div className="p-3 bg-red-50 border border-red-200 rounded-md">
-                <p className="text-sm text-red-600">{error}</p>
+                <p className="text-sm text-red-600">
+                  {typeof error === 'string' ? error : 'Erro ao criar conta. Tente novamente.'}
+                </p>
               </div>
             )}
 

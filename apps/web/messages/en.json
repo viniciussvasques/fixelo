@@ -113,7 +113,11 @@
       "boost": "Boost",
       "performance": "Performance",
       "subscription": "Subscription",
-      "backToSite": "Back to Site"
+      "backToSite": "Back to Site",
+      "upgradeBanner": "Unlock advanced features with Pro!",
+      "pro": {
+        "cta": "Upgrade to Pro"
+      }
     },
     "stats": {
       "servicesBooked": "Booked Services",
@@ -281,7 +285,6 @@
           "validationError": "Validation Error",
           "fillRequiredFields": "Please fill in all required fields.",
           "selectCities": "Select at least one target city.",
-          "error": "Error",
           "errorCreatingCampaign": "Error creating campaign. Please try again.",
           "adTypes": {
             "featured": "Featured",
@@ -290,7 +293,11 @@
             "boostDescription": "Increases visibility quickly",
             "topList": "Top List",
             "topListDescription": "Always at the top of the category"
-          }
+          },
+          "boosted": "Boosted",
+          "featured": "Featured",
+          "topList": "Top List",
+          "sponsored": "Sponsored"
         }
       },
       "boost": {
@@ -355,12 +362,15 @@
   },
   "services": {
     "title": "Services",
+    "subtitle": "Manage your services and track performance",
     "myServices": "My Services",
     "allServices": "All Services",
     "activeServices": "Active Services",
     "inactiveServices": "Inactive Services",
     "active": "Active",
     "inactive": "Inactive",
+    "activeOnly": "Active Only",
+    "inactiveOnly": "Inactive Only",
     "activate": "Activate",
     "deactivate": "Deactivate",
     "views": "Views",
@@ -368,7 +378,6 @@
     "totalServices": "Total Services",
     "totalViews": "Total Views",
     "totalBookings": "Total Bookings",
-    "allServices": "All Services",
     "activeOnly": "Active Only",
     "inactiveOnly": "Inactive Only",
     "confirmDelete": "Are you sure you want to delete this service?",
@@ -383,11 +392,11 @@
     "updating": "Updating...",
     "notFound": "Service not found",
     "tagsHelp": "Separate tags with commas",
-    "error": "Error",
     "serviceDeleted": "Service deleted successfully",
     "serviceUpdated": "Service updated successfully",
     "serviceCreated": "Service Created!",
     "serviceCreatedSuccess": "Your service has been created successfully.",
+    "created": "Created",
     "noServices": "No services found",
     "noServicesDescription": "You haven't created any services yet. Start by creating your first service.",
     "noActiveServices": "No active services",
@@ -426,6 +435,7 @@
     "providerInfo": "Provider Information",
     "serviceLocation": "Service Location",
     "serviceLocationDescription": "Where do you provide this service?",
+    "available": "Available",
     "availableIn": "Available in",
     "serviceArea": "Service Area",
     "duration": "Duration",
@@ -434,6 +444,9 @@
     "tags": "Tags",
     "serviceTags": "Service Tags",
     "serviceTagsDescription": "Add tags to help customers find your service",
+    "services": "Services",
+    "popularCategories": "Popular Categories",
+    "noResultsDescription": "Try adjusting your search or filters.",
     "addTag": "Add Tag",
     "addTagPlaceholder": "Add a tag...",
     "images": "Images",
@@ -475,8 +488,27 @@
     "creating": "Creating...",
     "validationError": "Validation Error",
     "fillRequiredFields": "Please fill in all required fields.",
-    "error": "Error",
-    "createServiceError": "Error creating service. Please try again."
+    "createServiceError": "Error creating service. Please try again.",
+    "servicesPage": {
+      "title": "Find Services",
+      "subtitle": "Browse and book the best professionals in your city.",
+      "searchPlaceholder": "Search for services...",
+      "allCategories": "All Categories",
+      "allCities": "All Cities",
+      "sortBy": {
+        "label": "Sort by",
+        "rating": "Rating",
+        "priceLow": "Lowest Price",
+        "priceHigh": "Highest Price",
+        "newest": "Newest"
+      },
+      "resultsCount": "{count} results",
+      "sponsored": "Sponsored",
+      "filters": "Filters",
+      "noResults": "No services found",
+      "noResultsDescription": "Try adjusting your search or filters.",
+      "popularCategories": "Popular Categories"
+    }
   },
   "favorites": {
     "title": "Your Favorites",
@@ -660,13 +692,19 @@
     "badge": "How It Works",
     "title": {
       "line1": "Three simple steps to find",
-      "highlight": "the perfect service"
+      "highlight": "the perfect service",
+      "line2": "for you"
     },
     "subtitle": "Get connected with trusted professionals in minutes",
     "steps": {
       "search": {
         "title": "Search & Compare",
         "description": "Browse through hundreds of verified professionals in your area",
+        "features": {
+          "browse": "Search by service category",
+          "filter": "Filter by location and price",
+          "compare": "Read reviews and ratings"
+        },
         "details": [
           "Search by service category",
           "Filter by location and price",
@@ -674,69 +712,142 @@
           "Compare profiles and portfolios"
         ]
       },
+      "choose": {
+        "title": "Choose & Review",
+        "description": "Select the best professional for your needs",
+        "features": {
+          "profile": "View professional profiles",
+          "reviews": "Check reviews and ratings",
+          "verification": "Verified professionals"
+        }
+      },
       "book": {
         "title": "Book & Schedule",
         "description": "Choose your preferred professional and schedule the service",
+        "features": {
+          "schedule": "Select date and time",
+          "payment": "Secure payment options",
+          "confirmation": "Instant confirmation"
+        },
         "details": [
           "Select date and time",
           "Add service details",
-          "Chat with professional",
-          "Confirm booking instantly"
+          "Chat with the professional",
+          "Instantly confirm the booking"
         ]
       },
       "pay": {
         "title": "Pay & Review",
-        "description": "Secure payment after service completion and leave feedback",
+        "description": "Secure payment after service completion and leave your feedback",
         "details": [
           "Pay only after completion",
           "Multiple payment methods",
-          "Rate and review service",
-          "Build trust in community"
+          "Rate and review the service",
+          "Build community trust"
         ]
-      }
+      },
+      "enjoy": {
+        "title": "Enjoy & Rate",
+        "description": "Enjoy the service and leave your feedback",
+        "features": {
+          "service": "Receive quality service",
+          "support": "24/7 support",
+          "review": "Leave a review"
+        }
+      },
+      "title": "Our Process",
+      "subtitle": "How it works in simple steps"
     },
     "benefits": {
-      "title": "Why Choose Our Platform?",
-      "subtitle": "Experience the difference with our comprehensive service platform",
+      "security": { "title": "Security", "description": "Your data and payments are protected" },
+      "speed": { "title": "Speed", "description": "Book services quickly and easily" },
+      "payment": { "title": "Payment", "description": "Multiple secure payment options" },
+      "communication": { "title": "Communication", "description": "Direct chat with professionals" },
+      "community": { "title": "Community", "description": "Join a trusted network of users" },
+      "quality": { "title": "Quality", "description": "Top-rated professionals" },
+      "title": "Why choose our platform?",
+      "subtitle": "Experience the difference with our complete service platform",
       "noHiddenFees": {
-        "title": "No Hidden Fees",
-        "description": "Transparent pricing with no surprise charges"
+        "title": "No hidden fees",
+        "description": "Transparent pricing with no surprises"
       },
       "support247": {
         "title": "24/7 Support",
         "description": "Get help whenever you need it"
       },
       "moneyBack": {
-        "title": "Money-Back Guarantee",
+        "title": "Money-back guarantee",
         "description": "100% satisfaction guaranteed"
       },
       "instantBooking": {
-        "title": "Instant Booking",
+        "title": "Instant booking",
         "description": "Book services in just a few clicks"
       },
       "findServices": "Find Services",
       "becomeProfessional": "Become a Professional"
+    },
+    "faq": {
+      "q1": { "question": "How do I book a service?", "answer": "Simply search, choose a professional, and book online." },
+      "q2": { "question": "Is payment secure?", "answer": "Yes, all payments are processed securely." },
+      "q3": { "question": "Can I contact the professional before booking?", "answer": "Yes, you can chat directly before confirming." },
+      "q4": { "question": "What if I am not satisfied?", "answer": "We offer a money-back guarantee and 24/7 support." },
+      "title": "Frequently Asked Questions",
+      "subtitle": "Quick answers to common questions"
+    },
+    "cta": {
+      "findServicesButton": "Find Services",
+      "becomeProfessionalButton": "Become a Professional",
+      "title": "Ready to get started?",
+      "subtitle": "Join thousands of happy clients and professionals today"
+    },
+    "comparison": {
+      "title": "Clients vs Professionals",
+      "subtitle": "Key benefits for each side",
+      "clients": {
+        "tab": "Clients",
+        "features": {
+          "search": { "title": "Smart Search", "description": "Find services easily" },
+          "security": { "title": "Security", "description": "Full data & payment protection" },
+          "payment": { "title": "Secure Payment", "description": "Trusted payment methods" },
+          "communication": { "title": "Direct Communication", "description": "Chat with professionals" },
+          "reviews": { "title": "Real Reviews", "description": "Read verified ratings" },
+          "speed": { "title": "Speed", "description": "Hire within minutes" }
+        }
+      },
+      "professionals": {
+        "tab": "Professionals",
+        "features": {
+          "clients": { "title": "More Clients", "description": "Connect with qualified customers" },
+          "verification": { "title": "Verification", "description": "Gain trust with a verified badge" },
+          "payment": { "title": "Fast Payments", "description": "Get paid quickly & securely" },
+          "communication": { "title": "Chat with Clients", "description": "Easy direct contact" },
+          "reviews": { "title": "Reputation", "description": "Build positive reviews" },
+          "tools": { "title": "Tools", "description": "Access management & analytics tools" }
+        }
+      }
     }
   },
   "categories": {
     "title": "Popular Services",
-    "services": "Services",
-    "cleaning": {
-      "title": "Cleaning",
-      "description": "House & office cleaning"
+    "services": {
+      "cleaning": {
+        "title": "Cleaning",
+        "description": "House & office cleaning"
+      },
+      "repairs": {
+        "title": "Repairs",
+        "description": "Home maintenance & repairs"
+      },
+      "beauty": {
+        "title": "Beauty",
+        "description": "Hair, nails, and spa services"
+      },
+      "personalCare": {
+        "title": "Personal Care",
+        "description": "Personal training & wellness"
+      }
     },
-    "repairs": {
-      "title": "Repairs",
-      "description": "Home maintenance & repairs"
-    },
-    "beauty": {
-      "title": "Beauty",
-      "description": "Hair, nails, and spa services"
-    },
-    "personalCare": {
-      "title": "Personal Care",
-      "description": "Personal training & wellness"
-    }
+    "serviceLabel": "services"
   },
   "testimonials": {
     "title": "What Our Users Say",
@@ -840,6 +951,28 @@
         "description": "Preparation for national expansion"
       }
     },
+    "milestones": {
+      "2020": {
+        "title": "Foundation",
+        "description": "Birth of the idea and initial concept development"
+      },
+      "2021": {
+        "title": "MVP Launched",
+        "description": "First version of the platform in Miami"
+      },
+      "2022": {
+        "title": "Regional Expansion",
+        "description": "Coverage throughout Florida"
+      },
+      "2023": {
+        "title": "Series A",
+        "description": "$5M investment for expansion"
+      },
+      "2024": {
+        "title": "National Platform",
+        "description": "Preparation for national expansion"
+      }
+    },
     "cta": {
       "title": "Join Us",
       "subtitle": "Be part of the service revolution in Florida",
@@ -910,7 +1043,7 @@
     },
     "faq": {
       "title": "Frequently Asked Questions",
-      "description": "Find quick answers to the most common questions.",
+      "description": "Quick answers to common questions.",
       "button": "View FAQ"
     }
   },
@@ -1163,7 +1296,6 @@
         "validationError": "Validation Error",
         "fillRequiredFields": "Please fill all required fields.",
         "selectCities": "Select at least one target city.",
-        "error": "Error",
         "errorCreatingCampaign": "Error creating campaign. Please try again.",
         "adTypes": {
           "featured": "Featured",
@@ -1391,15 +1523,30 @@
       "savings": "Save $180/year"
     },
     "comparison": {
-      "title": "Feature Comparison",
-      "leads": "Monthly Leads",
-      "topList": "Top List Priority",
-      "ads": "ADS Campaigns",
-      "images": "Service Images",
-      "support": "Support Level",
-      "analytics": "Analytics",
-      "verification": "Verification Time",
-      "badge": "Premium Badge"
+      "title": "Clients vs Professionals",
+      "subtitle": "Key benefits for each side",
+      "clients": {
+        "tab": "Clients",
+        "features": {
+          "search": { "title": "Smart Search", "description": "Find services easily" },
+          "security": { "title": "Security", "description": "Full data & payment protection" },
+          "payment": { "title": "Secure Payment", "description": "Trusted payment methods" },
+          "communication": { "title": "Direct Communication", "description": "Chat with professionals" },
+          "reviews": { "title": "Real Reviews", "description": "Read verified ratings" },
+          "speed": { "title": "Speed", "description": "Hire within minutes" }
+        }
+      },
+      "professionals": {
+        "tab": "Professionals",
+        "features": {
+          "clients": { "title": "More Clients", "description": "Connect with qualified customers" },
+          "verification": { "title": "Verification", "description": "Gain trust with a verified badge" },
+          "payment": { "title": "Fast Payments", "description": "Get paid quickly & securely" },
+          "communication": { "title": "Chat with Clients", "description": "Easy direct contact" },
+          "reviews": { "title": "Reputation", "description": "Build positive reviews" },
+          "tools": { "title": "Tools", "description": "Access management & analytics tools" }
+        }
+      }
     },
     "benefits": {
       "title": "Why Go Premium?",
@@ -1456,17 +1603,6 @@
           "advancedAnalytics": "Advanced analytics",
           "prioritySupport": "Priority support",
           "customBranding": "Custom branding"
-        }
-      },
-      "premium": {
-        "name": "Premium",
-        "price": "$99",
-        "features": {
-          "topListing": "Top listing position",
-          "unlimitedEverything": "Unlimited everything",
-          "dedicatedManager": "Dedicated account manager",
-          "customIntegrations": "Custom integrations",
-          "whiteLabel": "White label solution"
         }
       },
       "popular": "Most Popular",
@@ -1534,24 +1670,49 @@
     "spanish": "Spanish",
     "currentLanguage": "Current Language"
   },
-  "servicesPage": {
-    "title": "Find Services",
-    "subtitle": "Browse and book the best professionals in your city.",
-    "searchPlaceholder": "Search for services...",
-    "allCategories": "All Categories",
-    "allCities": "All Cities",
-    "sortBy": {
-      "label": "Sort by",
-      "rating": "Rating",
-      "priceLow": "Lowest Price",
-      "priceHigh": "Highest Price",
-      "newest": "Newest"
+  "subscriptionPage": {
+    "title": "Subscription & Benefits",
+    "currentPlan": "Your current plan",
+    "month": "month",
+    "free": {
+      "name": "Free",
+      "price": "$0",
+      "cta": "Stay on Free",
+      "features": [
+        "Basic service listing",
+        "Up to 5 leads per month",
+        "Basic support",
+        "Basic analytics"
+      ],
+      "limitations": [
+        "No top list priority",
+        "No ADS campaigns",
+        "Limited visibility",
+        "7-14 days verification"
+      ]
     },
-    "resultsCount": "{count} results",
-    "sponsored": "Sponsored",
-    "filters": "Filters",
-    "noResults": "No services found",
-    "noResultsDescription": "Try adjusting your search or filters.",
-    "popularCategories": "Popular Categories"
+    "pro": {
+      "name": "Pro",
+      "price": "$29",
+      "cta": "Upgrade to Pro",
+      "features": [
+        "Priority listing",
+        "Unlimited leads",
+        "Advanced analytics",
+        "Priority support",
+        "Custom branding"
+      ],
+      "limitations": []
+    },
+    "benefitsTitle": "Your plan benefits",
+    "changePlan": "Change Plan",
+    "upgradeBanner": "Unlock advanced features with Pro and boost your business!",
+    "usage": {
+      "title": "Usage Statistics",
+      "leadsUsed": "Leads Used",
+      "activeServices": "Active Services",
+      "bookingsThisMonth": "Bookings This Month",
+      "averageRating": "Average Rating"
+    }
   }
 } 

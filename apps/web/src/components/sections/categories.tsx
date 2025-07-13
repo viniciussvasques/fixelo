@@ -76,7 +76,7 @@ export function Categories() {
               </div>
               <h3 className="font-semibold mb-2 text-center">{category.name}</h3>
               <p className="text-sm text-gray-600 text-center">
-                {category.serviceCount || '0'} {t('services')}
+                {category.serviceCount || '0'} {t('serviceLabel')}
               </p>
             </div>
           ))}

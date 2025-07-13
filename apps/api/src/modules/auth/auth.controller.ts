@@ -96,4 +96,4 @@ export class AuthController {
     await this.authService.logout(user.id);
     return { message: 'Successfully logged out from all devices' };
   }
-} 
+}

@@ -1,4 +1,5 @@
 import { useState, useEffect } from 'react'
+import { apiClient } from '@/lib/api'
 
 interface User {
   id: string
@@ -15,30 +16,50 @@ export const useAuth = () => {
   useEffect(() => {
     const token = localStorage.getItem('auth_token')
     if (token) {
-      // Simular um usuário para teste
-      setUser({
-        id: '1',
-        email: 'test@example.com',
-        firstName: 'Test',
-        lastName: 'User',
-        role: 'PROVIDER'
-      })
+      // Verificar se o token é válido fazendo uma chamada para o perfil
+      apiClient.getProfile()
+        .then((response) => {
+          if (response.data?.data) {
+            setUser(response.data.data)
+          } else {
+            // Token inválido, limpar
+            localStorage.removeItem('auth_token')
+            localStorage.removeItem('refresh_token')
+          }
+        })
+        .catch(() => {
+          // Token inválido, limpar
+          localStorage.removeItem('auth_token')
+          localStorage.removeItem('refresh_token')
+        })
+        .finally(() => {
+          setIsLoading(false)
+        })
+    } else {
+      setIsLoading(false)
     }
-    setIsLoading(false)
   }, [])
 
-  const login = (email: string, _password: string) => {
-    // Simular login
-    const mockUser = {
-      id: '1',
-      email,
-      firstName: 'Test',
-      lastName: 'User',
-      role: 'PROVIDER' as const
+  const login = async (email: string, password: string) => {
+    try {
+      const response = await apiClient.login(email, password)
+      
+      if (response.data?.accessToken && response.data?.user) {
+        // Armazenar tokens
+        localStorage.setItem('auth_token', response.data.accessToken)
+        if (response.data.refreshToken) {
+          localStorage.setItem('refresh_token', response.data.refreshToken)
+        }
+        
+        setUser(response.data.user)
+        return response.data.user
+      } else {
+        throw new Error('Invalid response from server')
+      }
+    } catch (error) {
+      console.error('Login error:', error)
+      throw error
     }
-    setUser(mockUser)
-    localStorage.setItem('auth_token', 'mock_token')
-    return Promise.resolve(mockUser)
   }
 
   const logout = () => {

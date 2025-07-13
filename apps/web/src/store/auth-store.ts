@@ -20,6 +20,8 @@ export interface User {
   status: 'ACTIVE' | 'INACTIVE' | 'SUSPENDED' | 'DELETED'
   preferredLanguage: 'PT' | 'EN' | 'ES'
   avatar?: string
+  planType?: 'FREE' | 'PRO'
+  planExpiresAt?: string | undefined
   createdAt: string
   updatedAt: string
 }
@@ -36,6 +38,7 @@ interface AuthState {
   register: (userData: RegisterData) => Promise<void>
   logout: () => void
   updateProfile: (userData: Partial<User>) => Promise<void>
+  updateUserPlan: (planType: 'FREE' | 'PRO', planExpiresAt?: string) => void
   clearError: () => void
   setLoading: (loading: boolean) => void
   initializeAuth: () => Promise<void>
@@ -100,9 +103,11 @@ export const useAuthStore = create<AuthState>()(
             console.log('❌ initializeAuth - Token invalid:', error.response?.status, error.response?.data?.message)
             console.log('🔄 initializeAuth - Clearing auth tokens')
             
-            // Token inválido, limpar
+            // Token inválido, limpar todos os tokens
             localStorage.removeItem('auth_token')
             localStorage.removeItem('refresh_token')
+            document.cookie = 'auth_token=; path=/; expires=Thu, 01 Jan 1970 00:00:00 GMT; SameSite=Lax'
+            
             set({
               user: null,
               isAuthenticated: false,
@@ -137,7 +142,27 @@ export const useAuthStore = create<AuthState>()(
             error: null,
           })
         } catch (error: any) {
-          const errorMessage = error.response?.data?.message || 'Erro ao fazer login'
+          console.error('❌ Auth Store - Erro ao fazer login:', error)
+          console.error('❌ Auth Store - Detalhes do erro:', error.response?.data || error.message)
+          
+          let errorMessage = 'Erro ao fazer login'
+          
+          // Extrair mensagem de erro do response
+          if (error.response?.data) {
+            const responseData = error.response.data
+            if (typeof responseData === 'string') {
+              errorMessage = responseData
+            } else if (responseData.message) {
+              if (typeof responseData.message === 'string') {
+                errorMessage = responseData.message
+              } else {
+                errorMessage = 'Credenciais inválidas'
+              }
+            }
+          } else if (error.message) {
+            errorMessage = error.message
+          }
+          
           set({
             error: errorMessage,
             isLoading: false,
@@ -176,7 +201,45 @@ export const useAuthStore = create<AuthState>()(
           console.error('❌ Auth Store - Erro ao registrar:', error)
           console.error('❌ Auth Store - Detalhes do erro:', error.response?.data || error.message)
           
-          const errorMessage = error.response?.data?.message || 'Erro ao criar conta'
+          let errorMessage = 'Erro ao criar conta'
+          
+          // Extrair mensagem de erro do response
+          if (error.response?.data) {
+            const responseData = error.response.data
+            if (typeof responseData === 'string') {
+              errorMessage = responseData
+            } else if (responseData.message) {
+              if (typeof responseData.message === 'string') {
+                const msg = responseData.message.toLowerCase()
+                // Verificar mensagens específicas da API
+                if (msg.includes('user with this email already exists')) {
+                  errorMessage = 'Este email já está em uso'
+                } else if (msg.includes('user with this phone number already exists')) {
+                  errorMessage = 'Este telefone já está em uso'
+                } else if (msg.includes('invalid phone number format')) {
+                  errorMessage = 'Formato de telefone inválido'
+                } else if (msg.includes('email') || msg.includes('Email')) {
+                  errorMessage = 'Este email já está em uso'
+                } else if (msg.includes('phone') || msg.includes('telefone') || msg.includes('Phone')) {
+                  errorMessage = 'Este telefone já está em uso'
+                } else {
+                  errorMessage = responseData.message
+                }
+              } else if (responseData.message.email) {
+                errorMessage = 'Este email já está em uso'
+              } else if (responseData.message.phone) {
+                errorMessage = 'Este telefone já está em uso'
+              } else {
+                errorMessage = 'Erro de validação. Verifique os dados informados.'
+              }
+            } else if (error.response.status === 409) {
+              // Status 409 é conflito, provavelmente email ou telefone duplicado
+              errorMessage = 'Email ou telefone já está em uso. Tente com outros dados.'
+            }
+          } else if (error.message) {
+            errorMessage = error.message
+          }
+          
           set({
             error: errorMessage,
             isLoading: false,
@@ -200,7 +263,7 @@ export const useAuthStore = create<AuthState>()(
           // Limpar estado e localStorage
           localStorage.removeItem('auth_token')
           localStorage.removeItem('refresh_token')
-          document.cookie = 'auth_token=; Max-Age=0; path=/;'
+          document.cookie = 'auth_token=; path=/; expires=Thu, 01 Jan 1970 00:00:00 GMT; SameSite=Lax'
           
           set({
             user: null,
@@ -231,6 +294,21 @@ export const useAuthStore = create<AuthState>()(
             isLoading: false,
           })
           throw error
+        }
+      },
+
+      // Atualizar plano do usuário (para usar após pagamento bem-sucedido)
+      updateUserPlan: (planType: 'FREE' | 'PRO', planExpiresAt?: string) => {
+        const currentUser = _get().user
+        if (currentUser) {
+          console.log('🔄 AuthStore - Atualizando plano do usuário para:', planType)
+          const updatedUser: User = {
+            ...currentUser,
+            planType,
+            planExpiresAt: planExpiresAt || currentUser.planExpiresAt,
+          }
+          set({ user: updatedUser })
+          console.log('✅ AuthStore - Plano atualizado no store')
         }
       },
 

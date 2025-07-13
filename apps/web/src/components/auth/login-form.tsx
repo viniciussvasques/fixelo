@@ -150,7 +150,9 @@ export function LoginForm({ onToggleMode, onForgotPassword }: LoginFormProps) {
             {/* Error message */}
             {error && (
               <div className="p-3 bg-red-50 border border-red-200 rounded-md">
-                <p className="text-sm text-red-600">{error}</p>
+                <p className="text-sm text-red-600">
+                  {typeof error === 'string' ? error : 'Erro ao fazer login. Tente novamente.'}
+                </p>
               </div>
             )}
 

@@ -20,12 +20,16 @@ import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/com
 import { Badge } from '@/components/ui/badge'
 import { Progress } from '@/components/ui/progress'
 // import { useAuthStore } from '@/store/auth-store'
+import { usePlans } from '@/hooks/use-plans'
 
 export default function AdsPage() {
   const router = useRouter()
   const locale = useLocale()
   const t = useTranslations('dashboard.ads')
+  const tSubscription = useTranslations('subscriptionPage')
   // const { user } = useAuthStore() // Temporarily disabled
+  const { currentPlan, isLoading: planLoading } = usePlans()
+  const isPro = currentPlan?.type === 'PRO'
 
   // Mock data - em produção virá da API
   const adsStats = {
@@ -138,6 +142,18 @@ export default function AdsPage() {
       case 'TOP_LIST': return 'bg-green-100 text-green-800'
       default: return 'bg-gray-100 text-gray-800'
     }
+  }
+
+  if (!isPro && !planLoading) {
+    return (
+      <div className="max-w-xl mx-auto mt-16 p-8 bg-yellow-50 border border-yellow-300 rounded-xl text-center shadow-lg">
+        <h2 className="text-2xl font-bold text-yellow-700 mb-2">{tSubscription('upgradeBanner')}</h2>
+        <p className="mb-4 text-yellow-800">{tSubscription('pro.features.0')}</p>
+        <Button className="bg-amber-500 text-white font-bold hover:bg-amber-600" onClick={() => router.push(`/${locale}/dashboard/subscription`)}>
+          {tSubscription('pro.cta')}
+        </Button>
+      </div>
+    )
   }
 
   return (

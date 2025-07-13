@@ -1,14 +1,6 @@
 import { useQuery } from '@tanstack/react-query'
 import { api } from '@/lib/api'
 
-interface Plan {
-  id: string
-  name: string
-  price: number
-  features: string[]
-  type: 'FREE' | 'PRO' | 'PREMIUM'
-}
-
 interface Usage {
   leadsUsed: number
   servicesActive: number
@@ -23,13 +15,21 @@ interface Limits {
 }
 
 export const usePlans = () => {
-  const { data: currentPlan, isLoading: currentPlanLoading } = useQuery({
+  const { data: currentPlanRaw, isLoading: currentPlanLoading } = useQuery({
     queryKey: ['plans', 'current'],
     queryFn: async () => {
-      const { data } = await api.get<Plan>('/plans/user/current')
+      const { data } = await api.get('/plans/user/current')
       return data
     }
   })
+
+  // Mapear a resposta da API para o formato esperado
+  const currentPlan = currentPlanRaw ? {
+    type: currentPlanRaw.type || currentPlanRaw.currentPlan, // 'FREE' ou 'PRO'
+    name: currentPlanRaw.details?.name?.pt || currentPlanRaw.details?.name?.en || currentPlanRaw.currentPlan,
+    features: currentPlanRaw.details?.features?.pt || currentPlanRaw.details?.features?.en || [],
+    ...currentPlanRaw.details
+  } : undefined
 
   const { data: usage, isLoading: usageLoading } = useQuery({
     queryKey: ['plans', 'usage'],

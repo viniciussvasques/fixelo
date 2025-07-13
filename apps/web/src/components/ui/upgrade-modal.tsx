@@ -3,6 +3,8 @@ import { Dialog, DialogContent, DialogDescription, DialogHeader, DialogTitle, Di
 import { Button } from './button'
 import { Card, CardContent, CardHeader, CardTitle } from './card'
 import { CheckCircle, Crown } from 'lucide-react'
+import { api } from '@/lib/api'
+import { useQueryClient } from '@tanstack/react-query'
 
 interface Plan {
   id: string
@@ -22,54 +24,59 @@ interface UpgradeModalProps {
 
 export function UpgradeModal({ planType, currentPlan, children }: UpgradeModalProps) {
   const [isLoading, setIsLoading] = useState(false)
+  const queryClient = useQueryClient()
 
   const handleUpgrade = async () => {
     setIsLoading(true)
     try {
-      // Aqui seria feita a chamada para a API de upgrade
-      console.log(`Upgrading to ${planType}`)
-      // Simular delay
-      await new Promise(resolve => setTimeout(resolve, 2000))
+      // Chama endpoint que retorna a URL do Stripe Checkout
+      const res = await api.post('/plans/checkout-session', { billingPeriod: 'monthly' })
+      console.log('Checkout response:', res.data) // Debug log
+      if (res.data?.data?.url) {
+        window.location.href = res.data.data.url
+        return
+      }
+      alert('Erro ao criar sessão de pagamento. Tente novamente.')
     } catch (error) {
-      console.error('Erro ao fazer upgrade:', error)
+      alert('Erro ao iniciar upgrade. Tente novamente.')
+      console.error('Erro ao criar sessão Stripe:', error)
     } finally {
       setIsLoading(false)
     }
   }
 
-  // Mock plans data
+  // Atualizar mock dos planos para refletir Free e Pro corretamente
   const plans: Plan[] = [
+    {
+      id: 'free',
+      name: 'Grátis',
+      price: 0,
+      interval: 'monthly',
+      features: [
+        'Listagem básica de serviço',
+        'Até 10 leads por mês',
+        'Suporte básico',
+        'Analytics básico'
+      ]
+    },
     {
       id: 'pro',
       name: 'Pro',
       price: 29,
       interval: 'monthly',
       features: [
-        'Priority listing',
-        'Unlimited leads',
-        'Advanced analytics',
-        'Priority support',
-        'Custom branding'
+        'Listagem prioritária',
+        'Até 40 leads por mês',
+        'Analytics avançado',
+        'Suporte prioritário'
       ],
       popular: true
-    },
-    {
-      id: 'premium',
-      name: 'Premium',
-      price: 59,
-      interval: 'monthly',
-      features: [
-        'Top listing',
-        'Unlimited everything',
-        'Dedicated manager',
-        'Custom integrations',
-        'White label'
-      ],
-      recommended: true
     }
   ]
 
-  const selectedPlan = plans.find(p => p.id.toLowerCase() === planType.toLowerCase())
+  // Fallback seguro para planType
+  const safePlanType = planType ? planType.toLowerCase() : 'pro';
+  const selectedPlan = plans.find(p => p.id.toLowerCase() === safePlanType);
 
   return (
     <Dialog>
@@ -122,7 +129,7 @@ export function UpgradeModal({ planType, currentPlan, children }: UpgradeModalPr
                 disabled={isLoading || planType === currentPlan}
                 className="min-w-[120px]"
               >
-                {isLoading ? 'Processando...' : `Upgrade para ${planType}`}
+                {isLoading ? 'Processando...' : `Upgrade para ${selectedPlan?.name || 'Pro'}`}
               </Button>
             </div>
           </div>

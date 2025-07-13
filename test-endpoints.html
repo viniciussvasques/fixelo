@@ -1,0 +1,57 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Test Endpoints</title>
+</head>
+<body>
+    <h1>Testando Endpoints da API</h1>
+    
+    <h2>Categorias</h2>
+    <button onclick="testCategories()">Testar Categorias</button>
+    <div id="categories-result"></div>
+    
+    <h2>Cidades</h2>
+    <button onclick="testCities()">Testar Cidades</button>
+    <div id="cities-result"></div>
+    
+    <script>
+        async function testCategories() {
+            try {
+                console.log('🔍 Testando endpoint de categorias...');
+                const response = await fetch('http://localhost:3001/api/services/categories');
+                console.log('📡 Response status:', response.status);
+                console.log('📡 Response headers:', response.headers);
+                
+                const data = await response.json();
+                console.log('📦 Categories data:', data);
+                
+                document.getElementById('categories-result').innerHTML = 
+                    '<pre>' + JSON.stringify(data, null, 2) + '</pre>';
+            } catch (error) {
+                console.error('❌ Error testing categories:', error);
+                document.getElementById('categories-result').innerHTML = 
+                    '<p style="color: red;">Error: ' + error.message + '</p>';
+            }
+        }
+        
+        async function testCities() {
+            try {
+                console.log('🌍 Testando endpoint de cidades...');
+                const response = await fetch('http://localhost:3001/api/locations/cities');
+                console.log('📡 Response status:', response.status);
+                console.log('📡 Response headers:', response.headers);
+                
+                const data = await response.json();
+                console.log('📦 Cities data:', data);
+                
+                document.getElementById('cities-result').innerHTML = 
+                    '<pre>' + JSON.stringify(data, null, 2) + '</pre>';
+            } catch (error) {
+                console.error('❌ Error testing cities:', error);
+                document.getElementById('cities-result').innerHTML = 
+                    '<p style="color: red;">Error: ' + error.message + '</p>';
+            }
+        }
+    </script>
+</body>
+</html> 

@@ -1,4 +1,5 @@
 import { Injectable, BadRequestException, NotFoundException } from '@nestjs/common';
+import { ConfigService } from '@nestjs/config';
 import { PrismaService } from '@fixelo/prisma';
 import Stripe from 'stripe';
 import { 
@@ -12,13 +13,26 @@ import {
   PaymentType,
   PaymentStatus
 } from './dto/payment.dto';
+import { PlanType } from '@prisma/client';
 
 @Injectable()
 export class PaymentsService {
   private stripe: Stripe;
 
-  constructor(private prisma: PrismaService) {
-    this.stripe = new Stripe(process.env.STRIPE_SECRET_KEY!, {
+  constructor(
+    private prisma: PrismaService,
+    private configService: ConfigService
+  ) {
+    const stripeSecretKey = process.env.STRIPE_SECRET_KEY;
+    
+    console.log('✅ PaymentsService - STRIPE_SECRET_KEY:', stripeSecretKey?.substring(0, 20) + '...');
+    console.log('✅ PaymentsService - Comprimento:', stripeSecretKey?.length);
+    
+    if (!stripeSecretKey || stripeSecretKey.length < 50) {
+      throw new Error('STRIPE_SECRET_KEY não está configurada corretamente');
+    }
+    
+    this.stripe = new Stripe(stripeSecretKey, {
       apiVersion: '2023-10-16',
       typescript: true
     });
@@ -495,6 +509,14 @@ export class PaymentsService {
     });
   }
 
+  async updateUserPlan(userId: string, planType: PlanType) {
+    await this.prisma.user.update({
+      where: { id: userId },
+      data: { planType, planExpiresAt: planType === 'PRO' ? new Date(Date.now() + 30 * 24 * 60 * 60 * 1000) : null },
+    });
+    return true;
+  }
+
   private mapToPaymentResponse(payment: any): PaymentResponseDto {
     const metadata = payment.metadata ? JSON.parse(payment.metadata) : {};
     return {
@@ -510,4 +532,4 @@ export class PaymentsService {
       updatedAt: payment.updatedAt
     };
   }
-} 
+}

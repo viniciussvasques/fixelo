@@ -112,8 +112,8 @@ export default function ServicesPage() {
               </SelectTrigger>
               <SelectContent>
                 <SelectItem key="all-categories" value="All">{t('servicesPage.allCategories')}</SelectItem>
-                {Array.isArray(categories) && categories.map(cat => (
-                  <SelectItem key={cat.id} value={cat.slug}>
+                {Array.isArray(categories) && categories.map((cat, index) => (
+                  <SelectItem key={`category-${cat.id || index}`} value={cat.slug}>
                     {cat.name}
                   </SelectItem>
                 ))}
@@ -127,7 +127,7 @@ export default function ServicesPage() {
               <SelectContent>
                 <SelectItem key="all-cities" value="All Cities">{t('servicesPage.allCities')}</SelectItem>
                 {Array.isArray(cities) && cities.map((city, index) => (
-                  <SelectItem key={`${city}-${index}`} value={city}>
+                  <SelectItem key={`city-${city || index}`} value={city}>
                     {city}
                   </SelectItem>
                 ))}
@@ -166,18 +166,18 @@ export default function ServicesPage() {
             </div>
             
             <div className="flex items-center gap-2">
-              <span className="text-sm text-gray-600">
-                {t('servicesPage.resultsCount', { count: servicesArray.length })}
-              </span>
-              {servicesArray.filter(s => s.isSponsored).length > 0 && (
-                <span className="text-xs bg-blue-100 text-blue-800 px-2 py-1 rounded-full">
-                  {servicesArray.filter(s => s.isSponsored).length} {t('servicesPage.sponsored')}
+                              <span className="text-sm text-gray-600">
+                  {t('servicesPage.resultsCount', { count: servicesArray.length })}
                 </span>
-              )}
-              <Button variant="outline" size="sm">
-                <Filter className="h-4 w-4 mr-2" />
-                {t('servicesPage.filters')}
-              </Button>
+                {servicesArray.filter(s => s.isSponsored).length > 0 && (
+                  <span className="text-xs bg-blue-100 text-blue-800 px-2 py-1 rounded-full">
+                    {servicesArray.filter(s => s.isSponsored).length} {t('servicesPage.sponsored')}
+                  </span>
+                )}
+                <Button variant="outline" size="sm">
+                  <Filter className="h-4 w-4 mr-2" />
+                  {t('servicesPage.filters')}
+                </Button>
             </div>
           </div>
         </motion.div>
@@ -270,13 +270,13 @@ export default function ServicesPage() {
           transition={{ delay: 0.3 }}
           className="mt-16"
         >
-          <h2 className="text-2xl font-bold text-gray-900 mb-8">
-            {t('servicesPage.popularCategories')}
-          </h2>
+                      <h2 className="text-2xl font-bold text-gray-900 mb-8">
+              {t('servicesPage.popularCategories')}
+            </h2>
           <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
             {Array.isArray(categories) && categories.slice(0, 4).map((category, index) => (
               <Card 
-                key={`popular-category-${category.id}-${index}`}
+                key={`popular-category-${category.id || index}`}
                 className="hover:shadow-md transition-shadow cursor-pointer"
                 onClick={() => setSelectedCategory(category.slug)}
               >

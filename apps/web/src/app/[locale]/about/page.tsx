@@ -396,7 +396,7 @@ export default function AboutPage() {
                   {t('cta.joinButton')}
                   <ArrowRight className="ml-2 h-5 w-5" />
                 </Button>
-                <Button size="lg" variant="outline" className="text-lg px-8 border-white text-white hover:bg-white hover:text-blue-600">
+                <Button size="lg" variant="outline" className="text-lg px-8 border-white text-gray-900 bg-white hover:bg-white hover:text-blue-600">
                   {t('cta.contactButton')}
                 </Button>
               </div>
