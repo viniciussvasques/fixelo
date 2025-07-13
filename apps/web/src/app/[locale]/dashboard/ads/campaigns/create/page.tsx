@@ -41,7 +41,7 @@ export default function CreateCampaignPage() {
   const { user, isAuthenticated } = useAuthStore()
   
   // Buscar serviços do provedor atual
-  const { data: services } = useServices({ providerId: 'current' })
+  const { data: services = [] } = useServices({ providerId: 'current' })
   const { cities, isLoading: citiesLoading } = useFloridaCities()
   const createCampaign = useCreateAdsCampaign()
   
@@ -262,7 +262,7 @@ export default function CreateCampaignPage() {
                   <SelectValue placeholder={t('selectService')} />
                 </SelectTrigger>
                 <SelectContent>
-                  {services?.data?.map((service: any) => (
+                  {services?.map((service: any) => (
                     <SelectItem key={service.id} value={service.id}>
                       {service.title}
                     </SelectItem>

@@ -1,46 +1,90 @@
 'use client'
 
-import React from 'react'
-import { usePathname } from 'next/navigation'
+import React, { useState } from 'react'
+import { usePathname, useRouter } from 'next/navigation'
+import { useLocale, useTranslations } from 'next-intl'
 import Link from 'next/link'
-import { motion } from 'framer-motion'
-import { useTranslations } from 'next-intl'
 import { 
   Home, 
   Calendar, 
   MessageCircle, 
+  Heart, 
+  Star, 
   User, 
-  Settings, 
   CreditCard, 
-  Heart,
-  Star,
-  LogOut,
+  Settings,
+  Wrench,
+  DollarSign,
+  BarChart3,
+  Megaphone,
+  Target,
+  Zap,
+  TrendingUp,
+  Crown,
   Menu,
   X,
-  Wrench,
-  TrendingUp,
-  Megaphone,
-  BarChart3,
-  DollarSign,
-  Crown,
-  Target,
-  Zap
+  ArrowLeft
 } from 'lucide-react'
 import { Button } from '@/components/ui/button'
 import { Avatar, AvatarFallback } from '@/components/ui/avatar'
 import { Badge } from '@/components/ui/badge'
 import { useAuthStore } from '@/store/auth-store'
-import { useState } from 'react'
+import { useEffect } from 'react'
 
 export default function DashboardLayout({
   children,
 }: {
   children: React.ReactNode
 }) {
+  const router = useRouter()
   const pathname = usePathname()
-  const { user, logout } = useAuthStore()
+  const { user, logout, isAuthenticated, isLoading, initializeAuth } = useAuthStore()
   const [sidebarOpen, setSidebarOpen] = useState(false)
+  const [authChecked, setAuthChecked] = useState(false)
   const t = useTranslations('dashboard.navigation')
+  const locale = useLocale()
+
+  // Inicializar autenticação quando o componente montar
+  useEffect(() => {
+    const checkAuth = async () => {
+      try {
+        await initializeAuth()
+      } catch (error) {
+        console.error('Error initializing auth:', error)
+      } finally {
+        setAuthChecked(true)
+      }
+    }
+
+    if (!authChecked) {
+      checkAuth()
+    }
+  }, [initializeAuth, authChecked])
+
+  // Client-side guard
+  useEffect(() => {
+    if (authChecked && !isLoading && !isAuthenticated) {
+      console.log('🔐 Dashboard Layout - Redirecting to auth, authChecked:', authChecked, 'isLoading:', isLoading, 'isAuthenticated:', isAuthenticated)
+      router.replace(`/${locale}/auth`)
+    }
+  }, [authChecked, isLoading, isAuthenticated, locale, router])
+
+  // Mostrar loading enquanto verifica autenticação
+  if (!authChecked || isLoading) {
+    return (
+      <div className="h-screen flex items-center justify-center bg-gray-100">
+        <div className="text-center">
+          <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-blue-600 mx-auto mb-4"></div>
+          <p className="text-gray-600">Carregando...</p>
+        </div>
+      </div>
+    )
+  }
+
+  // Se não estiver autenticado, não renderizar nada (o useEffect acima fará o redirect)
+  if (!isAuthenticated) {
+    return null
+  }
 
   // Navegação específica para CLIENTs
   const clientNavigation = [
@@ -81,7 +125,19 @@ export default function DashboardLayout({
   ]
 
   // Selecionar navegação baseada no role do usuário
-  const navigation = user?.role === 'PROVIDER' ? providerNavigation : clientNavigation
+  const normalizedRole = user?.role ? String(user.role).trim().toUpperCase() : null
+  const isProvider = normalizedRole === 'PROVIDER'
+  const navigation = isProvider ? providerNavigation : clientNavigation
+
+  // Debug log para verificar a role
+  console.log('🔍 Dashboard Layout Debug:', {
+    userRole: user?.role,
+    normalizedRole,
+    isProvider,
+    navigationType: isProvider ? 'provider' : 'client',
+    navigationLength: navigation.length,
+    user: user ? { id: user.id, firstName: user.firstName, role: user.role } : null
+  })
 
   const handleLogout = async () => {
     await logout()
@@ -186,13 +242,25 @@ export default function DashboardLayout({
         <div className="flex flex-col w-64">
           <div className="flex flex-col h-0 flex-1 border-r border-gray-200 bg-white">
             <div className="flex-1 flex flex-col pt-5 pb-4 overflow-y-auto">
-              <div className="flex items-center flex-shrink-0 px-4">
-                <h1 className="text-xl font-bold text-gray-900">Fixelo</h1>
-                {user?.role === 'PROVIDER' && (
-                  <Badge variant="outline" className="ml-2">
-                    Provider
-                  </Badge>
-                )}
+              <div className="flex items-center justify-between flex-shrink-0 px-4">
+                <div className="flex items-center">
+                  <h1 className="text-xl font-bold text-gray-900">Fixelo</h1>
+                  {user?.role === 'PROVIDER' && (
+                    <Badge variant="outline" className="ml-2">
+                      Provider
+                    </Badge>
+                  )}
+                </div>
+                <Link href={`/${locale}`}>
+                  <Button
+                    variant="outline"
+                    size="sm"
+                    className="inline-flex items-center gap-2 text-gray-600 hover:text-gray-900"
+                  >
+                    <ArrowLeft className="h-4 w-4" />
+                    {t('backToSite')}
+                  </Button>
+                </Link>
               </div>
               <nav className="mt-5 flex-1 px-2 bg-white space-y-1">
                 {navigation.map((item) => (
@@ -217,9 +285,9 @@ export default function DashboardLayout({
                   variant="ghost"
                   size="sm"
                   onClick={handleLogout}
-                  className="text-gray-400 hover:text-gray-600"
+                  className="text-gray-600 hover:text-gray-900"
                 >
-                  <LogOut className="h-4 w-4" />
+                  <Settings className="h-4 w-4" />
                 </Button>
               </div>
             </div>
@@ -229,24 +297,30 @@ export default function DashboardLayout({
 
       {/* Main content */}
       <div className="flex flex-col w-0 flex-1 overflow-hidden">
-        <div className="md:hidden pl-1 pt-1 sm:pl-3 sm:pt-3">
-          <Button
-            variant="ghost"
-            size="sm"
-            className="-ml-0.5 -mt-0.5 h-12 w-12 inline-flex items-center justify-center rounded-md text-gray-500 hover:text-gray-900 focus:outline-none focus:ring-2 focus:ring-inset focus:ring-indigo-500"
-            onClick={() => setSidebarOpen(true)}
-          >
-            <Menu className="h-6 w-6" />
-          </Button>
+        <div className="md:hidden">
+          <div className="flex items-center justify-between bg-white px-4 py-2 border-b border-gray-200">
+            <Button
+              variant="ghost"
+              size="sm"
+              onClick={() => setSidebarOpen(true)}
+              className="text-gray-600 hover:text-gray-900"
+            >
+              <Menu className="h-6 w-6" />
+            </Button>
+            <h1 className="text-lg font-semibold">Fixelo</h1>
+            <Button
+              variant="ghost"
+              size="sm"
+              onClick={handleLogout}
+              className="text-gray-600 hover:text-gray-900"
+            >
+              <Settings className="h-5 w-5" />
+            </Button>
+          </div>
         </div>
-        <main className="flex-1 relative z-0 overflow-y-auto focus:outline-none">
-          <motion.div
-            initial={{ opacity: 0, y: 20 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.3 }}
-          >
-            {children}
-          </motion.div>
+        
+        <main className="flex-1 relative overflow-y-auto focus:outline-none">
+          {children}
         </main>
       </div>
     </div>

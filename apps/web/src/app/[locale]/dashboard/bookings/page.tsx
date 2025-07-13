@@ -162,11 +162,11 @@ export default function BookingsPage() {
   )
 
   const handleViewDetails = (bookingId: number) => {
-    router.push(`/dashboard/bookings/${bookingId}`)
+    router.push(`/${locale}/dashboard/bookings/${bookingId}`)
   }
 
   const handleContactProvider = (providerId: string) => {
-    router.push(`/dashboard/messages?provider=${providerId}`)
+    router.push(`/${locale}/dashboard/messages?provider=${providerId}`)
   }
 
   const handleReschedule = (bookingId: number) => {

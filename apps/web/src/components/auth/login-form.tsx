@@ -5,7 +5,8 @@ import { motion } from 'framer-motion'
 import { useForm } from 'react-hook-form'
 import { zodResolver } from '@hookform/resolvers/zod'
 import { z } from 'zod'
-import { useTranslations } from 'next-intl'
+import { useTranslations, useLocale } from 'next-intl'
+import { useRouter } from 'next/navigation'
 import { Eye, EyeOff, Loader2, Mail, Lock } from 'lucide-react'
 import { Button } from '@/components/ui/button'
 import { Input } from '@/components/ui/input'
@@ -21,6 +22,8 @@ interface LoginFormProps {
 export function LoginForm({ onToggleMode, onForgotPassword }: LoginFormProps) {
   const t = useTranslations('auth')
   const tCommon = useTranslations('common')
+  const locale = useLocale()
+  const router = useRouter()
   const [showPassword, setShowPassword] = useState(false)
   const { login, isLoading, error } = useAuthStore()
 
@@ -45,7 +48,12 @@ export function LoginForm({ onToggleMode, onForgotPassword }: LoginFormProps) {
     try {
       await login(data.email, data.password)
       toast.success(t('loginSuccess') || 'Login realizado com sucesso!')
-      // Redirect será feito pelo middleware ou pela aplicação
+      
+      // Redirecionar para o dashboard após login bem-sucedido
+      setTimeout(() => {
+        router.push(`/${locale}/dashboard`)
+      }, 500) // Pequeno delay para mostrar o toast
+      
     } catch (error: any) {
       toast.error(error.message || t('invalidCredentials'))
     }

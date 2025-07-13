@@ -1,5 +1,5 @@
 import { useQuery } from '@tanstack/react-query'
-import { apiClient } from '@/lib/api'
+import { api } from '@/lib/api'
 
 interface Category {
   id: string
@@ -20,10 +20,21 @@ export function useCategories() {
     queryKey: ['categories'],
     queryFn: async () => {
       try {
-        const response = await apiClient.getCategories()
-        return response.data.data || []
+        console.log('🔍 Fetching categories...')
+        const response = await api.get('/services/categories')
+        console.log('📡 Categories response:', response)
+        console.log('📡 Categories response.data:', response.data)
+        
+        // Handle API response structure and ensure it's always an array
+        const categories = response.data?.categories || response.data?.data || response.data || []
+        console.log('📦 Processed categories:', categories)
+        
+        const result = Array.isArray(categories) ? categories : []
+        console.log('✅ Final categories result:', result)
+        
+        return result
       } catch (err: any) {
-        console.error('Error fetching categories:', err)
+        console.error('❌ Error fetching categories:', err)
         throw err
       }
     },
@@ -42,8 +53,13 @@ export function useCategories() {
     { id: '8', name: 'Painting', slug: 'painting', icon: 'brush', serviceCount: 12 }
   ]
 
+  console.log('🎯 useCategories - data:', data)
+  console.log('🎯 useCategories - isLoading:', isLoading)
+  console.log('🎯 useCategories - error:', error)
+  console.log('🎯 useCategories - categories (final):', Array.isArray(data) ? data : mockCategories)
+
   return {
-    categories: data || mockCategories,
+    categories: Array.isArray(data) ? data : mockCategories,
     isLoading,
     error,
     refetch

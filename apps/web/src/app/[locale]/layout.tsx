@@ -1,29 +1,28 @@
-import { ReactNode } from 'react'
 import { NextIntlClientProvider } from 'next-intl'
-import { getMessages } from 'next-intl/server'
 import { notFound } from 'next/navigation'
-import { locales, Locale } from '@/i18n/request'
+import HeaderFooterWrapper from '@/components/layout/header-footer-wrapper'
 
-type Props = {
-  children: ReactNode
-  params: { locale: string }
+export function generateStaticParams() {
+  return [{ locale: 'en' }, { locale: 'pt' }, { locale: 'es' }]
 }
 
 export default async function LocaleLayout({
   children,
   params: { locale }
-}: Props) {
-  // Validate that the incoming `locale` parameter is valid
-  if (!locales.includes(locale as Locale)) {
+}: {
+  children: React.ReactNode
+  params: { locale: string }
+}) {
+  let messages: any
+  try {
+    messages = (await import(`../../../messages/${locale}.json`)).default
+  } catch (error) {
     notFound()
   }
 
-  // Providing all messages to the client
-  const messages = await getMessages({ locale })
-
   return (
-    <NextIntlClientProvider messages={messages}>
-      {children}
+    <NextIntlClientProvider locale={locale} messages={messages}>
+      <HeaderFooterWrapper>{children}</HeaderFooterWrapper>
     </NextIntlClientProvider>
   )
 }

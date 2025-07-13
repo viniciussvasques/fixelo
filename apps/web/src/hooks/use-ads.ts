@@ -29,19 +29,6 @@ interface Campaign {
   updatedAt: string
 }
 
-interface CampaignStats {
-  totalSpent: number
-  totalImpressions: number
-  totalClicks: number
-  totalLeads: number
-  avgCtr: number
-  avgCpc: number
-  avgConversionRate: number
-  avgRoas: number
-  activeCampaigns: number
-  totalCampaigns: number
-}
-
 interface BoostRequest {
   serviceId: string
   duration: number

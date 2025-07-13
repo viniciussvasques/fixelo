@@ -1,5 +1,6 @@
 {
   "common": {
+    "welcome": "Bienvenido",
     "or": "o",
     "loading": "Cargando...",
     "error": "Error",
@@ -111,7 +112,8 @@
       "campaigns": "Campañas",
       "boost": "Impulsar",
       "performance": "Rendimiento",
-      "subscription": "Suscripción"
+      "subscription": "Suscripción",
+      "backToSite": "Volver al Sitio"
     },
     "stats": {
       "servicesBooked": "Servicios Reservados",
@@ -341,7 +343,7 @@
         "performanceTrendsDescription": "Evolución de métricas a lo largo del tiempo",
         "insights": "Insights",
         "insightsDescription": "Recomendaciones basadas en datos",
-        "insights": {
+        "insightsData": {
           "goodPerformance": "Buen Rendimiento",
           "optimization": "Oportunidad de Optimización",
           "opportunity": "Nueva Oportunidad"
@@ -353,78 +355,122 @@
   },
   "services": {
     "title": "Servicios",
-    "subtitle": "Gestiona tus ofertas de servicios",
-    "searchPlaceholder": "Buscar servicios...",
-    "searchButton": "Buscar",
-    "filters": "Filtros",
-    "clearFilters": "Limpiar",
-    "category": "Categoría",
-    "allCategories": "Todas las categorías",
-    "city": "Ciudad",
-    "allCities": "Todas las ciudades",
-    "priceRange": "Rango de precio",
-    "popularCategories": "Categorías populares",
-    "servicesFound": "{count} servicios encontrados",
-    "sortByLabel": "Ordenar por:",
-    "sortBy": {
-      "rating": "Calificación",
-      "price": "Precio",
-      "distance": "Distancia",
-      "newest": "Más recientes",
-      "priceLow": "Precio: Menor a Mayor",
-      "priceHigh": "Precio: Mayor a Menor"
-    },
-    "resultsCount": "{count} servicios encontrados",
-    "noResults": "No se encontraron servicios",
-    "noResultsDescription": "Intenta ajustar tus filtros o término de búsqueda.",
-    "bestRating": "Mejor calificación",
-    "lowestPrice": "Precio más bajo",
-    "highestPrice": "Precio más alto",
-    "newest": "Más recientes",
-    "mostPopular": "Más populares",
-    "gridView": "Vista de cuadrícula",
-    "listView": "Vista de lista",
-    "noServices": "No se encontraron servicios",
-    "clearFiltersButton": "Limpiar filtros",
-    "errorLoading": "Error al cargar servicios",
-    "tryAgain": "Intenta de nuevo",
-    "available": "Disponible",
-    "unavailable": "No disponible",
-    "responseTime": "Tiempo de respuesta",
-    "bookNow": "Reservar Ahora",
-    "sendMessage": "Enviar Mensaje",
-    "shareService": "Compartir",
-    "addToFavorites": "Añadir a favoritos",
-    "createService": "Crear Servicio",
-    "totalServices": "Total de Servicios",
+    "myServices": "Mis Servicios",
+    "allServices": "Todos los Servicios",
     "activeServices": "Servicios Activos",
-    "totalViews": "Total de Vistas",
-    "totalBookings": "Total de Reservas",
-    "views": "Vistas",
-    "bookings": "Reservas",
-    "rating": "Calificación",
-    "created": "Creado",
+    "inactiveServices": "Servicios Inactivos",
     "active": "Activo",
     "inactive": "Inactivo",
-    "allServices": "Todos los Servicios",
-    "activeOnly": "Solo Activos",
-    "inactiveOnly": "Solo Inactivos",
-    "noServicesDescription": "Comienza creando tu primer servicio para atraer clientes.",
-    "createFirstService": "Crea tu primer servicio",
-    "noActiveServices": "No se encontraron servicios activos",
-    "noInactiveServices": "No se encontraron servicios inactivos",
-    "confirmDelete": "¿Estás seguro de que quieres eliminar este servicio?",
     "activate": "Activar",
     "deactivate": "Desactivar",
-    "services": "Servicios",
-    "sponsored": "patrocinado",
-    "sponsoredPlural": "patrocinados",
-    "ads": {
-      "boosted": "Impulsado",
-      "featured": "Destacado",
-      "topList": "Top de la Lista",
-      "sponsored": "Patrocinado"
-    }
+    "views": "Visualizaciones",
+    "bookings": "Reservas",
+    "totalServices": "Total de Servicios",
+    "totalViews": "Total de Visualizaciones",
+    "totalBookings": "Total de Reservas",
+    "createService": "Crear Servicio",
+    "createNewService": "Crear Nuevo Servicio",
+    "createServiceDescription": "Configure su oferta de servicio para clientes potenciales",
+    "editService": "Editar Servicio",
+    "editServiceDescription": "Actualiza la información de tu servicio",
+    "updateService": "Actualizar Servicio",
+    "updating": "Actualizando...",
+    "notFound": "Servicio no encontrado",
+    "tagsHelp": "Separa las etiquetas con comas",
+    "error": "Error",
+    "serviceDeleted": "Servicio eliminado exitosamente",
+    "serviceUpdated": "Servicio actualizado exitosamente",
+    "serviceCreated": "¡Servicio Creado!",
+    "serviceCreatedSuccess": "Su servicio ha sido creado exitosamente.",
+    "noServices": "No se encontraron servicios",
+    "noServicesDescription": "Aún no has creado ningún servicio. Comienza creando tu primer servicio.",
+    "noActiveServices": "No hay servicios activos",
+    "noInactiveServices": "No hay servicios inactivos",
+    "createFirstService": "Crear tu primer servicio",
+    "searchServices": "Buscar servicios...",
+    "filterByCategory": "Filtrar por categoría",
+    "filterByCity": "Filtrar por ciudad",
+    "sortBy": "Ordenar por",
+    "sortByRating": "Calificación",
+    "sortByPrice": "Precio",
+    "sortByNewest": "Más reciente",
+    "priceRange": "Rango de Precio",
+    "from": "Desde",
+    "to": "Hasta",
+    "apply": "Aplicar",
+    "clear": "Limpiar",
+    "results": "resultados",
+    "showing": "Mostrando",
+    "of": "de",
+    "loadMore": "Cargar más",
+    "featured": "Destacado",
+    "sponsored": "Patrocinado",
+    "verified": "Verificado",
+    "rating": "Calificación",
+    "reviews": "reseñas",
+    "startingAt": "Desde",
+    "bookNow": "Reservar Ahora",
+    "contactProvider": "Contactar Proveedor",
+    "addToFavorites": "Agregar a Favoritos",
+    "removeFromFavorites": "Quitar de Favoritos",
+    "shareService": "Compartir Servicio",
+    "reportService": "Reportar Servicio",
+    "serviceDetails": "Detalles del Servicio",
+    "aboutProvider": "Sobre el Proveedor",
+    "providerInfo": "Información del Proveedor",
+    "serviceLocation": "Ubicación del Servicio",
+    "serviceLocationDescription": "¿Dónde proporciona este servicio?",
+    "availableIn": "Disponible en",
+    "serviceArea": "Área de Servicio",
+    "duration": "Duración",
+    "minutes": "minutos",
+    "category": "Categoría",
+    "tags": "Etiquetas",
+    "serviceTags": "Etiquetas del Servicio",
+    "serviceTagsDescription": "Agregue etiquetas para ayudar a los clientes a encontrar su servicio",
+    "addTag": "Agregar Etiqueta",
+    "addTagPlaceholder": "Agregar una etiqueta...",
+    "images": "Imágenes",
+    "serviceImages": "Imágenes del Servicio",
+    "serviceImagesDescription": "Suba imágenes para mostrar su servicio (opcional)",
+    "imageUploadPlaceholder": "La funcionalidad de carga de imágenes se implementará aquí",
+    "imageUploadSupport": "Soporte para archivos JPG, PNG hasta 5MB cada uno",
+    "gallery": "Galería",
+    "viewAllImages": "Ver todas las imágenes",
+    "bookingInfo": "Información de Reserva",
+    "instantBooking": "Reserva Instantánea",
+    "requiresApproval": "Requiere Aprobación",
+    "cancellationPolicy": "Política de Cancelación",
+    "refundPolicy": "Política de Reembolso",
+    "similarServices": "Servicios Similares",
+    "relatedServices": "Servicios Relacionados",
+    "otherServicesByProvider": "Otros servicios de este proveedor",
+    "accessRestricted": "Acceso Restringido",
+    "loginRequired": "Necesita estar logueado para crear servicios.",
+    "providerOnly": "Solo los proveedores pueden crear servicios.",
+    "login": "Iniciar Sesión",
+    "basicInformation": "Información Básica",
+    "basicInformationDescription": "Proporcione los detalles esenciales sobre su servicio",
+    "serviceTitle": "Título del Servicio",
+    "serviceTitlePlaceholder": "ej.: Limpieza Residencial Profesional",
+    "description": "Descripción",
+    "descriptionPlaceholder": "Describe tu servicio en detalle...",
+    "selectCategory": "Seleccione una categoría",
+    "pricingDuration": "Precio y Duración",
+    "pricingDurationDescription": "Establezca el precio y duración estimada de su servicio",
+    "price": "Precio",
+    "city": "Ciudad",
+    "selectCity": "Seleccione una ciudad",
+    "loadingCities": "Cargando ciudades...",
+    "zipCode": "Código Postal",
+    "address": "Dirección (Opcional)",
+    "addressPlaceholder": "Dirección para la ubicación del servicio",
+    "cancel": "Cancelar",
+    "creating": "Creando...",
+    "validationError": "Error de Validación",
+    "fillRequiredFields": "Por favor, complete todos los campos obligatorios.",
+    "error": "Error",
+    "createServiceError": "Error al crear el servicio. Inténtelo de nuevo."
   },
   "favorites": {
     "title": "Tus Favoritos",
@@ -478,7 +524,7 @@
     "status": "Estado"
   },
   "serviceDetails": {
-    "backButton": "Volver",
+    "backButton": "Atrás",
     "shareButton": "Compartir",
     "favoriteButton": "Favorito",
     "bookService": "Reservar Servicio",
@@ -487,18 +533,37 @@
     "contactProvider": "Contactar Proveedor",
     "perService": "por servicio",
     "duration": "Duración: {duration}",
-    "responseTime": "Respuesta en {time}",
     "included": "Incluido",
     "notIncluded": "No incluido",
     "availability": "Disponibilidad",
     "reviews": "Reseñas",
     "reviewsDescription": "Lo que dicen los clientes sobre este servicio",
     "provider": "Proveedor",
-    "memberSince": "Miembro desde",
     "servicesCompleted": "Servicios completados",
     "viewFullProfile": "Ver Perfil Completo",
     "verified": "Verificado",
-    "rating": "Calificación"
+    "rating": "Calificación",
+    "breadcrumb": {
+      "services": "Servicios"
+    },
+    "tabs": {
+      "details": "Detalles",
+      "reviews": "Reseñas",
+      "provider": "Proveedor"
+    },
+    "serviceDetails": "Detalles del Servicio",
+    "requirements": "Requisitos",
+    "serviceIncludes": "El Servicio Incluye",
+    "customerReviews": "Reseñas de Clientes",
+    "averageRating": "Calificación Promedio",
+    "aboutProvider": "Sobre el Proveedor",
+    "completedJobs": "Trabajos Completados",
+    "responseTime": "Tiempo de Respuesta",
+    "memberSince": "Miembro Desde",
+    "minutes": "minutos",
+    "instantBooking": "Reserva Instantánea",
+    "freeRescheduling": "Reagendamiento Gratuito",
+    "moneyBackGuarantee": "Garantía de Devolución del Dinero"
   },
   "hero": {
     "badge": "Confiado por 50,000+ clientes",
@@ -605,68 +670,6 @@
       "description": "Entrenamiento personal y bienestar"
     }
   },
-  "howItWorks": {
-    "badge": "Proceso Simple",
-    "title": {
-      "line1": "¿Cómo",
-      "highlight": "Fixelo Funciona"
-    },
-    "subtitle": "Obtener la ayuda que necesitas nunca ha sido tan fácil. Sigue estos sencillos pasos para conectarte con profesionales verificados en tu área.",
-    "steps": {
-      "search": {
-        "title": "Buscar y Navegar",
-        "description": "Encuentra profesionales verificados en tu área buscando el servicio que necesitas",
-        "details": [
-          "Navega 120+ categorías de servicios",
-          "Filtra por ubicación, precio y calificación",
-          "Lee reseñas de clientes reales",
-          "Ver perfiles y portafolios profesionales"
-        ]
-      },
-      "book": {
-        "title": "Reserva y Agenda",
-        "description": "Elige tu hora preferida y reserva instantáneamente con disponibilidad en tiempo real",
-        "details": [
-          "Ver disponibilidad en tiempo real",
-          "Reserva instantáneamente o agenda para más tarde",
-          "Obtén confirmación instantánea",
-          "Chatea directamente con el profesional"
-        ]
-      },
-      "pay": {
-        "title": "Paga y Revisa",
-        "description": "Paga de forma segura a través de nuestra plataforma y deja una reseña para ayudar a otros",
-        "details": [
-          "Procesamiento de pago seguro",
-          "Varias opciones de pago",
-          "Garantía de finalización del servicio",
-          "Deja reseñas honestas"
-        ]
-      }
-    },
-    "benefits": {
-      "title": "¿Por qué Miles eligen Fixelo?",
-      "subtitle": "Nos comprometemos a proporcionar la mejor experiencia tanto para clientes como para profesionales",
-      "noHiddenFees": {
-        "title": "Sin Tarifas Ocultas",
-        "description": "Precios transparentes con cargos sorpresa"
-      },
-      "support247": {
-        "title": "Soporte 24/7",
-        "description": "Obtén ayuda cuando la necesites"
-      },
-      "moneyBack": {
-        "title": "Garantía de Devolución del Dinero",
-        "description": "100% de satisfacción o tu dinero de vuelta"
-      },
-      "instantBooking": {
-        "title": "Reserva Instantánea",
-        "description": "Reserva servicios en solo unos clics"
-      },
-      "findServices": "Buscar Servicios",
-      "becomeProfessional": "Ser un Profesional"
-    }
-  },
   "testimonials": {
     "title": "Lo que dicen nuestros usuarios",
     "customer1": {
@@ -680,11 +683,168 @@
       "location": "Orlando, FL"
     }
   },
+  "about": {
+    "badge": "Nuestra Historia",
+    "title": {
+      "line1": "Conectando",
+      "highlight": "Profesionales",
+      "line2": "y Clientes"
+    },
+    "subtitle": "Somos una plataforma innovadora que conecta profesionales calificados con clientes que necesitan servicios de calidad en Florida.",
+    "mission": {
+      "title": "Nuestra Misión",
+      "description": "Facilitar la conexión entre profesionales calificados y clientes, proporcionando una experiencia segura, confiable y eficiente para todos.",
+      "point1": "Verificación rigurosa de todos los profesionales",
+      "point2": "Sistema de pago seguro y transparente",
+      "point3": "Soporte 24/7 para clientes y profesionales"
+    },
+    "vision": {
+      "title": "Nuestra Visión",
+      "description": "Ser la plataforma líder de servicios en Florida, reconocida por calidad, confiabilidad e innovación.",
+      "goal": "Expansión Nacional",
+      "goalDescription": "Expandir a todo el territorio nacional para 2026"
+    },
+    "values": {
+      "title": "Nuestros Valores",
+      "subtitle": "Principios que guían nuestra empresa y relación con clientes y profesionales",
+      "trust": {
+        "title": "Confianza",
+        "description": "Construimos relaciones basadas en transparencia y confiabilidad"
+      },
+      "quality": {
+        "title": "Calidad",
+        "description": "Compromiso con la excelencia en todos nuestros servicios"
+      },
+      "community": {
+        "title": "Comunidad",
+        "description": "Fortalecer y apoyar la comunidad local de profesionales"
+      },
+      "innovation": {
+        "title": "Innovación",
+        "description": "Siempre buscando nuevas formas de mejorar la experiencia del usuario"
+      }
+    },
+    "stats": {
+      "title": "Números que Hablan",
+      "subtitle": "Resultados que demuestran nuestro compromiso con la calidad",
+      "happyCustomers": "Clientes Satisfechos",
+      "verifiedProfessionals": "Profesionales Verificados",
+      "citiesCovered": "Ciudades Cubiertas",
+      "averageRating": "Calificación Promedio"
+    },
+    "team": {
+      "title": "Nuestro Equipo",
+      "subtitle": "Profesionales experimentados dedicados a tu éxito",
+      "ceo": {
+        "role": "CEO & Fundador",
+        "bio": "Más de 15 años de experiencia en tecnología y emprendimiento"
+      },
+      "cto": {
+        "role": "CTO",
+        "bio": "Experto en desarrollo de software y arquitectura de sistemas"
+      },
+      "cpo": {
+        "role": "CPO",
+        "bio": "Enfocado en crear la mejor experiencia de usuario posible"
+      }
+    },
+    "timeline": {
+      "title": "Nuestro Viaje",
+      "subtitle": "Hitos importantes en la historia de Fixelo",
+      "2020": {
+        "title": "Fundación",
+        "description": "Nacimiento de la idea y desarrollo del concepto inicial"
+      },
+      "2021": {
+        "title": "MVP Lanzado",
+        "description": "Primera versión de la plataforma en Miami"
+      },
+      "2022": {
+        "title": "Expansión Regional",
+        "description": "Cobertura en toda Florida"
+      },
+      "2023": {
+        "title": "Serie A",
+        "description": "Inversión de $5M para expansión"
+      },
+      "2024": {
+        "title": "Plataforma Nacional",
+        "description": "Preparación para expansión nacional"
+      }
+    },
+    "cta": {
+      "title": "Únete a Nosotros",
+      "subtitle": "Sé parte de la revolución de servicios en Florida",
+      "joinButton": "Ser un Profesional",
+      "contactButton": "Contáctanos"
+    }
+  },
   "cta": {
     "title": "¿Listo para empezar?",
     "subtitle": "Únete a miles de clientes y profesionales satisfechos en Florida",
     "findServices": "Buscar Servicios",
     "becomeProfessional": "Ser un Profesional"
+  },
+  "contact": {
+    "badge": "Ponte en Contacto",
+    "title": "Contáctanos",
+    "subtitle": "Estamos aquí para ayudarte. Contáctanos para cualquier duda, soporte o asociación.",
+    "form": {
+      "title": "Envía tu Mensaje",
+      "subtitle": "Completa el formulario y te responderemos en 24 horas.",
+      "name": "Nombre",
+      "namePlaceholder": "Tu nombre completo",
+      "email": "Email",
+      "emailPlaceholder": "tu@email.com",
+      "phone": "Teléfono",
+      "phonePlaceholder": "(305) 555-0123",
+      "subject": "Asunto",
+      "subjectPlaceholder": "Selecciona un asunto",
+      "message": "Mensaje",
+      "messagePlaceholder": "Describe tu pregunta o solicitud...",
+      "send": "Enviar Mensaje",
+      "sending": "Enviando...",
+      "success": {
+        "title": "¡Mensaje Enviado!",
+        "message": "Gracias por contactarnos. Responderemos en 24 horas."
+      },
+      "subjects": {
+        "general": "General",
+        "support": "Soporte Técnico",
+        "billing": "Facturación",
+        "partnership": "Alianza",
+        "other": "Otro"
+      }
+    },
+    "info": {
+      "email": {
+        "title": "Email",
+        "description": "Respuesta en 24 horas"
+      },
+      "phone": {
+        "title": "Teléfono",
+        "description": "Soporte en inglés y portugués"
+      },
+      "address": {
+        "title": "Dirección",
+        "description": "Oficina en Miami, FL"
+      },
+      "hours": {
+        "title": "Horario",
+        "description": "Soporte 24/7 para emergencias"
+      }
+    },
+    "hours": {
+      "title": "Horario de Atención",
+      "weekdays": "Lunes a Viernes",
+      "weekends": "Sábado y Domingo",
+      "emergency": "Emergencias"
+    },
+    "faq": {
+      "title": "Preguntas Frecuentes",
+      "description": "Encuentra respuestas rápidas a las preguntas más comunes.",
+      "button": "Ver FAQ"
+    }
   },
   "profile": {
     "subtitle": "Administra tu información de cuenta y preferencias",
@@ -1086,18 +1246,25 @@
       "stable": "Estable"
     }
   },
+  "languageSelector": {
+    "title": "Seleccionar Idioma",
+    "english": "Inglés",
+    "portuguese": "Portugués",
+    "spanish": "Español",
+    "currentLanguage": "Idioma Actual"
+  },
   "footer": {
-    "tagline": "Tu marketplace de servicios confiable en Florida",
+    "tagline": "Conectando profesionales con clientes en Florida",
     "services": {
       "title": "Servicios",
-      "cleaning": "Limpieza",
-      "repairs": "Reparaciones",
-      "beauty": "Belleza",
+      "cleaning": "Limpieza del Hogar",
+      "repairs": "Reparaciones del Hogar",
+      "beauty": "Belleza & Bienestar",
       "personalCare": "Cuidado Personal"
     },
     "company": {
       "title": "Empresa",
-      "about": "Acerca de",
+      "about": "Acerca de Nosotros",
       "contact": "Contacto",
       "careers": "Carreras",
       "blog": "Blog"
@@ -1111,192 +1278,24 @@
     },
     "copyright": "© {year} Fixelo. Todos los derechos reservados."
   },
-  "plans": {
-    "title": "Elige Tu Plan",
-    "subtitle": "Desbloquea el potencial de tu negocio con nuestras características premium",
-    "free": {
-      "name": "GRATUITO",
-      "price": "$0",
-      "period": "para siempre",
-      "description": "Perfecto para empezar",
-      "includes": "Incluye",
-      "features": {
-        "leadsPerWeek": "10 leads por semana",
-        "basicProfile": "Perfil básico",
-        "images": "3 imágenes de servicio",
-        "standardSupport": "Soporte estándar",
-        "basicAnalytics": "Análisis básicos"
-      },
-      "limitations": {
-        "title": "Limitaciones",
-        "noTopPriority": "Sin prioridad en la parte superior",
-        "noAds": "Sin campañas ADS",
-        "limitedVisibility": "Visibilidad limitada",
-        "slowVerification": "Verificación en 7-14 días"
-      },
-      "button": "Plan Actual",
-      "downgrade": "Bajar a Gratuito",
-      "popular": false
+  "servicesPage": {
+    "title": "Buscar Servicios",
+    "subtitle": "Encuentra y agenda los mejores profesionales en tu ciudad.",
+    "searchPlaceholder": "Buscar servicios...",
+    "allCategories": "Todas las Categorías",
+    "allCities": "Todas las Ciudades",
+    "sortBy": {
+      "label": "Ordenar por",
+      "rating": "Calificación",
+      "priceLow": "Menor Precio",
+      "priceHigh": "Mayor Precio",
+      "newest": "Más Recientes"
     },
-    "premium": {
-      "name": "PREMIUM",
-      "price": "$34.80",
-      "period": "por mes",
-      "description": "Maximiza el crecimiento de tu negocio",
-      "mostPopular": "MÁS POPULAR",
-      "everythingInFree": "Todo en Gratuito, más",
-      "features": {
-        "moreLeads": "40 leads por mes (vs 10/semana)",
-        "topList": "Top de la lista 4x por semana",
-        "fullAds": "Acceso completo a ADS",
-        "moreImages": "10 imágenes de servicio",
-        "premiumBadge": "Insignia premium",
-        "prioritySupport": "Soporte prioritario",
-        "advancedAnalytics": "Análisis avanzados",
-        "autoTemplates": "Plantillas de respuesta automática",
-        "fastVerification": "Verificación en 24-48h",
-        "competitorInsights": "Insights de competidores"
-      },
-      "button": "Actualizar Ahora",
-      "currentPlan": "Plan Actual",
-      "popular": true,
-      "savings": "Ahorra $180/año"
-    },
-    "comparison": {
-      "title": "Comparación de Características",
-      "leads": "Leads Mensuales",
-      "topList": "Prioridad en la Lista Superior",
-      "ads": "Campañas ADS",
-      "images": "Imágenes de Servicio",
-      "support": "Nivel de Soporte",
-      "analytics": "Análisis",
-      "verification": "Tiempo de Verificación",
-      "badge": "Insignia Premium"
-    },
-    "benefits": {
-      "title": "¿Por Qué Ser Premium?",
-      "subtitle": "Únete a miles de profesionales exitosos",
-      "moreLeads": {
-        "title": "4x Más Leads",
-        "description": "Obtén hasta 40 leads calificados por mes vs 10 por semana en el plan gratuito"
-      },
-      "topVisibility": {
-        "title": "Visibilidad Superior",
-        "description": "Aparece en la parte superior de los resultados de búsqueda 4 veces por semana"
-      },
-      "adsControl": {
-        "title": "Control de ADS",
-        "description": "Crea campañas dirigidas para alcanzar a tus clientes ideales"
-      },
-      "fastGrowth": {
-        "title": "Crecimiento Más Rápido",
-        "description": "Los usuarios premium ven un crecimiento 300% más rápido en promedio"
-      }
-    },
-    "upgrade": {
-      "title": "Actualizar a Premium",
-      "subtitle": "Comienza a hacer crecer tu negocio hoy",
-      "monthlyBilling": "Facturación Mensual",
-      "annualBilling": "Facturación Anual",
-      "save20": "Ahorra 20%",
-      "savePerYear": "Ahorra {amount}/año",
-      "startTrial": "Iniciar Prueba Gratuita",
-      "upgradeNow": "Actualizar Ahora",
-      "moneyBack": "Garantía de devolución de dinero de 30 días"
-    },
-    "subscription": {
-      "title": "Suscripción",
-      "currentPlan": "Plan Actual: {plan}",
-      "plans": {
-        "free": {
-          "name": "Gratis",
-          "price": "$0",
-          "features": {
-            "basicListing": "Listado básico de servicios",
-            "limitedLeads": "Hasta 5 leads por mes",
-            "basicSupport": "Soporte básico",
-            "basicAnalytics": "Análisis básico"
-          }
-        },
-        "pro": {
-          "name": "Pro",
-          "price": "$29",
-          "features": {
-            "priorityListing": "Listado prioritario",
-            "unlimitedLeads": "Leads ilimitados",
-            "advancedAnalytics": "Análisis avanzado",
-            "prioritySupport": "Soporte prioritario",
-            "customBranding": "Marca personalizada"
-          }
-        },
-        "premium": {
-          "name": "Premium",
-          "price": "$99",
-          "features": {
-            "topListing": "Posición en la parte superior",
-            "unlimitedEverything": "Todo ilimitado",
-            "dedicatedManager": "Gerente de cuenta dedicado",
-            "customIntegrations": "Integraciones personalizadas",
-            "whiteLabel": "Solución de marca blanca"
-          }
-        },
-        "popular": "Más Popular",
-        "current": "Plan Actual",
-        "upgrade": "Actualizar",
-        "downgrade": "Degradar",
-        "month": "mes"
-      },
-      "usage": {
-        "title": "Estadísticas de Uso",
-        "leadsUsed": "Leads Utilizados",
-        "activeServices": "Servicios Activos",
-        "bookingsThisMonth": "Reservas Este Mes",
-        "averageRating": "Calificación Promedio"
-      }
-    },
-    "analytics": {
-      "title": "Análisis",
-      "timeRange": {
-        "7d": "7 días",
-        "30d": "30 días",
-        "90d": "90 días",
-        "1y": "1 año"
-      },
-      "metrics": {
-        "totalViews": "Total de Visualizaciones",
-        "totalLeads": "Total de Leads",
-        "totalBookings": "Total de Reservas",
-        "totalRevenue": "Ingresos Totales",
-        "averageRating": "Calificación Promedio",
-        "responseTime": "Tiempo de Respuesta",
-        "conversionRate": "Tasa de Conversión",
-        "repeatCustomers": "Clientes Recurrentes",
-        "fromLastMonth": "del mes pasado",
-        "outOf5": "de 5",
-        "averageResponse": "respuesta promedio",
-        "leadsToBookings": "leads a reservas",
-        "thisMonth": "este mes"
-      },
-      "tabs": {
-        "overview": "Resumen",
-        "services": "Servicios",
-        "customers": "Clientes",
-        "revenue": "Ingresos"
-      },
-      "charts": {
-        "performanceOverview": "Resumen de Rendimiento",
-        "chartPlaceholder": "El gráfico se mostrará aquí"
-      },
-      "tables": {
-        "topServices": "Servicios con Mejor Rendimiento",
-        "customerInsights": "Insights de Clientes",
-        "revenueAnalysis": "Análisis de Ingresos",
-        "views": "visualizaciones",
-        "leads": "leads",
-        "bookings": "reservas",
-        "conversion": "conversión",
-        "comingSoon": "Próximamente"
-      }
-    }
+    "resultsCount": "{count} resultados",
+    "sponsored": "Patrocinado",
+    "filters": "Filtros",
+    "noResults": "No se encontraron servicios",
+    "noResultsDescription": "Intenta ajustar tu búsqueda o filtros.",
+    "popularCategories": "Categorías Populares"
   }
 } 

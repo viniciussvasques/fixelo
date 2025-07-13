@@ -22,7 +22,7 @@ export default function DashboardPage() {
       description: t('dashboard.stats.thisMonth'),
       icon: Calendar,
       color: 'text-blue-600',
-      trend: t('dashboard.stats.trend.servicesBooked')
+      trend: t('dashboard.stats.trend.servicesBooked', { count: 12 })
     },
     {
       title: t('dashboard.stats.reviewsGiven'),
@@ -30,7 +30,7 @@ export default function DashboardPage() {
       description: t('dashboard.stats.total'),
       icon: Star,
       color: 'text-yellow-600',
-      trend: t('dashboard.stats.trend.reviewsGiven')
+      trend: t('dashboard.stats.trend.reviewsGiven', { count: 8 })
     },
     {
       title: t('dashboard.stats.messages'),
@@ -38,7 +38,7 @@ export default function DashboardPage() {
       description: t('dashboard.stats.unread'),
       icon: MessageCircle,
       color: 'text-green-600',
-      trend: t('dashboard.stats.trend.messages')
+      trend: t('dashboard.stats.trend.messages', { count: 3 })
     },
     {
       title: t('dashboard.stats.totalSpent'),
@@ -46,7 +46,7 @@ export default function DashboardPage() {
       description: t('dashboard.stats.thisYear'),
       icon: CreditCard,
       color: 'text-purple-600',
-      trend: t('dashboard.stats.trend.totalSpent')
+      trend: t('dashboard.stats.trend.totalSpent', { count: 15 })
     }
   ]
 

@@ -1,20 +1,5 @@
-import { useQuery } from '@tanstack/react-query'
+import { useQuery, useMutation, useQueryClient } from '@tanstack/react-query'
 import { api } from '@/lib/api'
-
-interface Service {
-  id: string
-  title: string
-  description: string
-  category: string
-  price: number
-  duration: number
-  images: string[]
-  status: string
-  isActive: boolean
-  providerId: string
-  createdAt: string
-  updatedAt: string
-}
 
 interface UseServicesParams {
   providerId?: string | 'current'
@@ -22,6 +7,11 @@ interface UseServicesParams {
   status?: string
   page?: number
   limit?: number
+  search?: string
+  city?: string
+  priceMin?: number
+  priceMax?: number
+  sortBy?: string
 }
 
 export const useServices = (params?: UseServicesParams) => {
@@ -42,8 +32,10 @@ export const useServices = (params?: UseServicesParams) => {
         providerId: params?.providerId === 'current' ? undefined : params?.providerId
       }
       
-      const { data } = await api.get(endpoint, { params: queryParams })
-      return data
+      const response = await api.get(endpoint, { params: queryParams })
+      // Handle API response structure
+      const services = response.data?.services || response.data?.data || response.data || []
+      return Array.isArray(services) ? services : []
     }
   })
 }
@@ -52,9 +44,43 @@ export const useService = (id: string) => {
   return useQuery({
     queryKey: ['services', id],
     queryFn: async () => {
-      const { data } = await api.get(`/services/${id}`)
-      return data
+      const response = await api.get(`/services/${id}`)
+      return response.data?.data || response.data
     },
     enabled: !!id
   })
+}
+
+// Hook para busca de serviços com filtros
+export const useServicesSearch = () => {
+  const queryClient = useQueryClient()
+  
+  const searchServices = useMutation({
+    mutationFn: async (filters: UseServicesParams) => {
+      const response = await api.get('/services', { params: filters })
+      // Handle API response structure
+      const services = response.data?.services || response.data?.data || response.data || []
+      return Array.isArray(services) ? services : []
+    },
+    onSuccess: (data) => {
+      queryClient.setQueryData(['services', 'search'], data)
+    }
+  })
+  
+  const { data: services = [], isLoading } = useQuery({
+    queryKey: ['services', 'search'],
+    queryFn: async () => {
+      const response = await api.get('/services')
+      // Handle API response structure and ensure it's always an array
+      const data = response.data?.services || response.data?.data || response.data || []
+      return Array.isArray(data) ? data : []
+    },
+    initialData: []
+  })
+  
+  return {
+    services: Array.isArray(services) ? services : [],
+    isLoading,
+    searchServices: searchServices.mutate
+  }
 } 

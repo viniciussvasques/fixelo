@@ -121,8 +121,8 @@ export function Hero() {
                       list="city-list"
                     />
                     <datalist id="city-list">
-                      {cities?.map((city: string) => (
-                        <option key={city} value={city} />
+                      {cities?.map((city: string, index: number) => (
+                        <option key={`${city}-${index}`} value={city} />
                       ))}
                     </datalist>
                   </div>
@@ -140,9 +140,9 @@ export function Hero() {
                 <div className="mt-4 pt-4 border-t">
                   <p className="text-sm text-gray-500 mb-2">{t('search.popularServices')}:</p>
                   <div className="flex flex-wrap gap-2">
-                    {popularServiceNames.map((service: string) => (
+                    {popularServiceNames.map((service: string, index: number) => (
                       <Badge 
-                        key={service} 
+                        key={`${service}-${index}`} 
                         variant="secondary" 
                         className="cursor-pointer hover:bg-gray-200"
                         onClick={() => setSearchQuery(service)}

@@ -1,15 +1,14 @@
 'use client'
 
-import React, { useState } from 'react'
+import React, { useState, useEffect } from 'react'
 import { useRouter } from 'next/navigation'
-import { useTranslations, useLocale } from 'next-intl'
+import { useLocale } from 'next-intl'
 import { 
   ArrowLeft,
   Plus,
   Upload,
   MapPin,
   DollarSign,
-  Clock,
   Tag,
   FileText
 } from 'lucide-react'
@@ -53,11 +52,11 @@ const SERVICE_CATEGORIES = [
 export default function CreateServicePage() {
   const router = useRouter()
   const locale = useLocale()
-  const t = useTranslations('services')
   const { toast } = useToast()
-  const { user, isAuthenticated } = useAuthStore()
-  const { cities, isLoading: citiesLoading } = useFloridaCities()
+  const { user, isAuthenticated, isLoading } = useAuthStore()
+  const { cities } = useFloridaCities()
   
+  const [authChecked, setAuthChecked] = useState(false)
   const [isSubmitting, setIsSubmitting] = useState(false)
   const [formData, setFormData] = useState({
     title: '',
@@ -74,6 +73,29 @@ export default function CreateServicePage() {
     tags: [] as string[],
     newTag: ''
   })
+
+  // Verificar autenticação após carregamento
+  useEffect(() => {
+    if (!isLoading) {
+      setAuthChecked(true)
+    }
+  }, [isLoading])
+
+  // Mostrar loading enquanto verifica autenticação
+  if (isLoading || !authChecked) {
+    return (
+      <div className="p-6 max-w-4xl mx-auto">
+        <Card>
+          <CardHeader>
+            <CardTitle>Loading...</CardTitle>
+            <CardDescription>
+              Checking authentication...
+            </CardDescription>
+          </CardHeader>
+        </Card>
+      </div>
+    )
+  }
 
   // Verificar se usuário está autenticado
   if (!isAuthenticated || !user) {
@@ -151,8 +173,8 @@ export default function CreateServicePage() {
       // Validações
       if (!formData.title || !formData.description || !formData.category || !formData.price || !formData.city) {
         toast({
-          title: 'Validation Error',
-          description: 'Please fill in all required fields.',
+          title: "Validation Error",
+          description: "Please fill in all required fields.",
           variant: "destructive"
         })
         return
@@ -165,7 +187,6 @@ export default function CreateServicePage() {
         category: formData.category,
         price: parseFloat(formData.price),
         duration: formData.duration ? parseInt(formData.duration) : 60,
-        currency: formData.currency,
         city: formData.city,
         state: formData.state,
         address: formData.address,
@@ -174,20 +195,24 @@ export default function CreateServicePage() {
         tags: formData.tags
       }
 
+      console.log('🚀 Creating service:', serviceData)
       const response = await api.post('/services', serviceData)
+      console.log('✅ Service created:', response.data)
 
-      if (response.data.success) {
+      // API retorna 201 se criado com sucesso
+      if (response.status === 201) {
         toast({
-          title: 'Service Created!',
-          description: 'Your service has been created successfully.',
+          title: "Service Created",
+          description: "Your service has been created successfully.",
         })
 
         router.push(`/${locale}/dashboard/services`)
       }
     } catch (error: any) {
+      console.error('❌ Error creating service:', error)
       toast({
-        title: 'Error',
-        description: error.response?.data?.message || 'Error creating service. Please try again.',
+        title: "Error",
+        description: error.response?.data?.message || "Error creating service. Please try again.",
         variant: "destructive"
       })
     } finally {
@@ -198,26 +223,20 @@ export default function CreateServicePage() {
   return (
     <div className="p-6 max-w-4xl mx-auto">
       {/* Header */}
-      <div className="mb-8">
-        <div className="flex items-center justify-between">
+      <div className="flex items-center justify-between mb-6">
+        <div className="flex items-center space-x-4">
+          <Button
+            variant="ghost"
+            size="sm"
+            onClick={() => router.back()}
+            className="flex items-center"
+          >
+            <ArrowLeft className="mr-2 h-4 w-4" />
+            Back
+          </Button>
           <div>
-            <div className="flex items-center mb-2">
-              <Button
-                variant="ghost"
-                size="sm"
-                onClick={() => router.back()}
-                className="mr-2"
-              >
-                <ArrowLeft className="h-4 w-4" />
-              </Button>
-              <h1 className="text-3xl font-bold text-gray-900 flex items-center">
-                <Plus className="mr-3 h-8 w-8 text-blue-600" />
-                Create New Service
-              </h1>
-            </div>
-            <p className="text-gray-600">
-              Set up your service offering for potential customers
-            </p>
+            <h1 className="text-2xl font-bold">Create Service</h1>
+            <p className="text-gray-600">Add a new service to your portfolio</p>
           </div>
         </div>
       </div>
@@ -279,43 +298,51 @@ export default function CreateServicePage() {
           </CardContent>
         </Card>
 
-        {/* Pricing & Duration */}
+        {/* Pricing */}
         <Card>
           <CardHeader>
             <CardTitle className="flex items-center">
               <DollarSign className="mr-2 h-5 w-5" />
-              Pricing & Duration
+              Pricing
             </CardTitle>
             <CardDescription>
-              Set your service pricing and estimated duration
+              Set your service price and duration
             </CardDescription>
           </CardHeader>
           <CardContent className="space-y-4">
-            <div className="grid grid-cols-2 gap-4">
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
               <div>
                 <Label htmlFor="price">Price *</Label>
-                <Input
-                  id="price"
-                  type="number"
-                  value={formData.price}
-                  onChange={(e) => handleInputChange('price', e.target.value)}
-                  placeholder="0.00"
-                  min="0"
-                  step="0.01"
-                  required
-                />
+                <div className="relative">
+                  <DollarSign className="absolute left-3 top-3 h-4 w-4 text-gray-400" />
+                  <Input
+                    id="price"
+                    type="number"
+                    step="0.01"
+                    min="0"
+                    value={formData.price}
+                    onChange={(e) => handleInputChange('price', e.target.value)}
+                    placeholder="0.00"
+                    className="pl-10"
+                    required
+                  />
+                </div>
               </div>
+
               <div>
                 <Label htmlFor="duration">Duration (minutes)</Label>
                 <Input
                   id="duration"
                   type="number"
+                  min="15"
+                  step="15"
                   value={formData.duration}
                   onChange={(e) => handleInputChange('duration', e.target.value)}
                   placeholder="60"
-                  min="15"
-                  step="15"
                 />
+                <p className="text-sm text-gray-500 mt-1">
+                  Estimated time to complete the service
+                </p>
               </div>
             </div>
           </CardContent>
@@ -326,46 +353,30 @@ export default function CreateServicePage() {
           <CardHeader>
             <CardTitle className="flex items-center">
               <MapPin className="mr-2 h-5 w-5" />
-              Service Location
+              Location
             </CardTitle>
             <CardDescription>
               Where do you provide this service?
             </CardDescription>
           </CardHeader>
           <CardContent className="space-y-4">
-            <div className="grid grid-cols-2 gap-4">
-              <div>
-                <Label htmlFor="city">City *</Label>
-                <Select
-                  value={formData.city}
-                  onValueChange={(value) => handleInputChange('city', value)}
-                >
-                  <SelectTrigger>
-                    <SelectValue placeholder="Select a city" />
-                  </SelectTrigger>
-                  <SelectContent>
-                    {citiesLoading ? (
-                      <SelectItem value="" disabled>Loading cities...</SelectItem>
-                    ) : (
-                      cities.map((city) => (
-                        <SelectItem key={city} value={city}>
-                          {city}
-                        </SelectItem>
-                      ))
-                    )}
-                  </SelectContent>
-                </Select>
-              </div>
-              <div>
-                <Label htmlFor="zipCode">ZIP Code</Label>
-                <Input
-                  id="zipCode"
-                  value={formData.zipCode}
-                  onChange={(e) => handleInputChange('zipCode', e.target.value)}
-                  placeholder="12345"
-                  maxLength={5}
-                />
-              </div>
+            <div>
+              <Label htmlFor="city">City *</Label>
+              <Select
+                value={formData.city}
+                onValueChange={(value) => handleInputChange('city', value)}
+              >
+                <SelectTrigger>
+                  <SelectValue placeholder="Select a city" />
+                </SelectTrigger>
+                <SelectContent>
+                  {cities.map((city) => (
+                    <SelectItem key={city} value={city}>
+                      {city}
+                    </SelectItem>
+                  ))}
+                </SelectContent>
+              </Select>
             </div>
 
             <div>
@@ -374,7 +385,7 @@ export default function CreateServicePage() {
                 id="address"
                 value={formData.address}
                 onChange={(e) => handleInputChange('address', e.target.value)}
-                placeholder="Street address for service location"
+                placeholder="Street address or area"
               />
             </div>
           </CardContent>
@@ -435,17 +446,17 @@ export default function CreateServicePage() {
               Service Images
             </CardTitle>
             <CardDescription>
-              Upload images to showcase your service (optional)
+              Upload images to showcase your work
             </CardDescription>
           </CardHeader>
           <CardContent>
             <div className="border-2 border-dashed border-gray-300 rounded-lg p-6 text-center">
               <Upload className="mx-auto h-12 w-12 text-gray-400" />
               <p className="mt-2 text-sm text-gray-600">
-                Image upload functionality will be implemented here
+                Click to upload or drag and drop
               </p>
               <p className="text-xs text-gray-500">
-                Support for JPG, PNG files up to 5MB each
+                PNG, JPG, GIF up to 10MB
               </p>
             </div>
           </CardContent>

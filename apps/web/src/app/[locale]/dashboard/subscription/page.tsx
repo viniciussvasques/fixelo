@@ -12,7 +12,7 @@ import { usePlans } from '@/hooks/use-plans'
 
 export default function SubscriptionPage() {
   const t = useTranslations('dashboard.subscription')
-  const { currentPlan, usage, limits, isLoading } = usePlans()
+  const { currentPlan, usage, isLoading } = usePlans()
 
   if (isLoading) {
     return (
@@ -50,11 +50,11 @@ export default function SubscriptionPage() {
       </div>
 
       {/* Current Plan Status */}
-      <CurrentPlan 
-        plan={currentPlan}
-        usage={usage}
-        limits={limits}
-      />
+      {currentPlan && (
+        <CurrentPlan 
+          plan={currentPlan}
+        />
+      )}
 
       {/* Plan Comparison */}
       <div className="grid grid-cols-1 md:grid-cols-3 gap-6">

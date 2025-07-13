@@ -16,8 +16,9 @@ import {
   ChevronLeft,
   ChevronRight
 } from 'lucide-react'
-import { Header } from '@/components/layout/header'
-import { Footer } from '@/components/layout/footer'
+import Link from 'next/link'
+import { useLocale } from 'next-intl'
+// Header and Footer are already in the layout
 import { Button } from '@/components/ui/button'
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card'
 import { Badge } from '@/components/ui/badge'
@@ -94,6 +95,7 @@ export default function ServiceDetailsPage({ params }: { params: { id: string } 
   const t = useTranslations('serviceDetails')
   const [currentImageIndex, setCurrentImageIndex] = useState(0)
   const [isFavorite, setIsFavorite] = useState(false)
+  const locale = useLocale()
 
   // TODO: Use params.id to fetch service data
   console.log('Service ID:', params.id)
@@ -121,14 +123,12 @@ export default function ServiceDetailsPage({ params }: { params: { id: string } 
 
   return (
     <div className="min-h-screen bg-gray-50">
-      <Header />
-      
       <main className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
         {/* Breadcrumb */}
         <nav className="text-sm text-gray-500 mb-6">
-          <a href="/services" className="hover:text-gray-700">
+          <Link href={`/${locale}/services`} className="hover:text-gray-700">
             {t('breadcrumb.services')}
-          </a>
+          </Link>
           <span className="mx-2">/</span>
           <span className="text-gray-900">{mockService.title}</span>
         </nav>
@@ -437,8 +437,6 @@ export default function ServiceDetailsPage({ params }: { params: { id: string } 
           </div>
         </div>
       </main>
-
-      <Footer />
     </div>
   )
 } 

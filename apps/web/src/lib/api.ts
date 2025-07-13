@@ -54,11 +54,10 @@ api.interceptors.response.use(
         originalRequest.headers.Authorization = `Bearer ${token}`
         return api(originalRequest)
       } catch (refreshError) {
-        // Se falhar, redirecionar para login apenas se o usuário estava logado
+        // Se falhar ao renovar token, apenas limpar os tokens
+        // Não redirecionar automaticamente - deixar o componente decidir
+        console.log('❌ Failed to refresh token, clearing auth tokens')
         clearAuthToken()
-        if (typeof window !== 'undefined' && window.location.pathname.startsWith('/dashboard')) {
-          window.location.href = '/auth?mode=login'
-        }
         return Promise.reject(refreshError)
       }
     }
@@ -137,6 +136,11 @@ export const apiClient = {
   resetPassword: (token: string, password: string) =>
     api.post<ApiResponse>('/auth/reset-password', { token, password }),
 
+  verifyEmail: (token: string) =>
+    api.post<ApiResponse>('/auth/verify-email', { token }),
+
+  resendVerification: (email: string) =>
+    api.post<ApiResponse>('/auth/resend-verification', { email }),
 
 
   // User
@@ -236,20 +240,11 @@ export const apiClient = {
   sendMessage: (data: { conversationId: string; content: string; receiverId: string }) =>
     api.post<ApiResponse<any>>('/chat/messages', data),
 
-  // Email verification
-  verifyEmail: (token: string) =>
-    api.post<ApiResponse<any>>('/auth/verify-email', { token }),
+  // Stats
+  getStats: () => api.get<ApiResponse<any>>('/stats'),
 
-  resendVerification: (email: string) =>
-    api.post<ApiResponse<any>>('/auth/resend-verification', { email }),
-
-  // Platform Stats
-  getPlatformStats: () => api.get<ApiResponse<{
-    servicesCompleted: number
-    verifiedProfessionals: number
-    citiesCount: number
-    averageRating: number
-  }>>('/ads/admin/stats'),
-}
-
-export default api 
+  // Ads
+  getAdsCampaigns: () => api.get<ApiResponse<any[]>>('/ads/campaigns'),
+  
+  createAdsCampaign: (data: any) => api.post<ApiResponse<any>>('/ads/campaigns', data),
+} 

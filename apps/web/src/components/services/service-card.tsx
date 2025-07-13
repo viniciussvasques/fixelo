@@ -2,7 +2,7 @@
 
 import React from 'react'
 import { useRouter } from 'next/navigation'
-import { useTranslations } from 'next-intl'
+import { useTranslations, useLocale } from 'next-intl'
 import { Star, MapPin, Clock, DollarSign, Heart, Share2, Badge as BadgeIcon, Zap, Crown, TrendingUp } from 'lucide-react'
 import { Card, CardContent } from '@/components/ui/card'
 import { Badge } from '@/components/ui/badge'
@@ -39,6 +39,7 @@ interface ServiceCardProps {
 export function ServiceCard({ service, viewMode = 'grid' }: ServiceCardProps) {
   const router = useRouter()
   const t = useTranslations('services')
+  const locale = useLocale()
 
   // Get sponsored badge info
   const getSponsoredBadgeInfo = () => {
@@ -75,12 +76,12 @@ export function ServiceCard({ service, viewMode = 'grid' }: ServiceCardProps) {
   const sponsoredInfo = getSponsoredBadgeInfo()
 
   const handleViewDetails = () => {
-    router.push(`/services/${service.id}`)
+    router.push(`/${locale}/services/${service.id}`)
   }
 
   const handleProviderClick = (e: React.MouseEvent) => {
     e.stopPropagation()
-    router.push(`/providers/${service.provider.id}`)
+    router.push(`/${locale}/providers/${service.provider.id}`)
   }
 
   const handleFavorite = (e: React.MouseEvent) => {

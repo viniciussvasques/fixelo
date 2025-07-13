@@ -108,7 +108,7 @@ export function HowItWorks() {
         <div className="max-w-6xl mx-auto">
           {steps.map((step, index) => (
             <motion.div
-              key={index}
+              key={`step-${index}`}
               initial={{ opacity: 0, x: index % 2 === 0 ? -50 : 50 }}
               whileInView={{ opacity: 1, x: 0 }}
               transition={{ duration: 0.6, delay: index * 0.2 }}
@@ -139,7 +139,7 @@ export function HowItWorks() {
                         </p>
                         <ul className="space-y-2">
                           {step.details.map((detail, detailIndex) => (
-                            <li key={detailIndex} className="flex items-center gap-2 text-gray-600">
+                            <li key={`detail-${index}-${detailIndex}`} className="flex items-center gap-2 text-gray-600">
                               <CheckCircle2 className="h-4 w-4 text-green-500" />
                               {detail}
                             </li>
@@ -186,7 +186,7 @@ export function HowItWorks() {
           <div className="grid md:grid-cols-2 lg:grid-cols-4 gap-6">
             {benefits.map((benefit, index) => (
               <motion.div
-                key={index}
+                key={`benefit-${index}`}
                 initial={{ opacity: 0, y: 20 }}
                 whileInView={{ opacity: 1, y: 0 }}
                 transition={{ duration: 0.5, delay: index * 0.1 }}

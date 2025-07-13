@@ -27,7 +27,7 @@ export const useAuth = () => {
     setIsLoading(false)
   }, [])
 
-  const login = (email: string, password: string) => {
+  const login = (email: string, _password: string) => {
     // Simular login
     const mockUser = {
       id: '1',

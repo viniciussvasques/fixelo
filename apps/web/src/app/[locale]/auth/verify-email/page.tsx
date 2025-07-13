@@ -45,7 +45,7 @@ export default function VerifyEmailPage() {
     }
 
     verifyEmail()
-  }, [searchParams, router])
+  }, [searchParams, router, locale])
 
   const handleResendVerification = async () => {
     try {

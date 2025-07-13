@@ -2,23 +2,23 @@
 
 import { useTranslations } from 'next-intl'
 import { useState, useEffect } from 'react'
-import { useRouter, useSearchParams } from 'next/navigation'
+import { useRouter, useSearchParams, usePathname } from 'next/navigation'
+
 import { motion } from 'framer-motion'
 import { Search, Filter, Star, Grid, List } from 'lucide-react'
 import { ServiceCard } from '@/components/services/service-card'
-import { Header } from '@/components/layout/header'
-import { Footer } from '@/components/layout/footer'
 import { Button } from '@/components/ui/button'
 import { Input } from '@/components/ui/input'
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select'
 import { Card, CardHeader, CardTitle, CardDescription } from '@/components/ui/card'
-import { useServices } from '@/hooks/use-services'
+import { useServicesSearch } from '@/hooks/use-services'
 import { useCategories } from '@/hooks/use-categories'
-import { useCities } from '@/hooks/use-cities'
+import { useFloridaCities } from '@/hooks/use-cities'
 
 export default function ServicesPage() {
   const t = useTranslations('services')
   const router = useRouter()
+  const pathname = usePathname()
   const searchParams = useSearchParams()
   
   // Get initial search params from URL
@@ -35,8 +35,11 @@ export default function ServicesPage() {
 
   // Fetch data using hooks
   const { categories } = useCategories()
-  const { cities } = useCities()
-  const { services, isLoading, searchServices } = useServices()
+  const { cities } = useFloridaCities()
+  const { services, isLoading, searchServices } = useServicesSearch()
+  
+  // Ensure services is always an array
+  const servicesArray = Array.isArray(services) ? services : []
   
   // Update search when filters change
   useEffect(() => {
@@ -63,14 +66,13 @@ export default function ServicesPage() {
     if (selectedCategory !== 'All') params.set('category', selectedCategory)
     if (selectedLocation !== 'All Cities') params.set('location', selectedLocation)
     
-    const newUrl = `/services${params.toString() ? `?${params.toString()}` : ''}`
-    router.push(newUrl, { scroll: false })
-  }, [searchQuery, selectedCategory, selectedLocation, sortBy, priceRange])
+    const basePath = pathname.split('?')[0] // preserves current /{locale}/services path
+    const newUrl = `${basePath}${params.toString() ? `?${params.toString()}` : ''}`
+    router.replace(newUrl, { scroll: false })
+  }, [searchQuery, selectedCategory, selectedLocation, sortBy, priceRange, pathname, router, searchServices])
 
   return (
     <div className="min-h-screen bg-gray-50">
-      <Header />
-      
       <main className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
         {/* Hero Section */}
         <motion.div
@@ -79,10 +81,10 @@ export default function ServicesPage() {
           className="text-center mb-12"
         >
           <h1 className="text-4xl font-bold text-gray-900 mb-4">
-            {t('title')}
+            {t('servicesPage.title')}
           </h1>
           <p className="text-xl text-gray-600 max-w-2xl mx-auto">
-            {t('subtitle')}
+            {t('servicesPage.subtitle')}
           </p>
         </motion.div>
 
@@ -97,7 +99,7 @@ export default function ServicesPage() {
             <div className="relative">
               <Search className="absolute left-3 top-3 h-4 w-4 text-gray-400" />
               <Input
-                placeholder={t('searchPlaceholder')}
+                placeholder={t('servicesPage.searchPlaceholder')}
                 className="pl-10"
                 value={searchQuery}
                 onChange={(e) => setSearchQuery(e.target.value)}
@@ -106,11 +108,11 @@ export default function ServicesPage() {
             
             <Select value={selectedCategory} onValueChange={setSelectedCategory}>
               <SelectTrigger>
-                <SelectValue placeholder={t('allCategories')} />
+                <SelectValue placeholder={t('servicesPage.allCategories')} />
               </SelectTrigger>
               <SelectContent>
-                <SelectItem value="All">{t('allCategories')}</SelectItem>
-                {categories.map(cat => (
+                <SelectItem key="all-categories" value="All">{t('servicesPage.allCategories')}</SelectItem>
+                {Array.isArray(categories) && categories.map(cat => (
                   <SelectItem key={cat.id} value={cat.slug}>
                     {cat.name}
                   </SelectItem>
@@ -120,12 +122,12 @@ export default function ServicesPage() {
             
             <Select value={selectedLocation} onValueChange={setSelectedLocation}>
               <SelectTrigger>
-                <SelectValue placeholder={t('allCities')} />
+                <SelectValue placeholder={t('servicesPage.allCities')} />
               </SelectTrigger>
               <SelectContent>
-                <SelectItem value="All Cities">{t('allCities')}</SelectItem>
-                {cities.map(city => (
-                  <SelectItem key={city} value={city}>
+                <SelectItem key="all-cities" value="All Cities">{t('servicesPage.allCities')}</SelectItem>
+                {Array.isArray(cities) && cities.map((city, index) => (
+                  <SelectItem key={`${city}-${index}`} value={city}>
                     {city}
                   </SelectItem>
                 ))}
@@ -134,13 +136,13 @@ export default function ServicesPage() {
             
             <Select value={sortBy} onValueChange={setSortBy}>
               <SelectTrigger>
-                <SelectValue placeholder={t('sortBy.rating')} />
+                <SelectValue placeholder={t('servicesPage.sortBy.rating')} />
               </SelectTrigger>
               <SelectContent>
-                <SelectItem value="rating">{t('sortBy.rating')}</SelectItem>
-                <SelectItem value="price-low">{t('sortBy.priceLow')}</SelectItem>
-                <SelectItem value="price-high">{t('sortBy.priceHigh')}</SelectItem>
-                <SelectItem value="newest">{t('sortBy.newest')}</SelectItem>
+                <SelectItem key="rating" value="rating">{t('servicesPage.sortBy.rating')}</SelectItem>
+                <SelectItem key="price-low" value="price-low">{t('servicesPage.sortBy.priceLow')}</SelectItem>
+                <SelectItem key="price-high" value="price-high">{t('servicesPage.sortBy.priceHigh')}</SelectItem>
+                <SelectItem key="newest" value="newest">{t('servicesPage.sortBy.newest')}</SelectItem>
               </SelectContent>
             </Select>
           </div>
@@ -165,16 +167,16 @@ export default function ServicesPage() {
             
             <div className="flex items-center gap-2">
               <span className="text-sm text-gray-600">
-                {t('resultsCount', { count: services.length })}
+                {t('servicesPage.resultsCount', { count: servicesArray.length })}
               </span>
-              {services.filter(s => s.isSponsored).length > 0 && (
+              {servicesArray.filter(s => s.isSponsored).length > 0 && (
                 <span className="text-xs bg-blue-100 text-blue-800 px-2 py-1 rounded-full">
-                  {services.filter(s => s.isSponsored).length} {t('sponsored')}
+                  {servicesArray.filter(s => s.isSponsored).length} {t('servicesPage.sponsored')}
                 </span>
               )}
               <Button variant="outline" size="sm">
                 <Filter className="h-4 w-4 mr-2" />
-                {t('filters')}
+                {t('servicesPage.filters')}
               </Button>
             </div>
           </div>
@@ -184,7 +186,7 @@ export default function ServicesPage() {
         {isLoading && (
           <div className="grid gap-6 grid-cols-1 md:grid-cols-2 lg:grid-cols-3">
             {[1, 2, 3, 4, 5, 6].map((i) => (
-              <Card key={i} className="overflow-hidden">
+              <Card key={`loading-card-${i}`} className="overflow-hidden">
                 <div className="h-48 bg-gray-200 animate-pulse" />
                 <CardHeader>
                   <div className="h-6 bg-gray-200 rounded animate-pulse mb-2 w-3/4" />
@@ -203,9 +205,9 @@ export default function ServicesPage() {
             transition={{ delay: 0.2 }}
             className={`grid gap-6 ${viewMode === 'grid' ? 'grid-cols-1 md:grid-cols-2 lg:grid-cols-3' : 'grid-cols-1'}`}
           >
-            {services.map((service, index) => (
+            {servicesArray.map((service, index) => (
               <motion.div
-                key={service.id}
+                key={`service-${service.id}-${index}`}
                 initial={{ opacity: 0, y: 20 }}
                 animate={{ opacity: 1, y: 0 }}
                 transition={{ delay: index * 0.1 }}
@@ -243,7 +245,7 @@ export default function ServicesPage() {
         )}
 
         {/* No Results */}
-        {!isLoading && services.length === 0 && (
+        {!isLoading && servicesArray.length === 0 && (
           <motion.div
             initial={{ opacity: 0 }}
             animate={{ opacity: 1 }}
@@ -253,10 +255,10 @@ export default function ServicesPage() {
               <Search className="h-12 w-12 mx-auto" />
             </div>
             <h3 className="text-lg font-medium text-gray-900 mb-2">
-              {t('noResults')}
+              {t('servicesPage.noResults')}
             </h3>
             <p className="text-gray-600">
-              {t('noResultsDescription')}
+              {t('servicesPage.noResultsDescription')}
             </p>
           </motion.div>
         )}
@@ -269,12 +271,12 @@ export default function ServicesPage() {
           className="mt-16"
         >
           <h2 className="text-2xl font-bold text-gray-900 mb-8">
-            {t('popularCategories')}
+            {t('servicesPage.popularCategories')}
           </h2>
           <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
-            {categories.slice(0, 4).map((category) => (
+            {Array.isArray(categories) && categories.slice(0, 4).map((category, index) => (
               <Card 
-                key={category.id} 
+                key={`popular-category-${category.id}-${index}`}
                 className="hover:shadow-md transition-shadow cursor-pointer"
                 onClick={() => setSelectedCategory(category.slug)}
               >
@@ -292,8 +294,6 @@ export default function ServicesPage() {
           </div>
         </motion.section>
       </main>
-
-      <Footer />
     </div>
   )
 } 

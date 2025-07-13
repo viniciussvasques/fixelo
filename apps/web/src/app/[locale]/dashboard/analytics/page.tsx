@@ -3,7 +3,7 @@
 import React, { useState } from 'react'
 import { useTranslations } from 'next-intl'
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card'
-import { Button } from '@/components/ui/button'
+// import { Button } from '@/components/ui/button' // Temporarily disabled
 import { Badge } from '@/components/ui/badge'
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs'
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select'
@@ -12,7 +12,7 @@ import {
   TrendingUp, 
   TrendingDown, 
   Eye, 
-  MessageSquare, 
+  // MessageSquare, 
   Star, 
   Calendar,
   Users,
@@ -36,15 +36,6 @@ export default function AnalyticsPage() {
     conversionRate: 7.1,
     repeatCustomers: 23
   }
-
-  const chartData = [
-    { name: 'Jan', views: 400, leads: 24, bookings: 12 },
-    { name: 'Feb', views: 300, leads: 18, bookings: 8 },
-    { name: 'Mar', views: 500, leads: 32, bookings: 15 },
-    { name: 'Apr', views: 450, leads: 28, bookings: 14 },
-    { name: 'May', views: 600, leads: 35, bookings: 18 },
-    { name: 'Jun', views: 520, leads: 31, bookings: 16 }
-  ]
 
   const topServices = [
     { name: 'House Cleaning', views: 324, leads: 28, bookings: 12 },

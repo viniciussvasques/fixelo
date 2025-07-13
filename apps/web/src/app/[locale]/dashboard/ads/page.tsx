@@ -1,6 +1,6 @@
 'use client'
 
-import React, { useState } from 'react'
+import React from 'react'
 import { useRouter } from 'next/navigation'
 import { useTranslations, useLocale } from 'next-intl'
 import { 
@@ -13,20 +13,19 @@ import {
   Users,
   BarChart3,
   AlertTriangle,
-  ArrowUpRight,
   Zap
 } from 'lucide-react'
 import { Button } from '@/components/ui/button'
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card'
 import { Badge } from '@/components/ui/badge'
 import { Progress } from '@/components/ui/progress'
-import { useAuthStore } from '@/store/auth-store'
+// import { useAuthStore } from '@/store/auth-store'
 
 export default function AdsPage() {
   const router = useRouter()
   const locale = useLocale()
   const t = useTranslations('dashboard.ads')
-  const { user } = useAuthStore()
+  // const { user } = useAuthStore() // Temporarily disabled
 
   // Mock data - em produção virá da API
   const adsStats = {
@@ -40,7 +39,8 @@ export default function AdsPage() {
     roas: 3.2,
     activeCampaigns: 3,
     totalCampaigns: 5,
-    budgetUsed: 68.5
+    budgetUsed: 68.5,
+    budget: 1000 // Orçamento total mensal
   }
 
   const activeCampaigns = [

@@ -1,7 +1,7 @@
 'use client';
 
 import { useState, useEffect } from 'react';
-import { useTranslations } from 'next-intl';
+import { useTranslations, useLocale } from 'next-intl';
 import { Button } from '@/components/ui/button';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
 import { Badge } from '@/components/ui/badge';
@@ -9,9 +9,13 @@ import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
 import { Plus, Edit, Trash2, Eye, MapPin, Clock, TrendingUp, Star } from 'lucide-react';
 import { apiClient } from '@/lib/api';
 import { Service } from '@/types/api';
+import { useRouter } from 'next/navigation'
+import { useAuthStore } from '@/store/auth-store';
 
 export default function ServicesPage() {
   const t = useTranslations();
+  const router = useRouter();
+  const locale = useLocale();
   const [services, setServices] = useState<Service[]>([]);
   const [loading, setLoading] = useState(true);
   const [stats, setStats] = useState({
@@ -21,18 +25,50 @@ export default function ServicesPage() {
     totalBookings: 0,
   });
 
+  const { isAuthenticated, isLoading: authLoading } = useAuthStore();
+
   useEffect(() => {
-    loadServices();
-    loadStats();
-  }, []);
+    if (!authLoading && isAuthenticated) {
+      loadServices();
+      loadStats();
+    }
+  }, [authLoading, isAuthenticated]);
+
+  // Recarregar quando a página ficar visível (usuário volta da criação)
+  useEffect(() => {
+    const handleFocus = () => {
+      if (isAuthenticated) {
+        loadServices();
+      }
+    };
+
+    window.addEventListener('focus', handleFocus);
+    return () => window.removeEventListener('focus', handleFocus);
+  }, [isAuthenticated]);
 
   const loadServices = async () => {
     try {
       setLoading(true);
       const response = await apiClient.getProviderServices();
-      setServices(response.data?.data || response.data || []);
+      console.log('📋 Services API Response:', response);
+      
+      // A API retorna { services: [...], total: x, page: y, limit: z }
+      let servicesData = [];
+      if (response.data) {
+        if ((response.data as any).services && Array.isArray((response.data as any).services)) {
+          servicesData = (response.data as any).services;
+        } else if (Array.isArray((response.data as any).data)) {
+          servicesData = (response.data as any).data;
+        } else if (Array.isArray(response.data)) {
+          servicesData = response.data;
+        }
+      }
+      
+      console.log('📋 Services Data:', servicesData);
+      setServices(servicesData);
     } catch (error) {
       console.error('Failed to load services:', error);
+      setServices([]); // Garantir que seja um array vazio em caso de erro
     } finally {
       setLoading(false);
     }
@@ -41,14 +77,32 @@ export default function ServicesPage() {
   const loadStats = async () => {
     try {
       const response = await apiClient.getProviderStats();
-      setStats(response.data?.data || {
-        totalServices: 5,
-        activeServices: 4,
-        totalViews: 125,
-        totalBookings: 32,
-      });
+      console.log('📊 Stats API Response:', response);
+      
+      // Garantir que stats seja um objeto válido
+      let statsData = {
+        totalServices: 0,
+        activeServices: 0,
+        totalViews: 0,
+        totalBookings: 0,
+      };
+      
+      if (response.data) {
+        // Mapear os dados da API para o formato esperado
+        const apiData = response.data.data || response.data;
+        statsData = {
+          totalServices: apiData.servicesCount || 0,
+          activeServices: apiData.servicesCount || 0, // Assumindo que todos os serviços retornados são ativos
+          totalViews: apiData.totalViews || 0,
+          totalBookings: apiData.bookingsCount || 0,
+        };
+      }
+      
+      console.log('📊 Stats Data:', statsData);
+      setStats(statsData);
     } catch (error) {
       console.error('Failed to load stats:', error);
+      // Manter stats padrão em caso de erro
     }
   };
 
@@ -56,19 +110,21 @@ export default function ServicesPage() {
     if (window.confirm(t('services.confirmDelete'))) {
       try {
         await apiClient.deleteService(serviceId);
-        loadServices();
+        loadServices(); // Recarregar a lista após exclusão
       } catch (error) {
         console.error('Failed to delete service:', error);
+        alert(t('services.error') || 'Error deleting service');
       }
     }
   };
 
-  const handleToggleService = async (serviceId: string, active: boolean) => {
+  const handleToggleService = async (serviceId: string, status: string) => {
     try {
-      await apiClient.updateService(serviceId, { active });
-      loadServices();
+      await apiClient.updateService(serviceId, { status });
+      loadServices(); // Recarregar a lista após atualização
     } catch (error) {
       console.error('Failed to update service:', error);
+      alert(t('services.error') || 'Error updating service');
     }
   };
 
@@ -80,14 +136,16 @@ export default function ServicesPage() {
             <CardTitle className="text-lg">{service.title}</CardTitle>
             <CardDescription className="flex items-center gap-2 mt-1">
               <MapPin className="w-4 h-4" />
-              Miami, FL
+              {service.location || 'Miami, FL'}
             </CardDescription>
           </div>
           <div className="flex items-center gap-2">
-            <Badge variant="default">
-              {t('services.active')}
+            <Badge variant={service.status === 'ACTIVE' ? 'default' : 'secondary'}>
+              {service.status === 'ACTIVE' ? t('services.active') : t('services.inactive')}
             </Badge>
-            <Badge variant="outline">$45</Badge>
+            <Badge variant="outline">
+              ${service.price}
+            </Badge>
           </div>
         </div>
       </CardHeader>
@@ -98,17 +156,17 @@ export default function ServicesPage() {
         
         <div className="grid grid-cols-3 gap-4 mb-4">
           <div className="text-center">
-            <div className="text-xl font-bold">125</div>
+            <div className="text-xl font-bold">{(service as any).views || 0}</div>
             <div className="text-xs text-muted-foreground">{t('services.views')}</div>
           </div>
           <div className="text-center">
-            <div className="text-xl font-bold">15</div>
+            <div className="text-xl font-bold">{(service as any).bookingCount || service.bookings?.length || 0}</div>
             <div className="text-xs text-muted-foreground">{t('services.bookings')}</div>
           </div>
           <div className="text-center">
             <div className="text-xl font-bold flex items-center justify-center gap-1">
               <Star className="w-4 h-4 text-yellow-500 fill-current" />
-              4.8
+              {service.rating || 0}
             </div>
             <div className="text-xs text-muted-foreground">{t('services.rating')}</div>
           </div>
@@ -121,20 +179,20 @@ export default function ServicesPage() {
           </div>
           
           <div className="flex gap-2">
-            <Button variant="outline" size="sm" onClick={() => window.open(`/services/${service.id}`, '_blank')}>
+            <Button variant="outline" size="sm" onClick={() => window.open(`/${locale}/services/${service.id}`, '_blank')}>
               <Eye className="w-4 h-4 mr-1" />
               {t('common.view')}
             </Button>
-            <Button variant="outline" size="sm" onClick={() => window.location.href = `/dashboard/services/edit/${service.id}`}>
+            <Button variant="outline" size="sm" onClick={() => router.push(`/${locale}/dashboard/services/edit/${service.id}`)}>
               <Edit className="w-4 h-4 mr-1" />
               {t('common.edit')}
             </Button>
             <Button
               variant="outline"
               size="sm"
-              onClick={() => handleToggleService(service.id, false)}
+              onClick={() => handleToggleService(service.id, service.status === 'ACTIVE' ? 'INACTIVE' : 'ACTIVE')}
             >
-              {t('services.deactivate')}
+              {service.status === 'ACTIVE' ? t('services.deactivate') : t('services.activate')}
             </Button>
             <Button variant="outline" size="sm" onClick={() => handleDeleteService(service.id)}>
               <Trash2 className="w-4 h-4 mr-1" />
@@ -162,7 +220,7 @@ export default function ServicesPage() {
           <h1 className="text-2xl font-bold">{t('services.title')}</h1>
           <p className="text-muted-foreground">{t('services.subtitle')}</p>
         </div>
-        <Button onClick={() => window.location.href = '/dashboard/services/create'}>
+        <Button onClick={() => router.push(`/${locale}/dashboard/services/create`)}>
           <Plus className="w-4 h-4 mr-2" />
           {t('services.createService')}
         </Button>
@@ -236,13 +294,13 @@ export default function ServicesPage() {
         </TabsList>
 
         <TabsContent value="all" className="space-y-4">
-          {services.length === 0 ? (
+          {!Array.isArray(services) || services.length === 0 ? (
             <Card>
               <CardContent className="p-8 text-center">
                 <div className="text-muted-foreground">
                   <p className="text-lg mb-2">{t('services.noServices')}</p>
                   <p className="mb-4">{t('services.noServicesDescription')}</p>
-                  <Button onClick={() => window.location.href = '/dashboard/services/create'}>
+                  <Button onClick={() => router.push(`/${locale}/dashboard/services/create`)}>
                     <Plus className="w-4 h-4 mr-2" />
                     {t('services.createFirstService')}
                   </Button>
@@ -255,7 +313,7 @@ export default function ServicesPage() {
         </TabsContent>
 
         <TabsContent value="active" className="space-y-4">
-          {services.length === 0 ? (
+          {!Array.isArray(services) || services.filter(service => service.status === 'ACTIVE').length === 0 ? (
             <Card>
               <CardContent className="p-8 text-center">
                 <div className="text-muted-foreground">
@@ -264,18 +322,22 @@ export default function ServicesPage() {
               </CardContent>
             </Card>
           ) : (
-            services.map(renderServiceCard)
+            services.filter(service => service.status === 'ACTIVE').map(renderServiceCard)
           )}
         </TabsContent>
 
         <TabsContent value="inactive" className="space-y-4">
-          <Card>
-            <CardContent className="p-8 text-center">
-              <div className="text-muted-foreground">
-                <p className="text-lg">{t('services.noInactiveServices')}</p>
-              </div>
-            </CardContent>
-          </Card>
+          {!Array.isArray(services) || services.filter(service => service.status !== 'ACTIVE').length === 0 ? (
+            <Card>
+              <CardContent className="p-8 text-center">
+                <div className="text-muted-foreground">
+                  <p className="text-lg">{t('services.noInactiveServices')}</p>
+                </div>
+              </CardContent>
+            </Card>
+          ) : (
+            services.filter(service => service.status !== 'ACTIVE').map(renderServiceCard)
+          )}
         </TabsContent>
       </Tabs>
     </div>

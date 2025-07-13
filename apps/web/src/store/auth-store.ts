@@ -2,6 +2,13 @@ import { create } from 'zustand'
 import { persist } from 'zustand/middleware'
 import { apiClient } from '@/lib/api'
 
+// Helper para ler token do cookie (não HttpOnly)
+function getCookieToken(): string | null {
+  if (typeof document === 'undefined') return null
+  const match = document.cookie.match(/(?:^|; )auth_token=([^;]+)/)
+  return match ? decodeURIComponent(match[1]) : null
+}
+
 // Tipos para o store de autenticação
 export interface User {
   id: string
@@ -31,6 +38,9 @@ interface AuthState {
   updateProfile: (userData: Partial<User>) => Promise<void>
   clearError: () => void
   setLoading: (loading: boolean) => void
+  initializeAuth: () => Promise<void>
+  setUser: (user: User | null) => void
+  setIsAuthenticated: (isAuthenticated: boolean) => void
 }
 
 interface RegisterData {
@@ -45,12 +55,66 @@ interface RegisterData {
 
 export const useAuthStore = create<AuthState>()(
   persist(
-    (set) => ({
+    (set, _get) => ({
       // Estado inicial
       user: null,
       isAuthenticated: false,
       isLoading: false,
       error: null,
+
+      // Ação para inicializar autenticação
+      initializeAuth: async () => {
+        try {
+          console.log('🔄 initializeAuth - Starting...')
+          set({ isLoading: true })
+          
+          const token = localStorage.getItem('auth_token') || getCookieToken()
+          const refreshToken = localStorage.getItem('refresh_token')
+          
+          console.log('🔐 initializeAuth - token:', token ? 'exists' : 'missing')
+          console.log('🔐 initializeAuth - refresh token:', refreshToken ? 'exists' : 'missing')
+          
+          if (!token) {
+            console.log('❌ initializeAuth - No token found, setting unauthenticated')
+            set({ isLoading: false, isAuthenticated: false, user: null })
+            return
+          }
+          
+          console.log('🔄 initializeAuth - Validating token with API...')
+          
+          // Verificar se o token é válido fazendo uma requisição ao perfil
+          try {
+            const response = await apiClient.getProfile()
+            // A API retorna o user dentro da propriedade data
+            const user = response.data.data || response.data
+            
+            console.log('✅ initializeAuth - Token valid, user:', user)
+            
+            set({
+              user,
+              isAuthenticated: true,
+              isLoading: false,
+              error: null,
+            })
+          } catch (error: any) {
+            console.log('❌ initializeAuth - Token invalid:', error.response?.status, error.response?.data?.message)
+            console.log('🔄 initializeAuth - Clearing auth tokens')
+            
+            // Token inválido, limpar
+            localStorage.removeItem('auth_token')
+            localStorage.removeItem('refresh_token')
+            set({
+              user: null,
+              isAuthenticated: false,
+              isLoading: false,
+              error: null,
+            })
+          }
+        } catch (error) {
+          console.error('❌ initializeAuth - Unexpected error:', error)
+          set({ isLoading: false })
+        }
+      },
 
       // Ação de login
       login: async (email: string, password: string) => {
@@ -63,6 +127,8 @@ export const useAuthStore = create<AuthState>()(
           // Salvar tokens no localStorage
           localStorage.setItem('auth_token', accessToken)
           localStorage.setItem('refresh_token', refreshToken)
+          // Também salvar em cookie (não HttpOnly) para middleware no lado do servidor
+          document.cookie = `auth_token=${accessToken}; path=/; SameSite=Lax`;
 
           set({
             user,
@@ -96,6 +162,7 @@ export const useAuthStore = create<AuthState>()(
           // Salvar tokens no localStorage
           localStorage.setItem('auth_token', accessToken)
           localStorage.setItem('refresh_token', refreshToken)
+          document.cookie = `auth_token=${accessToken}; path=/; SameSite=Lax`;
 
           set({
             user,
@@ -133,6 +200,7 @@ export const useAuthStore = create<AuthState>()(
           // Limpar estado e localStorage
           localStorage.removeItem('auth_token')
           localStorage.removeItem('refresh_token')
+          document.cookie = 'auth_token=; Max-Age=0; path=/;'
           
           set({
             user: null,
@@ -175,15 +243,22 @@ export const useAuthStore = create<AuthState>()(
       setLoading: (loading: boolean) => {
         set({ isLoading: loading })
       },
+
+      // Definir usuário
+      setUser: (user: User | null) => {
+        set({ user })
+      },
+
+      // Definir se está autenticado
+      setIsAuthenticated: (isAuthenticated: boolean) => {
+        set({ isAuthenticated })
+      },
     }),
     {
-      name: 'fixelo-auth', // Nome da chave no localStorage
-      partialize: (state) => ({
-        user: state.user,
-        isAuthenticated: state.isAuthenticated,
-      }), // Persistir apenas dados essenciais
-    }
-  )
+      name: 'auth-storage', // required to persist state across tabs
+      skipHydration: true,
+    },
+  ),
 )
 
 // Hook para verificar se usuário está logado e é um tipo específico

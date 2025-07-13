@@ -37,7 +37,7 @@ export const QUERY_KEYS = {
 // Hook para buscar serviços removido (duplicado em use-services.ts)
 
 // Hook para buscar serviço específico
-export const useService = (id: string) => {
+export const useServiceDetails = (id: string) => {
   return useQuery({
     queryKey: QUERY_KEYS.service(id),
     queryFn: () => apiClient.getService(id),

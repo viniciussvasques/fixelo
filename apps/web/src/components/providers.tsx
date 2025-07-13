@@ -4,6 +4,7 @@ import React from 'react'
 import { ThemeProvider } from 'next-themes'
 import { ReactQueryProvider } from '@/lib/react-query'
 import { Toaster } from 'sonner'
+import { AuthProvider } from '@/components/providers/auth-provider'
 
 interface ProvidersProps {
   children: React.ReactNode
@@ -18,16 +19,18 @@ export function Providers({ children }: ProvidersProps) {
       disableTransitionOnChange
     >
       <ReactQueryProvider>
-        {children}
-        <Toaster
-          position="top-right"
-          expand={false}
-          richColors
-          closeButton
-          toastOptions={{
-            duration: 4000,
-          }}
-        />
+        <AuthProvider>
+          {children}
+          <Toaster
+            position="top-right"
+            expand={false}
+            richColors
+            closeButton
+            toastOptions={{
+              duration: 4000,
+            }}
+          />
+        </AuthProvider>
       </ReactQueryProvider>
     </ThemeProvider>
   )
