@@ -1,7 +1,7 @@
 'use client'
 
 import React, { useState } from 'react'
-import { Calendar, Clock, MapPin, Star, MessageCircle, Search, Plus, Filter, ArrowRight } from 'lucide-react'
+import { Calendar, Clock, MapPin, Star, MessageCircle, Search, Plus, ArrowRight, DollarSign } from 'lucide-react'
 import { Button } from '@/components/ui/button'
 import { Card, CardContent } from '@/components/ui/card'
 import { Badge } from '@/components/ui/badge'
@@ -11,6 +11,8 @@ import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs'
 import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar'
 import { useRouter } from 'next/navigation'
 import { useLocale } from 'next-intl'
+import { useUserBookings } from '@/hooks/use-user-bookings'
+import { useAuthStore } from '@/store/auth-store'
 
 export default function BookingsPage() {
   const router = useRouter()
@@ -19,119 +21,51 @@ export default function BookingsPage() {
   const [statusFilter, setStatusFilter] = useState('all')
   const [sortBy, setSortBy] = useState('date')
 
-  const bookings = [
-    {
-      id: 1,
-      service: 'Limpeza Residencial Completa',
-      provider: {
-        name: 'Maria Silva',
-        avatar: '/placeholder-avatar.jpg',
-        rating: 4.9,
-        isVerified: true
-      },
-      date: '2024-01-15',
-      time: '14:00',
-      status: 'Confirmado',
-      price: '$120',
-      image: '/placeholder-service.jpg',
-      location: 'Rua das Flores, 123',
-      description: 'Limpeza completa incluindo todos os cômodos',
-      duration: '3-4 horas'
-    },
-    {
-      id: 2,
-      service: 'Reparo Elétrico',
-      provider: {
-        name: 'João Santos',
-        avatar: '/placeholder-avatar.jpg',
-        rating: 4.8,
-        isVerified: true
-      },
-      date: '2024-01-18',
-      time: '10:00',
-      status: 'Em andamento',
-      price: '$85',
-      image: '/placeholder-service.jpg',
-      location: 'Av. Principal, 456',
-      description: 'Instalação de tomadas e interruptores',
-      duration: '2-3 horas'
-    },
-    {
-      id: 3,
-      service: 'Jardinagem',
-      provider: {
-        name: 'Ana Costa',
-        avatar: '/placeholder-avatar.jpg',
-        rating: 4.7,
-        isVerified: false
-      },
-      date: '2024-01-20',
-      time: '08:00',
-      status: 'Agendado',
-      price: '$95',
-      image: '/placeholder-service.jpg',
-      location: 'Rua Verde, 789',
-      description: 'Poda e manutenção do jardim',
-      duration: '4-5 horas'
-    },
-    {
-      id: 4,
-      service: 'Pintura Residencial',
-      provider: {
-        name: 'Roberto Mendes',
-        avatar: '/placeholder-avatar.jpg',
-        rating: 4.6,
-        isVerified: true
-      },
-      date: '2024-01-05',
-      time: '09:00',
-      status: 'Concluído',
-      price: '$200',
-      image: '/placeholder-service.jpg',
-      location: 'Rua Azul, 321',
-      description: 'Pintura da sala e quartos',
-      duration: '2 dias'
-    },
-    {
-      id: 5,
-      service: 'Encanamento',
-      provider: {
-        name: 'Pedro Oliveira',
-        avatar: '/placeholder-avatar.jpg',
-        rating: 4.5,
-        isVerified: true
-      },
-      date: '2024-01-02',
-      time: '11:00',
-      status: 'Cancelado',
-      price: '$110',
-      image: '/placeholder-service.jpg',
-      location: 'Av. Central, 654',
-      description: 'Reparo de vazamento',
-      duration: '1-2 horas'
-    }
-  ]
+  const { isLoading: authLoading } = useAuthStore()
+  const { bookings, stats, loading, error, refetch } = useUserBookings()
 
   const getStatusColor = (status: string) => {
     switch (status) {
-      case 'Confirmado':
+      case 'CONFIRMED':
         return 'bg-green-100 text-green-800 border-green-200'
-      case 'Em andamento':
+      case 'IN_PROGRESS':
         return 'bg-yellow-100 text-yellow-800 border-yellow-200'
-      case 'Agendado':
+      case 'PENDING':
         return 'bg-blue-100 text-blue-800 border-blue-200'
-      case 'Concluído':
+      case 'COMPLETED':
         return 'bg-gray-100 text-gray-800 border-gray-200'
-      case 'Cancelado':
+      case 'CANCELLED':
         return 'bg-red-100 text-red-800 border-red-200'
+      case 'REJECTED':
+        return 'bg-purple-100 text-purple-800 border-purple-200'
       default:
         return 'bg-gray-100 text-gray-800 border-gray-200'
     }
   }
 
+  const getStatusLabel = (status: string) => {
+    switch (status) {
+      case 'CONFIRMED':
+        return 'Confirmado'
+      case 'IN_PROGRESS':
+        return 'Em Andamento'
+      case 'PENDING':
+        return 'Pendente'
+      case 'COMPLETED':
+        return 'Concluído'
+      case 'CANCELLED':
+        return 'Cancelado'
+      case 'REJECTED':
+        return 'Rejeitado'
+      default:
+        return status
+    }
+  }
+
   const filteredBookings = bookings.filter(booking => {
-    const matchesSearch = booking.service.toLowerCase().includes(searchTerm.toLowerCase()) ||
-                         booking.provider.name.toLowerCase().includes(searchTerm.toLowerCase())
+    const matchesSearch = booking.service?.title?.toLowerCase().includes(searchTerm.toLowerCase()) ||
+                         booking.provider?.firstName?.toLowerCase().includes(searchTerm.toLowerCase()) ||
+                         booking.provider?.lastName?.toLowerCase().includes(searchTerm.toLowerCase())
     const matchesStatus = statusFilter === 'all' || booking.status.toLowerCase() === statusFilter.toLowerCase()
     return matchesSearch && matchesStatus
   })
@@ -139,9 +73,9 @@ export default function BookingsPage() {
   const sortedBookings = [...filteredBookings].sort((a, b) => {
     switch (sortBy) {
       case 'date':
-        return new Date(b.date).getTime() - new Date(a.date).getTime()
+        return new Date(b.scheduledFor).getTime() - new Date(a.scheduledFor).getTime()
       case 'price':
-        return parseInt(b.price.replace('$', '')) - parseInt(a.price.replace('$', ''))
+        return b.totalAmount - a.totalAmount
       case 'status':
         return a.status.localeCompare(b.status)
       default:
@@ -150,18 +84,18 @@ export default function BookingsPage() {
   })
 
   const upcomingBookings = sortedBookings.filter(booking => 
-    booking.status === 'Confirmado' || booking.status === 'Agendado'
-  )
-
-  const pastBookings = sortedBookings.filter(booking => 
-    booking.status === 'Concluído' || booking.status === 'Cancelado'
+    booking.status === 'CONFIRMED' || booking.status === 'PENDING'
   )
 
   const currentBookings = sortedBookings.filter(booking => 
-    booking.status === 'Em andamento'
+    booking.status === 'IN_PROGRESS'
   )
 
-  const handleViewDetails = (bookingId: number) => {
+  const pastBookings = sortedBookings.filter(booking => 
+    booking.status === 'COMPLETED' || booking.status === 'CANCELLED' || booking.status === 'REJECTED'
+  )
+
+  const handleViewDetails = (bookingId: string) => {
     router.push(`/${locale}/dashboard/bookings/${bookingId}`)
   }
 
@@ -169,26 +103,26 @@ export default function BookingsPage() {
     router.push(`/${locale}/dashboard/messages?provider=${providerId}`)
   }
 
-  const handleReschedule = (bookingId: number) => {
+  const handleReschedule = (bookingId: string) => {
     // TODO: Implement reschedule functionality
     console.log('Reschedule booking:', bookingId)
   }
 
-  const handleCancel = (bookingId: number) => {
+  const handleCancel = (bookingId: string) => {
     // TODO: Implement cancel functionality
     console.log('Cancel booking:', bookingId)
   }
 
-  const BookingCard = ({ booking }: { booking: typeof bookings[0] }) => (
+  const BookingCard = ({ booking }: { booking: any }) => (
     <Card className="group hover:shadow-xl transition-all duration-300 border-0 bg-white shadow-lg hover:-translate-y-1">
       <CardContent className="p-6">
         <div className="flex items-start space-x-6">
           <div className="relative">
-            <img
-              src={booking.image}
-              alt={booking.service}
-              className="w-20 h-20 rounded-xl object-cover shadow-md"
-            />
+            <div className="w-20 h-20 rounded-xl bg-gradient-to-br from-blue-500 to-blue-600 flex items-center justify-center shadow-md">
+              <span className="text-white text-2xl font-bold">
+                {booking.service?.title?.charAt(0) || 'S'}
+              </span>
+            </div>
             <div className="absolute -bottom-1 -right-1 w-6 h-6 bg-gradient-to-br from-blue-500 to-blue-600 rounded-full flex items-center justify-center shadow-lg">
               <Calendar className="w-3 h-3 text-white" />
             </div>
@@ -196,33 +130,34 @@ export default function BookingsPage() {
           <div className="flex-1 min-w-0">
             <div className="flex items-center justify-between mb-3">
               <h3 className="font-bold text-xl text-gray-900 truncate">
-                {booking.service}
+                {booking.service?.title || 'Serviço'}
               </h3>
               <Badge className={`px-3 py-1 text-xs font-semibold border ${getStatusColor(booking.status)}`}>
-                {booking.status}
+                {getStatusLabel(booking.status)}
               </Badge>
             </div>
             
             <div className="flex items-center space-x-3 mb-3">
               <Avatar className="h-8 w-8 ring-2 ring-white shadow-md">
-                <AvatarImage src={booking.provider.avatar} />
-                <AvatarFallback className="bg-gradient-to-br from-blue-500 to-blue-600 text-white font-semibold">
-                  {booking.provider.name.charAt(0)}
-                </AvatarFallback>
+                <AvatarImage src={booking.provider?.profilePicture} />              <AvatarFallback className="bg-gradient-to-br from-blue-500 to-blue-600 text-white font-semibold">
+                {booking.provider?.firstName?.charAt(0) || 'P'}
+              </AvatarFallback>
               </Avatar>
-              <span className="text-sm font-medium text-gray-700">{booking.provider.name}</span>
+              <span className="text-sm font-medium text-gray-700">
+                {booking.provider?.firstName} {booking.provider?.lastName || 'Prestador'}
+              </span>
               <div className="flex items-center space-x-1">
                 <Star className="h-4 w-4 text-yellow-400 fill-current" />
-                <span className="text-sm font-medium text-gray-600">{booking.provider.rating}</span>
+                <span className="text-sm font-medium text-gray-600">{booking.provider?.rating || 0}</span>
               </div>
-              {booking.provider.isVerified && (
+              {booking.provider?.isVerified && (
                 <Badge variant="secondary" className="text-xs bg-green-50 text-green-700 border-green-200">
                   Verificado
                 </Badge>
               )}
             </div>
 
-            <p className="text-sm text-gray-600 mb-4">{booking.description}</p>
+            <p className="text-sm text-gray-600 mb-4">{booking.service?.description || booking.notes || 'Sem descrição disponível'}</p>
 
             <div className="grid grid-cols-2 gap-4 mb-6">
               <div className="flex items-center space-x-3 p-3 bg-gray-50 rounded-lg">
@@ -230,7 +165,7 @@ export default function BookingsPage() {
                 <div>
                   <p className="text-xs text-gray-500">Data & Hora</p>
                   <p className="text-sm font-medium text-gray-900">
-                    {booking.date} às {booking.time}
+                    {new Date(booking.scheduledFor).toLocaleDateString('pt-BR')} às {new Date(booking.scheduledFor).toLocaleTimeString('pt-BR', { hour: '2-digit', minute: '2-digit' })}
                   </p>
                 </div>
               </div>
@@ -238,23 +173,27 @@ export default function BookingsPage() {
                 <Clock className="h-5 w-5 text-green-500" />
                 <div>
                   <p className="text-xs text-gray-500">Duração</p>
-                  <p className="text-sm font-medium text-gray-900">{booking.duration}</p>
+                  <p className="text-sm font-medium text-gray-900">{booking.duration || 60} min</p>
                 </div>
               </div>
               <div className="flex items-center space-x-3 p-3 bg-gray-50 rounded-lg">
                 <MapPin className="h-5 w-5 text-purple-500" />
                 <div>
                   <p className="text-xs text-gray-500">Localização</p>
-                  <p className="text-sm font-medium text-gray-900 truncate">{booking.location}</p>
+                  <p className="text-sm font-medium text-gray-900 truncate">
+                    {booking.location?.address || booking.service?.location || 'A definir'}
+                  </p>
                 </div>
               </div>
               <div className="flex items-center space-x-3 p-3 bg-gradient-to-br from-blue-50 to-blue-100 rounded-lg">
                 <div className="w-5 h-5 bg-gradient-to-br from-blue-500 to-blue-600 rounded-full flex items-center justify-center">
-                  <span className="text-white text-xs font-bold">$</span>
+                  <DollarSign className="w-3 h-3 text-white" />
                 </div>
                 <div>
                   <p className="text-xs text-gray-500">Preço</p>
-                  <p className="text-lg font-bold text-gray-900">{booking.price}</p>
+                  <p className="text-lg font-bold text-gray-900">
+                    {booking.currency || '$'}{booking.totalAmount || booking.service?.price || 0}
+                  </p>
                 </div>
               </div>
             </div>
@@ -271,13 +210,13 @@ export default function BookingsPage() {
               <Button
                 variant="outline"
                 size="sm"
-                onClick={() => handleContactProvider(booking.provider.name)}
+                onClick={() => handleContactProvider(booking.providerId)}
                 className="border-gray-200 hover:border-gray-300 hover:bg-gray-50"
               >
                 <MessageCircle className="h-4 w-4 mr-2" />
                 Mensagem
               </Button>
-              {(booking.status === 'Confirmado' || booking.status === 'Agendado') && (
+              {(booking.status === 'CONFIRMED' || booking.status === 'PENDING') && (
                 <>
                   <Button
                     variant="outline"
@@ -304,6 +243,30 @@ export default function BookingsPage() {
     </Card>
   )
 
+  if (authLoading || loading) {
+    return (
+      <div className="p-8 max-w-7xl mx-auto">
+        <div className="flex flex-col items-center justify-center h-96 space-y-4">
+          <div className="animate-spin rounded-full h-12 w-12 border-4 border-blue-600 border-t-transparent"></div>
+          <div className="text-lg font-medium text-gray-900">Carregando suas reservas...</div>
+        </div>
+      </div>
+    )
+  }
+
+  if (error) {
+    return (
+      <div className="p-8 max-w-7xl mx-auto">
+        <div className="text-center py-12">
+          <div className="text-red-600 mb-4">Erro ao carregar reservas: {error}</div>
+          <Button onClick={refetch} variant="outline">
+            Tentar Novamente
+          </Button>
+        </div>
+      </div>
+    )
+  }
+
   return (
     <div className="p-8 max-w-7xl mx-auto">
       {/* Header */}
@@ -311,7 +274,7 @@ export default function BookingsPage() {
         <div>
           <h1 className="text-4xl font-bold text-gray-900 mb-2">Minhas Reservas</h1>
           <p className="text-lg text-gray-600">
-            Gerencie seus agendamentos de serviços
+            Gerencie seus agendamentos de serviços ({stats.total} total)
           </p>
         </div>
         <Button 
@@ -319,7 +282,7 @@ export default function BookingsPage() {
           className="bg-gradient-to-r from-blue-500 to-blue-600 hover:from-blue-600 hover:to-blue-700 text-white shadow-lg"
         >
           <Plus className="mr-2 h-4 w-4" />
-          Novo Agendamento
+          Buscar Serviços
         </Button>
       </div>
 
@@ -344,11 +307,12 @@ export default function BookingsPage() {
               </SelectTrigger>
               <SelectContent>
                 <SelectItem value="all">Todos os status</SelectItem>
-                <SelectItem value="confirmado">Confirmado</SelectItem>
-                <SelectItem value="em andamento">Em andamento</SelectItem>
-                <SelectItem value="agendado">Agendado</SelectItem>
-                <SelectItem value="concluído">Concluído</SelectItem>
-                <SelectItem value="cancelado">Cancelado</SelectItem>
+                <SelectItem value="pending">Pendente</SelectItem>
+                <SelectItem value="confirmed">Confirmado</SelectItem>
+                <SelectItem value="in_progress">Em Andamento</SelectItem>
+                <SelectItem value="completed">Concluído</SelectItem>
+                <SelectItem value="cancelled">Cancelado</SelectItem>
+                <SelectItem value="rejected">Rejeitado</SelectItem>
               </SelectContent>
             </Select>
             <Select value={sortBy} onValueChange={setSortBy}>
@@ -460,4 +424,4 @@ export default function BookingsPage() {
       </Tabs>
     </div>
   )
-} 
+}

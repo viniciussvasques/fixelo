@@ -1,12 +1,15 @@
+'use client'
+
 import { usePlans } from '@/hooks/use-plans'
 import { useTranslations } from 'next-intl'
-import { useRouter } from 'next/navigation'
+import { useRouter, useParams } from 'next/navigation'
 import { Button } from '@/components/ui/button'
 
 export default function EarningsPage() {
   const t = useTranslations('Earnings')
   const router = useRouter()
-  const locale = router.locale || 'en'
+  const params = useParams()
+  const locale = params.locale || 'en'
 
   const { currentPlan, isLoading: planLoading } = usePlans()
   const isPro = currentPlan?.type === 'PRO'

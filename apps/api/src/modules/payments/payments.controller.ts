@@ -163,9 +163,12 @@ export class PaymentsController {
   @ApiResponse({ status: 401, description: 'Unauthorized' })
   async getPaymentHistory(
     @Request() req: any,
-    @Query('page') page: number = 1,
-    @Query('limit') limit: number = 20
+    @Query('page') pageQuery?: string,
+    @Query('limit') limitQuery?: string
   ) {
+    const page = Math.max(1, parseInt(pageQuery || '1', 10) || 1);
+    const limit = Math.max(1, Math.min(100, parseInt(limitQuery || '20', 10) || 20));
+    
     return this.paymentsService.getPaymentHistory(req.user.id, page, limit);
   }
 

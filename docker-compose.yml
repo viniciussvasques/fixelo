@@ -52,7 +52,7 @@ services:
       JWT_REFRESH_SECRET: your-jwt-refresh-secret-key
       PORT: 3001
     ports:
-      - "3001:3001"
+      - "127.0.0.1:3001:3001"  # Only bind to localhost
     depends_on:
       postgres:
         condition: service_healthy
@@ -64,6 +64,11 @@ services:
     networks:
       - fixelo-network
     restart: unless-stopped
+    healthcheck:
+      test: ["CMD", "curl", "-f", "http://localhost:3001/api/v1/health"]
+      interval: 30s
+      timeout: 10s
+      retries: 3
 
   # Web Frontend
   web:
@@ -76,9 +81,10 @@ services:
       NEXT_PUBLIC_API_URL: http://localhost:3001/api/v1
       NEXT_PUBLIC_APP_URL: http://localhost:3000
     ports:
-      - "3000:3000"
+      - "127.0.0.1:3000:3000"  # Only bind to localhost
     depends_on:
-      - api
+      api:
+        condition: service_healthy
     volumes:
       - ./apps/web:/app
       - /app/node_modules
@@ -86,6 +92,43 @@ services:
     networks:
       - fixelo-network
     restart: unless-stopped
+    healthcheck:
+      test: ["CMD", "curl", "-f", "http://localhost:3000"]
+      interval: 30s
+      timeout: 10s
+      retries: 3
+
+  # Admin Panel (AdminJS)
+  admin:
+    build:
+      context: .
+      dockerfile: apps/api/Dockerfile.admin
+    container_name: fixelo-admin
+    environment:
+      NODE_ENV: development
+      DATABASE_URL: postgresql://fixelo:fixelo123@postgres:5432/fixelo
+      REDIS_URL: redis://:redis123@redis:6379
+      JWT_SECRET: your-jwt-secret-key
+      ADMIN_SECRET: your-admin-secret-key
+      PORT: 3002
+    ports:
+      - "127.0.0.1:3002:3002"  # Only bind to localhost
+    depends_on:
+      postgres:
+        condition: service_healthy
+      redis:
+        condition: service_healthy
+    volumes:
+      - ./apps/api:/app
+      - /app/node_modules
+    networks:
+      - fixelo-network
+    restart: unless-stopped
+    healthcheck:
+      test: ["CMD", "curl", "-f", "http://localhost:3002/admin"]
+      interval: 30s
+      timeout: 10s
+      retries: 3
 
   # Database Admin (optional)
   pgadmin:

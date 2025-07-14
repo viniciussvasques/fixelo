@@ -23,7 +23,6 @@ import {
   Crown,
   Menu,
   X,
-  ArrowLeft,
   LogOut,
   ExternalLink
 } from 'lucide-react'
@@ -106,14 +105,14 @@ export default function DashboardLayout({
   ]
 
   // Navegação específica para PROVIDERs
-  const providerNavigation = [
+  const providerNavigationItems = [
     { name: t('dashboard'), href: '/dashboard', icon: Home },
     { name: t('services'), href: '/dashboard/services', icon: Wrench },
     { name: t('bookings'), href: '/dashboard/bookings', icon: Calendar },
     { name: t('messages'), href: '/dashboard/messages', icon: MessageCircle },
     { name: t('reviews'), href: '/dashboard/reviews', icon: Star },
-    isPro && { name: t('earnings'), href: '/dashboard/earnings', icon: DollarSign },
-    isPro && { name: t('analytics'), href: '/dashboard/analytics', icon: BarChart3 },
+    ...(isPro ? [{ name: t('earnings'), href: '/dashboard/earnings', icon: DollarSign }] : []),
+    ...(isPro ? [{ name: t('analytics'), href: '/dashboard/analytics', icon: BarChart3 }] : []),
     {
       name: t('ads'),
       href: '/dashboard/ads',
@@ -131,12 +130,12 @@ export default function DashboardLayout({
     { name: t('profile'), href: '/dashboard/profile', icon: User },
     { name: t('payments'), href: '/dashboard/payments', icon: CreditCard },
     { name: t('settings'), href: '/dashboard/settings', icon: Settings },
-  ].filter(Boolean)
+  ]
 
   // Selecionar navegação baseada no role do usuário
   const normalizedRole = user?.role ? String(user.role).trim().toUpperCase() : null
   const isProvider = normalizedRole === 'PROVIDER'
-  const navigation = isProvider ? providerNavigation : clientNavigation
+  const navigation = isProvider ? providerNavigationItems : clientNavigation
 
   // Debug log para verificar a role
   console.log('🔍 Dashboard Layout Debug:', {
@@ -218,11 +217,11 @@ export default function DashboardLayout({
     <div className="h-screen flex overflow-hidden bg-gradient-to-br from-gray-50 to-gray-100">
       {/* Banner de upgrade */}
       {showUpgradeBanner && (
-        <div className="fixed top-0 left-0 right-0 z-30 bg-gradient-to-r from-yellow-400 to-amber-500 text-white text-center py-3 font-semibold shadow-lg md:left-72">
-          <div className="flex items-center justify-center gap-4">
-            <span>{t('upgradeBanner')}</span>
+        <div className="fixed top-0 left-0 right-0 z-20 bg-gradient-to-r from-yellow-400 to-amber-500 text-white text-center py-2 font-semibold shadow-lg md:left-72">
+          <div className="flex items-center justify-center gap-2 px-4">
+            <span className="text-sm md:text-base">{t('upgradeBanner')}</span>
             <Button
-              className="bg-white text-amber-600 font-bold hover:bg-amber-100 px-4 py-1"
+              className="bg-white text-amber-600 font-bold hover:bg-amber-100 px-3 py-1 text-sm"
               onClick={() => router.push(`/${locale}/dashboard/subscription`)}
             >
               {t('pro.cta')}
@@ -389,7 +388,7 @@ export default function DashboardLayout({
       {/* Main content */}
       <div className="flex flex-col w-0 flex-1 overflow-hidden">
         <div className="md:hidden">
-          <div className="flex items-center justify-between bg-white px-4 py-3 border-b border-gray-200 shadow-sm">
+          <div className={`flex items-center justify-between bg-white px-4 py-3 border-b border-gray-200 shadow-sm relative z-30 ${showUpgradeBanner ? 'mt-10' : ''}`}>
             <Button
               variant="ghost"
               size="sm"
@@ -415,7 +414,7 @@ export default function DashboardLayout({
           </div>
         </div>
         
-        <main className={`flex-1 relative overflow-y-auto focus:outline-none ${showUpgradeBanner ? 'pt-16' : ''}`}> {/* pt-16 para compensar altura do banner */}
+        <main className={`flex-1 relative overflow-y-auto focus:outline-none ${showUpgradeBanner ? 'pt-10' : ''}`}> {/* pt-10 para compensar altura do banner mais fino */}
           {children}
         </main>
       </div>

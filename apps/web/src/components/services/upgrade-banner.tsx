@@ -27,19 +27,19 @@ export function UpgradeBanner({
   const isAtLimit = leadsUsed >= leadsLimit;
 
   return (
-    <div className="sticky top-0 z-40 bg-gradient-to-r from-blue-600 to-purple-600 text-white shadow-lg">
+    <div className="sticky top-0 z-20 bg-gradient-to-r from-blue-600 to-purple-600 text-white shadow-lg">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-        <div className="flex items-center justify-between py-3">
+        <div className="flex items-center justify-between py-2">
           <div className="flex items-center space-x-4">
             <div className="flex items-center space-x-2">
               <div className="bg-white/20 rounded-full p-2">
                 <span className="text-lg">🚀</span>
               </div>
               <div>
-                <p className="font-semibold">
+                <p className="font-semibold text-sm">
                   {isAtLimit ? 'Limite de leads atingido!' : 'Leads limitados no plano FREE'}
                 </p>
-                <p className="text-sm text-blue-100">
+                <p className="text-xs text-blue-100">
                   {isAtLimit 
                     ? 'Faça upgrade para continuar recebendo leads'
                     : `${leadsUsed}/${leadsLimit} leads usados esta semana`
@@ -50,7 +50,7 @@ export function UpgradeBanner({
           </div>
           
           <div className="flex items-center space-x-3">
-            <div className="hidden sm:flex items-center space-x-4 text-sm">
+            <div className="hidden sm:flex items-center space-x-4 text-xs">
               <div className="flex items-center space-x-2">
                 <span className="text-blue-100">Premium:</span>
                 <span className="font-semibold">40 leads/mês</span>
@@ -67,7 +67,7 @@ export function UpgradeBanner({
             
             <Button 
               onClick={onUpgrade}
-              className="bg-white text-blue-600 hover:bg-blue-50 font-semibold px-6 py-2"
+              className="bg-white text-blue-600 hover:bg-blue-50 font-semibold px-4 py-1 text-sm"
             >
               Upgrade por $34.80/mês
             </Button>
@@ -76,7 +76,7 @@ export function UpgradeBanner({
               onClick={() => setDismissed(true)}
               className="text-white/80 hover:text-white p-1"
             >
-              <XMarkIcon className="h-5 w-5" />
+              <XMarkIcon className="h-4 w-4" />
             </button>
           </div>
         </div>

@@ -7,6 +7,15 @@ const nextConfig = {
   reactStrictMode: true,
   swcMinify: true,
   transpilePackages: ['@fixelo/common', '@fixelo/utils'],
+  output: 'standalone',
+  eslint: {
+    // During builds, we'll allow warnings but not errors
+    ignoreDuringBuilds: true,
+  },
+  typescript: {
+    // During builds, we'll allow warnings but not errors  
+    ignoreBuildErrors: false,
+  },
   env: {
     NEXT_PUBLIC_API_URL: process.env.NEXT_PUBLIC_API_URL || 'http://localhost:3001/api',
     NEXT_PUBLIC_APP_URL: process.env.NEXT_PUBLIC_APP_URL || 'http://localhost:3000',

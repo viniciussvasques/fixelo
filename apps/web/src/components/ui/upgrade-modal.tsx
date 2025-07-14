@@ -4,7 +4,6 @@ import { Button } from './button'
 import { Card, CardContent, CardHeader, CardTitle } from './card'
 import { CheckCircle, Crown } from 'lucide-react'
 import { api } from '@/lib/api'
-import { useQueryClient } from '@tanstack/react-query'
 
 interface Plan {
   id: string
@@ -24,7 +23,6 @@ interface UpgradeModalProps {
 
 export function UpgradeModal({ planType, currentPlan, children }: UpgradeModalProps) {
   const [isLoading, setIsLoading] = useState(false)
-  const queryClient = useQueryClient()
 
   const handleUpgrade = async () => {
     setIsLoading(true)

@@ -121,6 +121,7 @@
     },
     "stats": {
       "servicesBooked": "Booked Services",
+      "completedServices": "Completed Services",
       "reviewsGiven": "Reviews Given",
       "messages": "Messages",
       "totalSpent": "Total Spent",
@@ -130,6 +131,7 @@
       "thisYear": "This year",
       "trend": {
         "servicesBooked": "+{count}% vs last week",
+        "completedServices": "+{count}% vs last week",
         "reviewsGiven": "+{count}% vs last week",
         "messages": "+{count}% vs last week",
         "totalSpent": "+{count}% vs last week"
@@ -378,11 +380,7 @@
     "totalServices": "Total Services",
     "totalViews": "Total Views",
     "totalBookings": "Total Bookings",
-    "activeOnly": "Active Only",
-    "inactiveOnly": "Inactive Only",
     "confirmDelete": "Are you sure you want to delete this service?",
-    "created": "Created",
-    "subtitle": "Manage your service offerings",
     "createService": "Create Service",
     "createNewService": "Create New Service",
     "createServiceDescription": "Set up your service offering for potential customers",
@@ -396,7 +394,6 @@
     "serviceUpdated": "Service updated successfully",
     "serviceCreated": "Service Created!",
     "serviceCreatedSuccess": "Your service has been created successfully.",
-    "created": "Created",
     "noServices": "No services found",
     "noServicesDescription": "You haven't created any services yet. Start by creating your first service.",
     "noActiveServices": "No active services",

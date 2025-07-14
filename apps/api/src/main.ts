@@ -37,6 +37,8 @@ async function bootstrap() {
       'http://localhost:19000',
       'exp://localhost:19000',
       'exp://localhost:19006',
+      'https://fixelo.app',
+      'http://fixelo.app',
     ],
     credentials: true,
   });

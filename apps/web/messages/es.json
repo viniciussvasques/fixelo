@@ -121,6 +121,7 @@
     },
     "stats": {
       "servicesBooked": "Servicios Reservados",
+      "completedServices": "Servicios Completados",
       "reviewsGiven": "Reseñas Dadas",
       "messages": "Mensajes",
       "totalSpent": "Total Gastado",
@@ -130,6 +131,7 @@
       "thisYear": "Este año",
       "trend": {
         "servicesBooked": "+{count}% vs semana pasada",
+        "completedServices": "+{count}% vs semana pasada",
         "reviewsGiven": "+{count}% vs semana pasada",
         "messages": "+{count}% vs semana pasada",
         "totalSpent": "+{count}% vs semana pasada"
@@ -1310,29 +1312,6 @@
       "safety": "Seguridad"
     },
     "copyright": "© {year} Fixelo. Todos los derechos reservados."
-  },
-  "services": {
-    "services": "Servicios",
-    "servicesPage": {
-      "title": "Buscar Servicios",
-      "subtitle": "Encuentra y agenda los mejores profesionales en tu ciudad.",
-      "searchPlaceholder": "Buscar servicios...",
-      "allCategories": "Todas las Categorías",
-      "allCities": "Todas las Ciudades",
-      "sortBy": {
-        "label": "Ordenar por",
-        "rating": "Calificación",
-        "priceLow": "Menor Precio",
-        "priceHigh": "Mayor Precio",
-        "newest": "Más Recientes"
-      },
-      "resultsCount": "{count} resultados",
-      "sponsored": "Patrocinado",
-      "filters": "Filtros",
-      "noResults": "No se encontraron servicios",
-      "noResultsDescription": "Intenta ajustar tu búsqueda o filtros.",
-      "popularCategories": "Categorías Populares"
-    }
   },
   "howItWorks": {
     "badge": "Cómo Funciona",

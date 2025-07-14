@@ -21,13 +21,15 @@ import {
   Clock
 } from 'lucide-react'
 import { usePlans } from '@/hooks/use-plans'
-import { useRouter } from 'next/navigation'
+import { useRouter, useParams } from 'next/navigation'
 import { Button } from '@/components/ui/button'
 
 export default function AnalyticsPage() {
   const t = useTranslations('dashboard.analytics')
   const [timeRange, setTimeRange] = useState('30d')
   const router = useRouter()
+  const params = useParams()
+  const locale = params.locale as string
   const { currentPlan, isLoading: planLoading } = usePlans()
   const isPro = currentPlan?.type === 'PRO'
 
@@ -55,7 +57,7 @@ export default function AnalyticsPage() {
       <div className="max-w-xl mx-auto mt-16 p-8 bg-yellow-50 border border-yellow-300 rounded-xl text-center shadow-lg">
         <h2 className="text-2xl font-bold text-yellow-700 mb-2">{t('subscriptionPage.upgradeBanner')}</h2>
         <p className="mb-4 text-yellow-800">{t('subscriptionPage.pro.features.0')}</p>
-        <Button className="bg-amber-500 text-white font-bold hover:bg-amber-600" onClick={() => router.push(`/${router.locale}/dashboard/subscription`)}>
+        <Button className="bg-amber-500 text-white font-bold hover:bg-amber-600" onClick={() => router.push(`/${locale}/dashboard/subscription`)}>
           {t('subscriptionPage.pro.cta')}
         </Button>
       </div>

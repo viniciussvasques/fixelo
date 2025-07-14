@@ -15,6 +15,9 @@ COPY apps/api/ ./apps/api/
 # Install all dependencies (including devDependencies for build)
 RUN npm ci
 
+# Generate Prisma client
+RUN npx prisma generate --schema=libs/prisma/prisma/schema.prisma
+
 # Build the application
 RUN npm run build --workspace=@fixelo/api
 

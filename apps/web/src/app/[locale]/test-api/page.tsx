@@ -17,12 +17,12 @@ export default function TestApiPage() {
         console.log('🧪 Testando API diretamente...')
         
         // Teste categorias
-        const categoriesResponse = await fetch('http://localhost:3001/api/services/categories')
+        const categoriesResponse = await fetch('https://fixelo.app/api/services/categories')
         const categoriesData = await categoriesResponse.json()
         console.log('📊 Categorias direto:', categoriesData)
         
         // Teste cidades
-        const citiesResponse = await fetch('http://localhost:3001/api/locations/cities')
+        const citiesResponse = await fetch('https://fixelo.app/api/locations/cities')
         const citiesData = await citiesResponse.json()
         console.log('🌍 Cidades direto:', citiesData)
         

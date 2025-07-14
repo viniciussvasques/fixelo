@@ -446,13 +446,16 @@ export class PaymentsService {
    * Get payment history
    */
   async getPaymentHistory(userId: string, page = 1, limit = 20) {
-    const skip = (page - 1) * limit;
+    // Ensure page and limit are valid numbers
+    const validPage = Math.max(1, Number(page) || 1);
+    const validLimit = Math.max(1, Math.min(100, Number(limit) || 20));
+    const skip = (validPage - 1) * validLimit;
     
     const [payments, total] = await Promise.all([
       this.prisma.transaction.findMany({
         where: { userId },
         skip,
-        take: limit,
+        take: validLimit,
         orderBy: { createdAt: 'desc' }
       }),
       this.prisma.transaction.count({ where: { userId } })
@@ -461,10 +464,10 @@ export class PaymentsService {
     return {
       payments: payments.map(payment => this.mapToPaymentResponse(payment)),
       pagination: {
-        page,
-        limit,
+        page: validPage,
+        limit: validLimit,
         total,
-        pages: Math.ceil(total / limit)
+        pages: Math.ceil(total / validLimit)
       }
     };
   }

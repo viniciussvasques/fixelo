@@ -20,6 +20,7 @@ import { LocationsModule } from './modules/locations/locations.module';
   imports: [
     ConfigModule.forRoot({
       isGlobal: true,
+      envFilePath: ['.env', '../../.env'],
     }),
     PrismaModule,
     AuthModule,

@@ -18,10 +18,16 @@ export class JwtStrategy extends PassportStrategy(Strategy) {
     private readonly configService: ConfigService,
     private readonly prisma: PrismaService,
   ) {
+    // Adicionando uma verificação para garantir que a chave JWT_ACCESS_SECRET está configurada corretamente
+    const jwtSecret = configService.get('JWT_ACCESS_SECRET');
+    if (!jwtSecret) {
+      throw new Error('JWT_ACCESS_SECRET is not defined in the environment variables');
+    }
+
     super({
       jwtFromRequest: ExtractJwt.fromAuthHeaderAsBearerToken(),
       ignoreExpiration: false,
-      secretOrKey: configService.get('JWT_ACCESS_SECRET'),
+      secretOrKey: jwtSecret,
     });
   }
 
@@ -58,4 +64,4 @@ export class JwtStrategy extends PassportStrategy(Strategy) {
       role: user.role,
     };
   }
-} 
+}

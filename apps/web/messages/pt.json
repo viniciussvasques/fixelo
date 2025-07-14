@@ -121,6 +121,7 @@
     },
     "stats": {
       "servicesBooked": "Serviços Agendados",
+      "completedServices": "Serviços Concluídos",
       "reviewsGiven": "Avaliações Feitas",
       "messages": "Mensagens",
       "totalSpent": "Total Gasto",
@@ -130,6 +131,7 @@
       "thisYear": "Este ano",
       "trend": {
         "servicesBooked": "+{count}% vs semana passada",
+        "completedServices": "+{count}% vs semana passada",
         "reviewsGiven": "+{count}% vs semana passada",
         "messages": "+{count}% vs semana passada",
         "totalSpent": "+{count}% vs semana passada"

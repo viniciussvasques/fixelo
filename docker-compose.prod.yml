@@ -1,0 +1,223 @@
+version: '3.8'
+
+services:
+  # Database
+  postgres:
+    image: postgres:15
+    container_name: fixelo-postgres-prod
+    environment:
+      POSTGRES_DB: fixelo
+      POSTGRES_USER: fixelo
+      POSTGRES_PASSWORD: ${POSTGRES_PASSWORD:-fixelo123}
+    ports:
+      - "127.0.0.1:5432:5432"  # Only bind to localhost
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+      - ./backup:/backup  # For database backups
+    networks:
+      - fixelo-network
+    restart: unless-stopped
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U fixelo"]
+      interval: 30s
+      timeout: 10s
+      retries: 5
+    logging:
+      driver: "json-file"
+      options:
+        max-size: "10m"
+        max-file: "3"
+
+  # Cache
+  redis:
+    image: redis:7-alpine
+    container_name: fixelo-redis-prod
+    ports:
+      - "127.0.0.1:6379:6379"  # Only bind to localhost
+    command: redis-server --appendonly yes --requirepass ${REDIS_PASSWORD:-redis123}
+    volumes:
+      - redis_data:/data
+    networks:
+      - fixelo-network
+    restart: unless-stopped
+    healthcheck:
+      test: ["CMD", "redis-cli", "--raw", "incr", "ping"]
+      interval: 30s
+      timeout: 10s
+      retries: 5
+    logging:
+      driver: "json-file"
+      options:
+        max-size: "10m"
+        max-file: "3"
+
+  # Database Admin (optional - for management)
+  pgadmin:
+    image: dpage/pgadmin4:latest
+    container_name: fixelo-pgadmin-prod
+    environment:
+      PGADMIN_DEFAULT_EMAIL: ${PGADMIN_EMAIL:-admin@fixelo.com}
+      PGADMIN_DEFAULT_PASSWORD: ${PGADMIN_PASSWORD:-admin123}
+      PGADMIN_CONFIG_SERVER_MODE: 'False'
+    ports:
+      - "127.0.0.1:5050:80"  # Only bind to localhost
+    depends_on:
+      postgres:
+        condition: service_healthy
+    volumes:
+      - pgadmin_data:/var/lib/pgadmin
+    networks:
+      - fixelo-network
+    restart: unless-stopped
+    profiles:
+      - tools
+    logging:
+      driver: "json-file"
+      options:
+        max-size: "10m"
+        max-file: "3"
+
+  # Redis Admin (optional - for management)
+  redis-commander:
+    image: rediscommander/redis-commander:latest
+    container_name: fixelo-redis-commander-prod
+    environment:
+      REDIS_HOSTS: local:redis:6379:0:${REDIS_PASSWORD:-redis123}
+    ports:
+      - "127.0.0.1:8081:8081"  # Only bind to localhost
+    depends_on:
+      - redis
+    networks:
+      - fixelo-network
+    restart: unless-stopped
+    profiles:
+      - tools
+    logging:
+      driver: "json-file"
+      options:
+        max-size: "10m"
+        max-file: "3"
+
+  # API Backend
+  api:
+    build:
+      context: .
+      dockerfile: apps/api/Dockerfile.prod
+    container_name: fixelo-api-prod
+    environment:
+      NODE_ENV: production
+      DATABASE_URL: postgresql://fixelo:${POSTGRES_PASSWORD:-fixelo123}@postgres:5432/fixelo
+      REDIS_URL: redis://:${REDIS_PASSWORD:-redis123}@redis:6379
+      JWT_SECRET: ${JWT_SECRET}
+      JWT_REFRESH_SECRET: ${JWT_REFRESH_SECRET}
+      PORT: 3001
+    ports:
+      - "127.0.0.1:3001:3001"  # Only bind to localhost
+    depends_on:
+      postgres:
+        condition: service_healthy
+      redis:
+        condition: service_healthy
+    networks:
+      - fixelo-network
+    restart: unless-stopped
+    healthcheck:
+      test: ["CMD", "curl", "-f", "http://localhost:3001/api/v1/health"]
+      interval: 30s
+      timeout: 10s
+      retries: 3
+    logging:
+      driver: "json-file"
+      options:
+        max-size: "10m"
+        max-file: "3"
+
+  # Web Frontend
+  web:
+    build:
+      context: .
+      dockerfile: apps/web/Dockerfile.prod
+    container_name: fixelo-web-prod
+    environment:
+      NODE_ENV: production
+      NEXT_PUBLIC_API_URL: https://${DOMAIN_NAME}/api/v1
+      NEXT_PUBLIC_APP_URL: https://${DOMAIN_NAME}
+    ports:
+      - "127.0.0.1:3000:3000"  # Only bind to localhost
+    depends_on:
+      api:
+        condition: service_healthy
+    networks:
+      - fixelo-network
+    restart: unless-stopped
+    healthcheck:
+      test: ["CMD", "curl", "-f", "http://localhost:3000"]
+      interval: 30s
+      timeout: 10s
+      retries: 3
+    logging:
+      driver: "json-file"
+      options:
+        max-size: "10m"
+        max-file: "3"
+
+  # Admin Panel (AdminJS)
+  admin:
+    build:
+      context: .
+      dockerfile: apps/api/Dockerfile.admin.prod
+    container_name: fixelo-admin-prod
+    environment:
+      NODE_ENV: production
+      DATABASE_URL: postgresql://fixelo:${POSTGRES_PASSWORD:-fixelo123}@postgres:5432/fixelo
+      REDIS_URL: redis://:${REDIS_PASSWORD:-redis123}@redis:6379
+      JWT_SECRET: ${JWT_SECRET}
+      ADMIN_SECRET: ${ADMIN_SECRET}
+      PORT: 3002
+    ports:
+      - "127.0.0.1:3002:3002"  # Only bind to localhost
+    depends_on:
+      postgres:
+        condition: service_healthy
+      redis:
+        condition: service_healthy
+    networks:
+      - fixelo-network
+    restart: unless-stopped
+    healthcheck:
+      test: ["CMD", "curl", "-f", "http://localhost:3002/admin"]
+      interval: 30s
+      timeout: 10s
+      retries: 3
+    logging:
+      driver: "json-file"
+      options:
+        max-size: "10m"
+        max-file: "3"
+
+  # Backup service
+  backup:
+    image: postgres:15
+    container_name: fixelo-backup
+    environment:
+      PGPASSWORD: ${POSTGRES_PASSWORD:-fixelo123}
+    volumes:
+      - ./backup:/backup
+      - ./scripts/backup.sh:/backup.sh
+    networks:
+      - fixelo-network
+    profiles:
+      - backup
+    entrypoint: ["/backup.sh"]
+
+volumes:
+  postgres_data:
+    driver: local
+  redis_data:
+    driver: local
+  pgadmin_data:
+    driver: local
+
+networks:
+  fixelo-network:
+    driver: bridge
